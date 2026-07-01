@@ -19,6 +19,12 @@ data/processed/*
 data/raw/*
 data/sample/*
 
+# Bỏ qua toàn bộ nội dung trong các thư mục con của data nhưng giữ tệp .gitkeep
+!data/sample/.gitkeep
+!data/processed/.gitkeep
+!data/raw/.gitkeep
+!data/home-credit-default-risk/.gitkeep
+
 # Bỏ qua toàn bộ nội dung trong models ngoại trừ tệp .gitkeep
 models/*
 
