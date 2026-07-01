@@ -1,0 +1,23 @@
+# Windows system files
+desktop.ini
+Thumbs.db
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.ipynb_checkpoints
+.venv/
+venv/
+env/
+
+# Data & Models (Tránh đẩy tệp dung lượng lớn lên GitHub)
+data/
+models/*.pkl
+models/*.h5
+models/*.joblib
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/*
