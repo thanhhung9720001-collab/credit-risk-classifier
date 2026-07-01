@@ -15,20 +15,12 @@ env/
 # Data & Models (Tránh đẩy tệp dung lượng lớn lên GitHub)
 # Bỏ qua toàn bộ nội dung trong các thư mục con của data nhưng giữ tệp .gitkeep
 data/home-credit-default-risk/*
-!data/home-credit-default-risk/.gitkeep
-
 data/processed/*
-!data/processed/.gitkeep
-
 data/raw/*
-!data/raw/.gitkeep
-
 data/sample/*
-!data/sample/.gitkeep
 
 # Bỏ qua toàn bộ nội dung trong models ngoại trừ tệp .gitkeep
 models/*
-!models/.gitkeep
 
 # Jupyter Notebook checkpoints
 .ipynb_checkpoints/
