@@ -1,5 +1,7 @@
 # credit-risk-classifier — Quy định làm việc nhóm
 
+> Quy trình đầy đủ (kèm hướng dẫn chi tiết từng bước và xử lý tình huống): xem `docs/QUY-TRINH-LAM-VIEC.md`.
+
 ## Quy trình Git (BẮT BUỘC với mọi thành viên)
 
 1. **Trước khi bắt đầu làm việc**: luôn lấy code mới nhất về trước.
