@@ -39,7 +39,8 @@
 - ✅ Đã dựng xong cấu trúc thư mục hoàn chỉnh
 - ✅ Đã tải đầy đủ dữ liệu Home Credit vào `data/raw/`
 - ✅ Có tài liệu môn học trong `docs/` (assignment, mẫu tài liệu, mẫu báo cáo)
-- ❌ **Toàn bộ file code đều RỖNG** (chưa triển khai): tất cả notebooks, tất cả file SQL, tất cả file trong `app/`, `README.md`, `requirements.txt`, `models/*.pkl`
+- ✅ Đã chốt **quy ước định dạng notebook** (xem mục 6) và tạo cell tiêu đề chuẩn cho cả 7 notebook
+- ❌ **Chưa triển khai nội dung code**: các notebook mới chỉ có cell tiêu đề; tất cả file SQL, tất cả file trong `app/`, `README.md`, `requirements.txt`, `models/*.pkl` vẫn rỗng
 - Git: branch `main`, các commit gần nhất chỉ về cấu hình cấu trúc folder
 
 ## 4. Việc tiếp theo (chưa quyết định thứ tự, cần hỏi user)
@@ -54,3 +55,12 @@ Các hướng khởi đầu khả dĩ:
 - User trao đổi bằng **tiếng Việt** — trả lời bằng tiếng Việt
 - Môi trường: Windows 11, PowerShell, repo git tại `D:\FPT Polytechnic\2026\HK Summer 2026\Block2\Du-an-01\credit-risk-classifier`
 - Khi hoàn thành mốc quan trọng, cập nhật lại mục **3. Trạng thái hiện tại** và **4. Việc tiếp theo** trong file này
+
+## 6. Quy ước định dạng notebook (chốt 2026-07-02)
+
+Áp dụng thống nhất cho cả 7 notebook — **mọi phiên làm việc phải tuân theo**:
+
+1. **Cell đầu tiên (Markdown):** tiêu đề dự án (H1 `#`) → dòng `**Notebook XX/07 — Tên EN (Tên tiếng Việt)**` → gạch ngang `---` → các trường: **🎯 Mục tiêu**, **📥 Input**, **📤 Output**, **🔗 Pipeline** (notebook trước → **hiện tại** → notebook sau). Cả 7 notebook đã có sẵn cell này làm mẫu.
+2. **Đề mục thân notebook:** mục lớn `## 1.`, `## 2.`, ...; mục con `### 1.1.`, `### 1.2.`, ...; cấp 3 `#### 1.1.1.`, ...; cấp 4 KHÔNG dùng heading mà dùng chữ đậm `**a. ...**`, `**b. ...**`. H1 (`#`) chỉ dành riêng cho tiêu đề notebook ở cell đầu.
+3. **Nhận xét sau kết quả:** cell code có output mang ý nghĩa phân tích (bảng thống kê, biểu đồ, kết quả đánh giá mô hình...) phải có cell Markdown ngay bên dưới, mở đầu bằng `**Nhận xét:**`. Cell kỹ thuật thuần túy (import, config, định nghĩa hàm) không bắt buộc nhận xét — chỉ cần một dòng Markdown dẫn dắt phía trên nhóm cell đó.
+4. **Cuối notebook:** mục **Tổng kết** (mang số thứ tự cuối cùng, ví dụ `## 6. Tổng kết`) chốt các phát hiện chính và nêu bước tiếp theo (dẫn sang notebook kế tiếp).
