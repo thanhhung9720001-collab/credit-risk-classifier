@@ -45,13 +45,42 @@ git switch -c feature/<tên-task>    # tạo nhánh mới từ main (vừa pull 
 
 **Quy ước đặt tên nhánh:**
 
+Công thức chung:
+
+```
+<tiền-tố>/<mô-tả-ngắn-gọn>
+```
+
+- Viết **tiếng Việt không dấu, chữ thường, nối bằng dấu gạch ngang** (`-`).
+- Nếu task có mã trong `Task_Tracker.xlsx` (T01, T02...) thì đưa mã vào đầu mô tả — nhìn tên nhánh biết ngay task nào: `feature/t05-feature-engineering`.
+
 | Tiền tố | Dùng khi | Ví dụ |
 |---|---|---|
 | `feature/` | Làm tính năng, phân tích, model mới | `feature/xu-ly-missing-values` |
 | `fix/` | Sửa lỗi | `fix/loi-doc-file-csv` |
 | `docs/` | Viết tài liệu, báo cáo | `docs/bao-cao-eda` |
 
-Tên nhánh viết **tiếng Việt không dấu, chữ thường, nối bằng dấu gạch ngang**.
+**Ví dụ đặt tên cho từng mảng của dự án này** (nhìn là bắt chước được):
+
+| Mảng việc | Tên nhánh mẫu |
+|---|---|
+| Notebook 01 — tìm hiểu dữ liệu | `feature/notebook-01-data-understanding` |
+| Notebook 04 — EDA & trực quan hóa | `feature/notebook-04-eda` |
+| Notebook 06 — huấn luyện model | `feature/notebook-06-machine-learning` |
+| SQL — tạo bảng + import dữ liệu | `feature/sql-tao-bang-import` |
+| App Streamlit — trang dự đoán | `feature/app-trang-du-doan` |
+| Sửa lỗi đường dẫn đọc file CSV | `fix/loi-duong-dan-csv` |
+| Báo cáo Word — chương 2 | `docs/bao-cao-chuong-2` |
+| Slide bảo vệ | `docs/slide-bao-ve` |
+
+**Các lỗi đặt tên cần tránh:**
+
+| ❌ Tên sai | Vì sao sai | ✅ Sửa thành |
+|---|---|---|
+| `feature/Xử lý dữ liệu` | Có dấu + khoảng trắng → gõ lệnh git sẽ lỗi | `feature/xu-ly-du-lieu` |
+| `feature/update`, `feature/lam-tiep` | Chung chung, không ai biết nhánh làm gì | `feature/notebook-03-data-cleaning` |
+| `nhanh-cua-hung` | Nhánh theo NGƯỜI, sống lâu, trôi xa khỏi main → conflict lớn | Nhánh theo TASK, merge xong là xóa |
+| `feature/eda-va-sql-va-readme` | Một nhánh ôm nhiều task → PR to, khó review | Tách mỗi task một nhánh riêng |
 
 ### Bước 5: Kiểm tra lại lần cuối rồi bắt đầu code
 
