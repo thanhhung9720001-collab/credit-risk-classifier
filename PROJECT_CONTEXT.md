@@ -40,15 +40,21 @@
 - ✅ Đã tải đầy đủ dữ liệu Home Credit vào `data/raw/`
 - ✅ Có tài liệu môn học trong `docs/` (assignment, mẫu tài liệu, mẫu báo cáo)
 - ✅ Đã chốt **quy ước định dạng notebook** (xem mục 6) và tạo cell tiêu đề chuẩn cho cả 7 notebook
+- ✅ Đã thiết lập **quy trình làm việc nhóm qua git** (2026-07-02) — gồm 3 lớp:
+  - **GitHub Ruleset `protect-main`**: cấm push thẳng lên `main`, bắt buộc Pull Request + 1 approve, chặn force-push và xóa nhánh (đã test, chặn đúng với lỗi GH013)
+  - **Hook Claude Code** (`.claude/settings.json` + `.claude/hooks/`): đầu phiên tự fetch và nhắc pull code mới; chặn commit/push/merge khi đang ở main kèm hướng dẫn tạo nhánh
+  - **Tài liệu**: `docs/QUY-TRINH-LAM-VIEC.md` (quy trình chi tiết bắt buộc: checklist đầu phiên, quy ước tên nhánh/commit, cách tạo-review-approve PR, xử lý tình huống) + `CLAUDE.md` (quy tắc cho Claude)
+  - Các PR #1, #2 thiết lập quy trình đã merge; thành viên đang được thêm làm Collaborator (Settings → Collaborators)
 - ❌ **Chưa triển khai nội dung code**: các notebook mới chỉ có cell tiêu đề; tất cả file SQL, tất cả file trong `app/`, `README.md`, `requirements.txt`, `models/*.pkl` vẫn rỗng
-- Git: branch `main`, các commit gần nhất chỉ về cấu hình cấu trúc folder
 
 ## 4. Việc tiếp theo (chưa quyết định thứ tự, cần hỏi user)
 
-Các hướng khởi đầu khả dĩ:
-- Notebook `01_data_understanding.ipynb` (khám phá dữ liệu ban đầu)
-- Script SQL tạo bảng + import dữ liệu vào PostgreSQL
-- Viết `README.md` và `requirements.txt`
+**Với mọi thành viên trước khi bắt đầu:** đọc `docs/QUY-TRINH-LAM-VIEC.md` và làm theo checklist đầu phiên (pull code mới → tạo/chuyển nhánh, KHÔNG code trên main).
+
+Các hướng khởi đầu khả dĩ (mỗi việc = 1 nhánh riêng, xem gợi ý phân công 5 người trong quy trình):
+- Notebook `01_data_understanding.ipynb` (khám phá dữ liệu ban đầu) — nhánh `feature/notebook-01-data-understanding`
+- Script SQL tạo bảng + import dữ liệu vào PostgreSQL — nhánh `feature/sql-tao-bang-import`
+- Viết `README.md` và `requirements.txt` — nhánh `docs/readme-va-requirements`
 
 ## 5. Ghi chú làm việc
 
