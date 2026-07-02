@@ -1,0 +1,31 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash|PowerShell",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/git-branch-guard.sh\"",
+            "shell": "bash",
+            "timeout": 15,
+            "statusMessage": "Kiem tra nhanh git truoc khi chay lenh..."
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/session-pull-check.sh\"",
+            "shell": "bash",
+            "timeout": 30,
+            "statusMessage": "Kiem tra code moi nhat tu remote..."
+          }
+        ]
+      }
+    ]
+  }
+}
