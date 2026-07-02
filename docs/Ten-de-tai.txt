@@ -1,0 +1,7 @@
+Tiếng Việt:
+
+Xây dựng Mô hình Phân loại
+và Dự báo Rủi ro Khách hàng Vay vốn
+
+Tiếng Anh:
+credit-risk-classifier
