@@ -155,9 +155,9 @@ git push -u origin feature/<tên-task>
 5. Bấm **Create pull request**.
 6. **Nhắn vào nhóm** kèm link PR, nhờ một bạn review.
 
-### Bước 5: Một thành viên KHÁC review và approve
+### Bước 5: Nhờ thành viên khác review (khuyến khích, không bắt buộc)
 
-> Người tạo PR **không thể** tự approve PR của mình — GitHub chặn. Luôn phải nhờ bạn khác.
+> GitHub không bắt buộc approve để merge — người quyết định cuối cùng là nhóm trưởng ở Bước 6. Nhưng **rất nên** nhờ một bạn review chéo: người viết thường không thấy lỗi của mình, và review giúp cả nhóm hiểu code của nhau (có lợi khi bảo vệ đồ án).
 
 Người review làm 4 bước:
 
@@ -169,10 +169,10 @@ Người review làm 4 bước:
 
 ### Bước 6: Nhóm trưởng merge và dọn dẹp
 
-> **Chỉ nhóm trưởng có quyền bấm Merge** — GitHub Ruleset `chi-co-nhom-truong-duoc-merge` chặn mọi thành viên khác cập nhật `main`, kể cả khi PR đã đủ approve.
+> **Chỉ nhóm trưởng có quyền bấm Merge** — GitHub Ruleset `chi-co-nhom-truong-duoc-merge` chặn mọi thành viên khác cập nhật `main`, kể cả khi PR đã có approve.
 
-1. Sau khi PR có approve, **nhắn nhóm trưởng kèm link PR**.
-2. Nhóm trưởng mở PR, xem lướt lần cuối → bấm **Merge pull request** → **Confirm merge**.
+1. PR sẵn sàng (đã review xong hoặc cần merge) → **nhắn nhóm trưởng kèm link PR**.
+2. Nhóm trưởng mở PR, bấm **Files changed** review lần cuối → bấm **Merge pull request** → **Confirm merge**.
 3. Bấm **Delete branch** (nút hiện ra ngay sau khi merge) — nhánh đã gộp xong thì xóa cho gọn.
 4. **Nhắn nhóm: "main đã có code mới, mọi người pull nhé"** — ai đang làm việc thì chạy `git pull --rebase origin main` trên nhánh của mình.
 5. Người làm task cập nhật trạng thái trong `Task_Tracker.xlsx`.
