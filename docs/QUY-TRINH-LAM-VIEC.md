@@ -155,9 +155,9 @@ git push -u origin feature/<tên-task>
 5. Bấm **Create pull request**.
 6. **Nhắn vào nhóm** kèm link PR, nhờ một bạn review.
 
-### Bước 5: Một thành viên KHÁC review và approve
+### Bước 5: Nhờ thành viên khác review (khuyến khích, không bắt buộc)
 
-> Người tạo PR **không thể** tự approve PR của mình — GitHub chặn. Luôn phải nhờ bạn khác.
+> GitHub không bắt buộc approve để merge — người quyết định cuối cùng là nhóm trưởng ở Bước 6. Nhưng **rất nên** nhờ một bạn review chéo: người viết thường không thấy lỗi của mình, và review giúp cả nhóm hiểu code của nhau (có lợi khi bảo vệ đồ án).
 
 Người review làm 4 bước:
 
@@ -167,12 +167,15 @@ Người review làm 4 bước:
 4. Chọn **✅ Approve** → **Submit review**.
    (Nếu thấy có vấn đề cần sửa thì chọn **Request changes** thay vì Approve — người tạo PR sửa xong, push tiếp lên cùng nhánh, PR tự cập nhật, rồi review lại.)
 
-### Bước 6: Merge và dọn dẹp
+### Bước 6: Nhóm trưởng merge và dọn dẹp
 
-1. Sau khi có approve, nút **Merge pull request** chuyển xanh → bấm **Merge** → **Confirm merge**.
-2. Bấm **Delete branch** (nút hiện ra ngay sau khi merge) — nhánh đã gộp xong thì xóa cho gọn.
-3. **Nhắn nhóm: "main đã có code mới, mọi người pull nhé"** — ai đang làm việc thì chạy `git pull --rebase origin main` trên nhánh của mình.
-4. Cập nhật trạng thái task trong `Task_Tracker.xlsx`.
+> **Chỉ nhóm trưởng có quyền bấm Merge** — GitHub Ruleset `chi-co-nhom-truong-duoc-merge` chặn mọi thành viên khác cập nhật `main`, kể cả khi PR đã có approve.
+
+1. PR sẵn sàng (đã review xong hoặc cần merge) → **nhắn nhóm trưởng kèm link PR**.
+2. Nhóm trưởng mở PR, bấm **Files changed** review lần cuối → bấm **Merge pull request** → **Confirm merge**.
+3. Bấm **Delete branch** (nút hiện ra ngay sau khi merge) — nhánh đã gộp xong thì xóa cho gọn.
+4. **Nhắn nhóm: "main đã có code mới, mọi người pull nhé"** — ai đang làm việc thì chạy `git pull --rebase origin main` trên nhánh của mình.
+5. Người làm task cập nhật trạng thái trong `Task_Tracker.xlsx`.
 
 ---
 
@@ -181,7 +184,7 @@ Người review làm 4 bước:
 ```
 Mở dự án ──► đọc PROJECT_CONTEXT ──► git pull main ──► tạo/chuyển nhánh ──► code + commit nhỏ
                                                                                   │
-cả nhóm pull main ◄── merge + xóa nhánh ◄── review/approve ◄── tạo PR ◄── cập nhật PROJECT_CONTEXT + push
+cả nhóm pull main ◄── nhóm trưởng merge ◄── review/approve ◄── tạo PR ◄── cập nhật PROJECT_CONTEXT + push
 ```
 
 ---
@@ -246,7 +249,8 @@ git log --oneline -5         # 5 commit gần nhất
 | Lớp | Phạm vi | Tác dụng |
 |---|---|---|
 | Hook Claude Code (`.claude/hooks/`) | Khi làm việc qua Claude Code | Đầu phiên: nhắc pull code mới. Khi commit/push trên main: chặn + hướng dẫn tạo nhánh |
-| GitHub Ruleset (`protect-main`) | Mọi thao tác push từ mọi công cụ | Chặn cứng push thẳng/force-push/xóa nhánh main; bắt buộc PR + 1 approve |
+| GitHub Ruleset (`protect-main`) | Mọi thao tác push từ mọi công cụ | Chặn cứng push thẳng/force-push/xóa nhánh main; bắt buộc đi qua PR |
+| GitHub Ruleset (`chi-co-nhom-truong-duoc-merge`) | Mọi thao tác cập nhật `main` | Chỉ nhóm trưởng (Repository admin) merge được PR vào main |
 | `CLAUDE.md` gốc repo | Mọi phiên Claude Code | Claude chủ động tuân theo quy trình này khi được nhờ commit/push |
 
 **Thành viên mới chỉ cần làm 1 việc:** clone repo về, mở Claude Code trong folder — mọi thứ ở trên tự có, không phải cài đặt gì thêm.
