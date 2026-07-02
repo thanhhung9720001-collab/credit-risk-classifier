@@ -23,11 +23,14 @@ data/sample/*
 !data/sample/.gitkeep
 !data/processed/.gitkeep
 !data/raw/.gitkeep
-!data/home-credit-default-risk/.gitkeep
 
 # Bỏ qua toàn bộ nội dung trong models ngoại trừ tệp .gitkeep
 models/*
+!models/.gitkeep
 
 # Jupyter Notebook checkpoints
 .ipynb_checkpoints/
-*/.ipynb_checkpoints/*
+*/.ipynb_checkpoints/
+
+# OMC (oh-my-claudecode) - trạng thái công cụ, không commit
+.omc/
