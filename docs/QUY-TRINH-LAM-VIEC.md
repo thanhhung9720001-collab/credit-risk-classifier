@@ -24,9 +24,11 @@ git switch main
 git pull
 ```
 
-### Bước 3: Xác định task của mình
+### Bước 3: Nắm ngữ cảnh và xác định task của mình
 
-Xem phân công trong `Task_Tracker.xlsx` hoặc kênh chat nhóm. Biết task rồi mới biết cần nhánh nào.
+1. **Đọc `PROJECT_CONTEXT.md`** — tập trung mục **3. Trạng thái hiện tại** và **4. Việc tiếp theo** để biết dự án đang đến đâu, người trước vừa làm gì. Làm việc với Claude thì chỉ cần gõ:
+   > *"Đọc file PROJECT_CONTEXT.md để nắm ngữ cảnh dự án, sau đó tiếp tục làm việc với tôi."*
+2. Xem phân công trong `Task_Tracker.xlsx` hoặc kênh chat nhóm. Biết task rồi mới biết cần nhánh nào.
 
 ### Bước 4: Vào đúng nhánh làm việc
 
@@ -124,13 +126,26 @@ git pull --rebase origin main
 
 Nếu có **conflict** (xung đột) → xem [Phần 5](#phần-5--xử-lý-tình-huống-thường-gặp). Giải quyết xung đột ngay trên máy mình, đừng để lên PR.
 
-### Bước 2: Push nhánh lên GitHub
+### Bước 2: Cập nhật file ngữ cảnh `PROJECT_CONTEXT.md`
+
+Nếu task vừa xong là một mốc đáng kể (hoàn thành một notebook, một mảng SQL, một trang app...), cập nhật mục **3. Trạng thái hiện tại** và **4. Việc tiếp theo** trong `PROJECT_CONTEXT.md` rồi commit **ngay trong nhánh này** — thay đổi sẽ đi cùng PR của task, không cần tạo PR riêng:
+
+```bash
+git add PROJECT_CONTEXT.md
+git commit -m "docs: cap nhat trang thai sau khi xong <tên-task>"
+```
+
+- Viết ngắn gọn 1–2 dòng mỗi mục: đã xong gì, người sau nên làm gì tiếp.
+- Nhờ Claude làm giúp cũng được: *"Cập nhật PROJECT_CONTEXT.md theo những gì vừa làm xong."*
+- Nếu pull về bị conflict ở file này (2 người cùng cập nhật): giữ **cả hai** phần nội dung, gộp các gạch đầu dòng lại.
+
+### Bước 3: Push nhánh lên GitHub
 
 ```bash
 git push -u origin feature/<tên-task>
 ```
 
-### Bước 3: Tạo Pull Request (PR)
+### Bước 4: Tạo Pull Request (PR)
 
 1. Mở repo trên GitHub — thường sẽ thấy ngay khung vàng **"feature/... had recent pushes"** → bấm nút **Compare & pull request**.
    (Không thấy thì vào tab **Pull requests** → **New pull request** → chọn nhánh của bạn ở ô `compare`.)
@@ -140,7 +155,7 @@ git push -u origin feature/<tên-task>
 5. Bấm **Create pull request**.
 6. **Nhắn vào nhóm** kèm link PR, nhờ một bạn review.
 
-### Bước 4: Một thành viên KHÁC review và approve
+### Bước 5: Một thành viên KHÁC review và approve
 
 > Người tạo PR **không thể** tự approve PR của mình — GitHub chặn. Luôn phải nhờ bạn khác.
 
@@ -152,7 +167,7 @@ Người review làm 4 bước:
 4. Chọn **✅ Approve** → **Submit review**.
    (Nếu thấy có vấn đề cần sửa thì chọn **Request changes** thay vì Approve — người tạo PR sửa xong, push tiếp lên cùng nhánh, PR tự cập nhật, rồi review lại.)
 
-### Bước 5: Merge và dọn dẹp
+### Bước 6: Merge và dọn dẹp
 
 1. Sau khi có approve, nút **Merge pull request** chuyển xanh → bấm **Merge** → **Confirm merge**.
 2. Bấm **Delete branch** (nút hiện ra ngay sau khi merge) — nhánh đã gộp xong thì xóa cho gọn.
@@ -164,9 +179,9 @@ Người review làm 4 bước:
 ## PHẦN 4 — Sơ đồ tóm tắt toàn bộ vòng lặp
 
 ```
-Mở dự án ──► git pull main ──► tạo/chuyển nhánh ──► code + commit nhỏ
-                                                        │
-   cả nhóm pull main ◄── merge + xóa nhánh ◄── review/approve ◄── tạo PR ◄── push
+Mở dự án ──► đọc PROJECT_CONTEXT ──► git pull main ──► tạo/chuyển nhánh ──► code + commit nhỏ
+                                                                                  │
+cả nhóm pull main ◄── merge + xóa nhánh ◄── review/approve ◄── tạo PR ◄── cập nhật PROJECT_CONTEXT + push
 ```
 
 ---

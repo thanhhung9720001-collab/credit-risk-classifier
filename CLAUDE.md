@@ -25,6 +25,8 @@
 
 ## Hướng dẫn cho Claude
 
+- Đầu phiên làm việc: đọc `PROJECT_CONTEXT.md` (mục 3 và 4) để nắm trạng thái dự án trước khi bắt đầu.
 - Khi người dùng yêu cầu commit/push: luôn kiểm tra nhánh hiện tại trước. Nếu đang ở `main`, hướng dẫn pull code mới nhất rồi tạo/chuyển nhánh theo quy ước ở trên, sau đó mới commit/push.
 - Đầu phiên làm việc: nhắc người dùng pull code mới nhất nếu nhánh đang chậm hơn remote.
+- Khi hoàn thành một task/mốc đáng kể: chủ động cập nhật mục **3. Trạng thái hiện tại** và **4. Việc tiếp theo** trong `PROJECT_CONTEXT.md`, commit ngay trong nhánh của task đó (đi cùng PR, không tạo PR riêng).
 - Commit message viết tiếng Việt không dấu, theo dạng `<loại>: <mô tả>` (ví dụ: `docs: them cell tieu de chuan cho notebook`).
