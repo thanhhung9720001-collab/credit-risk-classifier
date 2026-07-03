@@ -12,6 +12,18 @@
             "statusMessage": "Kiem tra nhanh git truoc khi chay lenh..."
           }
         ]
+      },
+      {
+        "matcher": "Edit|Write|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/edit-branch-guard.sh\"",
+            "shell": "bash",
+            "timeout": 15,
+            "statusMessage": "Kiem tra nhanh git truoc khi sua file..."
+          }
+        ]
       }
     ],
     "SessionStart": [

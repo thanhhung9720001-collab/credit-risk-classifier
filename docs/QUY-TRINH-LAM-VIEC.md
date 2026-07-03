@@ -32,7 +32,17 @@
 
 ### Bước 1: Mở Claude Code trong folder dự án
 
-Hook tự động sẽ chạy và báo ngay: bạn đang ở nhánh nào, có bị chậm hơn code trên GitHub không.
+Hook tự động sẽ chạy và báo ngay: bạn đang ở nhánh nào, có bị chậm hơn code trên GitHub không, **và bạn đã khai báo tên chưa**.
+
+### Bước 1b: Khai báo tên (chỉ làm 1 lần trên mỗi máy)
+
+Nhóm không dùng chung một file ngữ cảnh nữa — **mỗi người có một file context riêng** trong `context/` để khỏi giẫm chân nhau (xem [Phần 6](#phần-6--context-cá-nhân--khai-báo-tên)). Để hook biết bạn là ai, khai báo tên **một lần** cho máy của bạn:
+
+```bash
+echo hung > .claude/whoami      # thay "hung" bằng tên bạn (viết thường, không dấu)
+```
+
+Hoặc nói với Claude: *"Tôi là <tên>"* — Claude sẽ tạo file `.claude/whoami` và `context/<tên>.md` giúp bạn. File `.claude/whoami` **không commit** (riêng từng máy). Từ đó về sau, mỗi phiên hook tự chào bạn và nhắc đúng file context của bạn.
 
 ### Bước 2: Lấy code mới nhất về
 
@@ -143,18 +153,18 @@ git pull --rebase origin main
 
 Nếu có **conflict** (xung đột) → xem [Phần 5](#phần-5--xử-lý-tình-huống-thường-gặp). Giải quyết xung đột ngay trên máy mình, đừng để lên PR.
 
-### Bước 2: Cập nhật file ngữ cảnh `PROJECT_CONTEXT.md`
+### Bước 2: Cập nhật file context cá nhân của bạn
 
-Nếu task vừa xong là một mốc đáng kể (hoàn thành một notebook, một mảng SQL, một trang app...), cập nhật mục **3. Trạng thái hiện tại** và **4. Việc tiếp theo** trong `PROJECT_CONTEXT.md` rồi commit **ngay trong nhánh này** — thay đổi sẽ đi cùng PR của task, không cần tạo PR riêng:
+Cập nhật `context/<tên>.md` **của chính bạn**: đang làm gì, làm tới đâu, còn dở gì. Chỉ bạn sửa file này nên **không bao giờ conflict**. Commit **ngay trong nhánh này** — đi cùng PR của task, không cần tạo PR riêng:
 
 ```bash
-git add PROJECT_CONTEXT.md
-git commit -m "docs: cap nhat trang thai sau khi xong <tên-task>"
+git add context/<tên>.md
+git commit -m "docs: cap nhat context ca nhan sau khi xong <tên-task>"
 ```
 
-- Viết ngắn gọn 1–2 dòng mỗi mục: đã xong gì, người sau nên làm gì tiếp.
-- Nhờ Claude làm giúp cũng được: *"Cập nhật PROJECT_CONTEXT.md theo những gì vừa làm xong."*
-- Nếu pull về bị conflict ở file này (2 người cùng cập nhật): giữ **cả hai** phần nội dung, gộp các gạch đầu dòng lại.
+- Viết ngắn gọn: đã xong gì, việc tiếp theo của bạn là gì.
+- Nhờ Claude làm giúp cũng được: *"Cập nhật context của tôi theo những gì vừa làm xong."*
+- **KHÔNG sửa `PROJECT_CONTEXT.md`** (bức tranh tổng — do nhóm trưởng cập nhật khi merge). Cũng không đụng file context của người khác.
 
 ### Bước 3: Push nhánh lên GitHub
 
@@ -199,9 +209,9 @@ Người review làm 4 bước:
 ## PHẦN 4 — Sơ đồ tóm tắt toàn bộ vòng lặp
 
 ```
-Mở dự án ──► đọc PROJECT_CONTEXT ──► git pull main ──► tạo/chuyển nhánh ──► code + commit nhỏ
-                                                                                  │
-cả nhóm pull main ◄── nhóm trưởng merge ◄── review/approve ◄── tạo PR ◄── cập nhật PROJECT_CONTEXT + push
+Mở dự án ──► khai báo tên ──► đọc PROJECT_CONTEXT + context/<tên> ──► git pull main ──► tạo/chuyển nhánh ──► code + commit nhỏ
+                                                                                                    │
+cả nhóm pull main ◄── nhóm trưởng merge ◄── review/approve ◄── tạo PR ◄── cập nhật context/<tên> + push
 ```
 
 ---
@@ -251,6 +261,12 @@ git switch feature/<tên-task>        # tiếp tục làm trên nhánh
 
 Bạn đang push thẳng lên `main` — GitHub chặn đúng quy định. Quay lại Phần 3: push lên nhánh riêng rồi tạo PR.
 
+### ❗ Đang nhờ Claude làm mà mình lỡ tự đổi nhánh (vd đổi về `main`)
+
+Nếu bạn tự chạy `git switch` (hoặc merge PR rồi về `main`) **trong lúc Claude đang làm việc**, Claude có thể vẫn tưởng đang ở nhánh cũ và lỡ sửa file trên `main`. Giờ đã có hook `edit-branch-guard.sh` **chặn ngay** mọi thao tác sửa file commit được khi ở `main`, nên tình huống này được đỡ tự động. Dù vậy, khi bạn tự đổi nhánh giữa chừng, **nên nói cho Claude biết** ("mình vừa đổi về main / sang nhánh X") để Claude không thao tác nhầm.
+
+Nếu lỡ sửa vài file trên `main` rồi (chưa commit): xem [Lỡ code trên `main` rồi](#-lỡ-code-trên-main-rồi-chưa-commit) — chỉ cần tạo/chuyển sang nhánh, thay đổi đi theo bạn.
+
 ### ❗ Không nhớ mình đang ở nhánh nào / đang dở việc gì
 
 ```bash
@@ -261,13 +277,44 @@ git log --oneline -5         # 5 commit gần nhất
 
 ---
 
+## PHẦN 6 — Context cá nhân & khai báo tên
+
+### Vì sao mỗi người một file context?
+
+Trước đây cả nhóm cùng cập nhật `PROJECT_CONTEXT.md` → dễ **xung đột (conflict)** vì ai cũng sửa cùng vài dòng. Giải pháp: **mỗi người một file context riêng** trong `context/`. Mỗi file chỉ do đúng một người sửa → hai người sửa hai file khác nhau, git không bao giờ đụng nhau → **hết conflict**.
+
+| File | Ai sửa? | Nội dung |
+|---|---|---|
+| `PROJECT_CONTEXT.md` (gốc repo) | **Chỉ nhóm trưởng** | Bức tranh tổng: spec, cấu trúc, quy ước. Mọi người **đọc**. |
+| `context/<tên>.md` | **Chỉ chủ nhân file** | Nhật ký cá nhân: đang làm task gì, nhánh nào, tới đâu, còn dở gì. |
+
+### Khai báo tên (mỗi máy 1 lần)
+
+File `.claude/whoami` chứa tên bạn (viết thường, không dấu), **không commit** (riêng từng máy). Tạo bằng:
+
+```bash
+echo hung > .claude/whoami          # thay bằng tên bạn
+```
+
+Hoặc nói với Claude *"Tôi là <tên>"*. Mỗi phiên, hook đọc file này để **chào bạn theo tên** và nhắc đúng `context/<tên>.md`. Nếu chưa khai báo, hook sẽ cảnh báo và Claude hỏi tên trước khi bắt đầu.
+
+### Tạo file context của bạn
+
+```bash
+cp context/_TEMPLATE.md context/<tên>.md   # rồi điền thông tin của bạn
+```
+
+Chi tiết xem `context/README.md`.
+
+---
+
 ## Các lớp bảo vệ tự động
 
 | Lớp | Phạm vi | Tác dụng |
 |---|---|---|
-| Hook Claude Code (`.claude/hooks/`) | Khi làm việc qua Claude Code | Đầu phiên: nhắc pull code mới. Khi commit/push trên main: chặn + hướng dẫn tạo nhánh |
+| Hook Claude Code (`.claude/hooks/`) | Khi làm việc qua Claude Code | Đầu phiên: nhắc pull code mới, chào theo tên + nhắc file context (nếu chưa khai báo tên thì cảnh báo). Khi commit/push trên main: chặn + hướng dẫn tạo nhánh. **Khi sửa file trong repo trên main: chặn ngay** (kể cả lúc bạn tự đổi về main mà Claude chưa biết) |
 | GitHub Ruleset (`protect-main`) | Mọi thao tác push từ mọi công cụ | Chặn cứng push thẳng/force-push/xóa nhánh main; bắt buộc đi qua PR |
 | GitHub Ruleset (`chi-co-nhom-truong-duoc-merge`) | Mọi thao tác cập nhật `main` | Chỉ nhóm trưởng (Repository admin) merge được PR vào main |
 | `CLAUDE.md` gốc repo | Mọi phiên Claude Code | Claude chủ động tuân theo quy trình này khi được nhờ commit/push |
 
-**Thành viên mới chỉ cần làm 1 việc:** clone repo về, mở Claude Code trong folder — mọi thứ ở trên tự có, không phải cài đặt gì thêm.
+**Thành viên mới chỉ cần làm 2 việc:** (1) clone repo về, mở Claude Code trong folder; (2) khai báo tên một lần (`echo <tên> > .claude/whoami`) và tạo `context/<tên>.md` — mọi thứ còn lại tự có, không phải cài đặt gì thêm.
