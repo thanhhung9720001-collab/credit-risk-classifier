@@ -46,16 +46,20 @@
   - **Tài liệu**: `docs/QUY-TRINH-LAM-VIEC.md` (quy trình chi tiết + Phần 0 quyền đổi cấu trúc + Phần 6 context cá nhân) + `CLAUDE.md` (quy tắc cho Claude)
 - ✅ **Nội quy (2026-07-03)**: chỉ **nhóm trưởng (Hưng)** được thay đổi cấu trúc thư mục / quy trình / quy định (Phần 0 quy trình)
 - ✅ **Context cá nhân (2026-07-03)**: mỗi thành viên có 1 file `context/<tên>.md` (chỉ chủ nhân sửa → hết conflict); khai báo tên đầu phiên qua `.claude/whoami` (không commit). `PROJECT_CONTEXT.md` từ nay do **nhóm trưởng làm chủ** (bức tranh tổng)
-- ❌ **Chưa triển khai nội dung code**: các notebook mới chỉ có cell tiêu đề; tất cả file SQL, tất cả file trong `app/`, `README.md`, `requirements.txt`, `models/*.pkl` vẫn rỗng
+- 🔄 **Bắt đầu triển khai nội dung code**:
+  - ✅ **Notebook 01 (`01_data_understanding.ipynb`) — HOÀN THÀNH** (T01, merge PR #12): 32 cell đúng quy ước format; tổng quan 8 bảng, phân tích `application_train` (307.511×122, `TARGET` mất cân bằng ~8%, 67 cột thiếu, thống kê mô tả), quan hệ khóa các bảng phụ, từ điển dữ liệu, tổng kết. Đã chạy nhúng output thật.
+  - ❌ Các notebook 02→07 vẫn chỉ có cell tiêu đề; tất cả file SQL, tất cả file trong `app/`, `README.md`, `requirements.txt`, `models/*.pkl` vẫn rỗng
 
 ## 4. Việc tiếp theo (chưa quyết định thứ tự, cần hỏi user)
 
 **Với mọi thành viên trước khi bắt đầu:** đọc `docs/QUY-TRINH-LAM-VIEC.md` và làm theo checklist đầu phiên (pull code mới → **khai báo tên** `echo <tên> > .claude/whoami` + tạo `context/<tên>.md` → tạo/chuyển nhánh, KHÔNG code trên main). Ai đã kéo quy trình mới về nhớ **khởi động lại Claude Code** để nạp hook.
 
-Các hướng khởi đầu khả dĩ (mỗi việc = 1 nhánh riêng, xem gợi ý phân công 5 người trong quy trình):
-- Notebook `01_data_understanding.ipynb` (khám phá dữ liệu ban đầu) — nhánh `feature/notebook-01-data-understanding`
+Các hướng tiếp theo khả dĩ (mỗi việc = 1 nhánh riêng, đưa mã task vào đầu tên nhánh nếu có — vd `feature/t02-...`; xem gợi ý phân công 5 người trong quy trình):
+- Notebook `02_posgrespl_pipline.ipynb` (pipeline PostgreSQL) — nối tiếp notebook 01
 - Script SQL tạo bảng + import dữ liệu vào PostgreSQL — nhánh `feature/sql-tao-bang-import`
-- Viết `README.md` và `requirements.txt` — nhánh `docs/readme-va-requirements`
+- Viết `README.md` và `requirements.txt` (kèm `pandas/numpy/matplotlib/seaborn/nbconvert` mà notebook 01 cần) — nhánh `docs/readme-va-requirements`
+
+> ✅ Đã xong: Notebook `01_data_understanding.ipynb` (T01, PR #12).
 
 ## 5. Ghi chú làm việc
 
