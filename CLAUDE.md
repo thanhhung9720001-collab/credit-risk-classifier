@@ -39,6 +39,7 @@
 ## Hướng dẫn cho Claude
 
 - Đầu phiên làm việc: đọc `PROJECT_CONTEXT.md` (mục 3 và 4) để nắm trạng thái dự án; và đọc `context/<ten>.md` của thành viên đang làm để biết họ đang dở việc gì.
+- **Trước khi sửa bất kỳ file nào trong repo (Edit/Write): kiểm tra lại nhánh bằng `git branch --show-current` — đừng dựa vào trí nhớ.** Người dùng có thể đã tự đổi về `main` mà Claude không biết. Nếu đang ở `main`, chuyển sang nhánh làm việc trước khi sửa (có hook `edit-branch-guard.sh` chặn tự động, nhưng vẫn nên tự kiểm tra).
 - Khi người dùng yêu cầu commit/push: luôn kiểm tra nhánh hiện tại trước. Nếu đang ở `main`, hướng dẫn pull code mới nhất rồi tạo/chuyển nhánh theo quy ước ở trên, sau đó mới commit/push.
 - Đầu phiên làm việc: nhắc người dùng pull code mới nhất nếu nhánh đang chậm hơn remote.
 - Khi hoàn thành một phần việc / cuối buổi: cập nhật `context/<ten>.md` của thành viên đang làm (đang làm gì, tới đâu, còn dở gì), commit ngay trong nhánh của task đó (đi cùng PR).

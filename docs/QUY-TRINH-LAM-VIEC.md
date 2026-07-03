@@ -261,6 +261,12 @@ git switch feature/<tên-task>        # tiếp tục làm trên nhánh
 
 Bạn đang push thẳng lên `main` — GitHub chặn đúng quy định. Quay lại Phần 3: push lên nhánh riêng rồi tạo PR.
 
+### ❗ Đang nhờ Claude làm mà mình lỡ tự đổi nhánh (vd đổi về `main`)
+
+Nếu bạn tự chạy `git switch` (hoặc merge PR rồi về `main`) **trong lúc Claude đang làm việc**, Claude có thể vẫn tưởng đang ở nhánh cũ và lỡ sửa file trên `main`. Giờ đã có hook `edit-branch-guard.sh` **chặn ngay** mọi thao tác sửa file commit được khi ở `main`, nên tình huống này được đỡ tự động. Dù vậy, khi bạn tự đổi nhánh giữa chừng, **nên nói cho Claude biết** ("mình vừa đổi về main / sang nhánh X") để Claude không thao tác nhầm.
+
+Nếu lỡ sửa vài file trên `main` rồi (chưa commit): xem [Lỡ code trên `main` rồi](#-lỡ-code-trên-main-rồi-chưa-commit) — chỉ cần tạo/chuyển sang nhánh, thay đổi đi theo bạn.
+
 ### ❗ Không nhớ mình đang ở nhánh nào / đang dở việc gì
 
 ```bash
@@ -306,7 +312,7 @@ Chi tiết xem `context/README.md`.
 
 | Lớp | Phạm vi | Tác dụng |
 |---|---|---|
-| Hook Claude Code (`.claude/hooks/`) | Khi làm việc qua Claude Code | Đầu phiên: nhắc pull code mới, chào theo tên + nhắc file context (nếu chưa khai báo tên thì cảnh báo). Khi commit/push trên main: chặn + hướng dẫn tạo nhánh |
+| Hook Claude Code (`.claude/hooks/`) | Khi làm việc qua Claude Code | Đầu phiên: nhắc pull code mới, chào theo tên + nhắc file context (nếu chưa khai báo tên thì cảnh báo). Khi commit/push trên main: chặn + hướng dẫn tạo nhánh. **Khi sửa file trong repo trên main: chặn ngay** (kể cả lúc bạn tự đổi về main mà Claude chưa biết) |
 | GitHub Ruleset (`protect-main`) | Mọi thao tác push từ mọi công cụ | Chặn cứng push thẳng/force-push/xóa nhánh main; bắt buộc đi qua PR |
 | GitHub Ruleset (`chi-co-nhom-truong-duoc-merge`) | Mọi thao tác cập nhật `main` | Chỉ nhóm trưởng (Repository admin) merge được PR vào main |
 | `CLAUDE.md` gốc repo | Mọi phiên Claude Code | Claude chủ động tuân theo quy trình này khi được nhờ commit/push |
