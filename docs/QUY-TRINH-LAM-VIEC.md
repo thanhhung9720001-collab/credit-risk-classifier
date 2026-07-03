@@ -14,7 +14,7 @@
 
 ## PHẦN 0 — Quyền thay đổi cấu trúc & quy định
 
-> **Nhóm trưởng: Hùng.** Chỉ nhóm trưởng mới được quyết định thay đổi những thứ mang tính "khung xương" của dự án.
+> **Nhóm trưởng: Hưng.** Chỉ nhóm trưởng mới được quyết định thay đổi những thứ mang tính "khung xương" của dự án.
 
 **Thuộc phạm vi CHỈ nhóm trưởng được đổi:**
 
