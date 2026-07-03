@@ -34,22 +34,23 @@
 4. **Models** (`models/`): lưu `model.pkl` và `scaler.pkl` sau khi train
 5. **Báo cáo** (`reports/`): báo cáo Word + slide PowerPoint theo mẫu trường (`docs/2. Mau tai lieu.docx`, `docs/3. Mau bao cao.pptx`); theo dõi tiến độ nhóm bằng `Task_Tracker.xlsx`
 
-## 3. Trạng thái hiện tại (cập nhật 2026-07-02)
+## 3. Trạng thái hiện tại (cập nhật 2026-07-03)
 
 - ✅ Đã dựng xong cấu trúc thư mục hoàn chỉnh
 - ✅ Đã tải đầy đủ dữ liệu Home Credit vào `data/raw/`
 - ✅ Có tài liệu môn học trong `docs/` (assignment, mẫu tài liệu, mẫu báo cáo)
 - ✅ Đã chốt **quy ước định dạng notebook** (xem mục 6) và tạo cell tiêu đề chuẩn cho cả 7 notebook
-- ✅ Đã thiết lập **quy trình làm việc nhóm qua git** (2026-07-02) — gồm 3 lớp:
-  - **GitHub Ruleset `protect-main`**: cấm push thẳng lên `main`, bắt buộc Pull Request + 1 approve, chặn force-push và xóa nhánh (đã test, chặn đúng với lỗi GH013)
-  - **Hook Claude Code** (`.claude/settings.json` + `.claude/hooks/`): đầu phiên tự fetch và nhắc pull code mới; chặn commit/push/merge khi đang ở main kèm hướng dẫn tạo nhánh
-  - **Tài liệu**: `docs/QUY-TRINH-LAM-VIEC.md` (quy trình chi tiết bắt buộc: checklist đầu phiên, quy ước tên nhánh/commit, cách tạo-review-approve PR, xử lý tình huống) + `CLAUDE.md` (quy tắc cho Claude)
-  - Các PR #1, #2 thiết lập quy trình đã merge; thành viên đang được thêm làm Collaborator (Settings → Collaborators)
+- ✅ Đã thiết lập **quy trình làm việc nhóm qua git** — gồm nhiều lớp:
+  - **GitHub Ruleset**: `protect-main` (cấm push thẳng, bắt buộc PR, chặn force-push/xóa nhánh) + `chi-co-nhom-truong-duoc-merge` (chỉ nhóm trưởng merge được vào main)
+  - **Hook Claude Code** (`.claude/settings.json` + `.claude/hooks/`): (1) đầu phiên tự fetch, nhắc pull, **chào theo tên + nhắc file context**; (2) chặn commit/push/merge trên main; (3) **chặn cả thao tác sửa file trên main** (`edit-branch-guard.sh`) — kể cả khi tự đổi về main mà Claude chưa biết
+  - **Tài liệu**: `docs/QUY-TRINH-LAM-VIEC.md` (quy trình chi tiết + Phần 0 quyền đổi cấu trúc + Phần 6 context cá nhân) + `CLAUDE.md` (quy tắc cho Claude)
+- ✅ **Nội quy (2026-07-03)**: chỉ **nhóm trưởng (Hưng)** được thay đổi cấu trúc thư mục / quy trình / quy định (Phần 0 quy trình)
+- ✅ **Context cá nhân (2026-07-03)**: mỗi thành viên có 1 file `context/<tên>.md` (chỉ chủ nhân sửa → hết conflict); khai báo tên đầu phiên qua `.claude/whoami` (không commit). `PROJECT_CONTEXT.md` từ nay do **nhóm trưởng làm chủ** (bức tranh tổng)
 - ❌ **Chưa triển khai nội dung code**: các notebook mới chỉ có cell tiêu đề; tất cả file SQL, tất cả file trong `app/`, `README.md`, `requirements.txt`, `models/*.pkl` vẫn rỗng
 
 ## 4. Việc tiếp theo (chưa quyết định thứ tự, cần hỏi user)
 
-**Với mọi thành viên trước khi bắt đầu:** đọc `docs/QUY-TRINH-LAM-VIEC.md` và làm theo checklist đầu phiên (pull code mới → tạo/chuyển nhánh, KHÔNG code trên main).
+**Với mọi thành viên trước khi bắt đầu:** đọc `docs/QUY-TRINH-LAM-VIEC.md` và làm theo checklist đầu phiên (pull code mới → **khai báo tên** `echo <tên> > .claude/whoami` + tạo `context/<tên>.md` → tạo/chuyển nhánh, KHÔNG code trên main). Ai đã kéo quy trình mới về nhớ **khởi động lại Claude Code** để nạp hook.
 
 Các hướng khởi đầu khả dĩ (mỗi việc = 1 nhánh riêng, xem gợi ý phân công 5 người trong quy trình):
 - Notebook `01_data_understanding.ipynb` (khám phá dữ liệu ban đầu) — nhánh `feature/notebook-01-data-understanding`
@@ -60,7 +61,8 @@ Các hướng khởi đầu khả dĩ (mỗi việc = 1 nhánh riêng, xem gợi
 
 - User trao đổi bằng **tiếng Việt** — trả lời bằng tiếng Việt
 - Môi trường: Windows 11, PowerShell, repo git tại `D:\FPT Polytechnic\2026\HK Summer 2026\Block2\Du-an-01\credit-risk-classifier`
-- Khi hoàn thành mốc quan trọng, cập nhật lại mục **3. Trạng thái hiện tại** và **4. Việc tiếp theo** trong file này
+- File này (`PROJECT_CONTEXT.md`) = bức tranh tổng, **do nhóm trưởng cập nhật** (thường khi merge PR). Thành viên **đọc**, không sửa — tiến độ cá nhân ghi vào `context/<tên>.md` của mình.
+- Khi hoàn thành mốc quan trọng, nhóm trưởng cập nhật lại mục **3. Trạng thái hiện tại** và **4. Việc tiếp theo** trong file này
 
 ## 6. Quy ước định dạng notebook (chốt 2026-07-02)
 
