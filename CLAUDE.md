@@ -23,6 +23,12 @@
    ```
 6. **Push nhánh và tạo Pull Request** trên GitHub để cả nhóm review — không merge thẳng vào main.
 
+## Quyền thay đổi cấu trúc & quy định (chỉ nhóm trưởng)
+
+- **Không tự ý thay đổi cấu trúc thư mục, quy trình hay quy định của nhóm.** Chỉ **nhóm trưởng (Hùng)** mới được quyết định. Chi tiết: xem `docs/QUY-TRINH-LAM-VIEC.md` — Phần 0.
+- Phạm vi bị khóa: cấu trúc thư mục gốc (`notebooks/`, `sql/`, `app/`, `models/`, `data/`, `reports/`, `docs/`...), các bước quy trình làm việc, `CLAUDE.md`, hook trong `.claude/`, GitHub Ruleset, quy ước định dạng notebook.
+- Thành viên **được tự do** viết nội dung code/notebook/SQL/app bên trong cấu trúc đã có và thêm file mới đúng chỗ theo quy ước.
+
 ## Hướng dẫn cho Claude
 
 - Đầu phiên làm việc: đọc `PROJECT_CONTEXT.md` (mục 3 và 4) để nắm trạng thái dự án trước khi bắt đầu.
@@ -30,3 +36,4 @@
 - Đầu phiên làm việc: nhắc người dùng pull code mới nhất nếu nhánh đang chậm hơn remote.
 - Khi hoàn thành một task/mốc đáng kể: chủ động cập nhật mục **3. Trạng thái hiện tại** và **4. Việc tiếp theo** trong `PROJECT_CONTEXT.md`, commit ngay trong nhánh của task đó (đi cùng PR, không tạo PR riêng).
 - Commit message viết tiếng Việt không dấu, theo dạng `<loại>: <mô tả>` (ví dụ: `docs: them cell tieu de chuan cho notebook`).
+- Khi được nhờ đổi cấu trúc thư mục / quy trình / quy định nhóm (phạm vi bị khóa ở trên): nhắc đây là việc chỉ nhóm trưởng được quyết. Nếu người dùng không phải nhóm trưởng, đề nghị họ xin ý kiến nhóm trưởng trước; chỉ thực hiện khi có xác nhận của nhóm trưởng.

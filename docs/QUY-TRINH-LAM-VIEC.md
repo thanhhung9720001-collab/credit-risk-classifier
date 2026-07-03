@@ -3,11 +3,28 @@
 > **Áp dụng bắt buộc cho mọi thành viên.** Quy trình này được hỗ trợ bởi 3 lớp bảo vệ tự động
 > (xem [phần cuối](#các-lớp-bảo-vệ-tự-động)), nhưng mỗi người vẫn cần thuộc nhịp làm việc dưới đây.
 
-## 3 quy tắc vàng
+## 4 quy tắc vàng
 
 1. **KHÔNG BAO GIỜ code trực tiếp trên nhánh `main`** — luôn làm trên nhánh riêng.
 2. **Luôn pull code mới nhất TRƯỚC KHI bắt đầu làm việc.**
 3. **Mọi thay đổi vào `main` phải đi qua Pull Request** và được 1 thành viên khác approve.
+4. **KHÔNG tự ý thay đổi cấu trúc thư mục, quy trình hay quy định của nhóm** — chỉ **nhóm trưởng** mới có quyền quyết định (xem [Phần 0](#phần-0--quyền-thay-đổi-cấu-trúc--quy-định)).
+
+---
+
+## PHẦN 0 — Quyền thay đổi cấu trúc & quy định
+
+> **Nhóm trưởng: Hùng.** Chỉ nhóm trưởng mới được quyết định thay đổi những thứ mang tính "khung xương" của dự án.
+
+**Thuộc phạm vi CHỈ nhóm trưởng được đổi:**
+
+- **Cấu trúc thư mục** — tạo/xóa/đổi tên/di chuyển các folder gốc (`notebooks/`, `sql/`, `app/`, `models/`, `data/`, `reports/`, `docs/`...) và cách tổ chức file bên trong đã chốt.
+- **Quy trình làm việc** — các bước trong chính tài liệu này (checklist đầu phiên, cách tạo/review/merge PR, quy ước tên nhánh/commit...).
+- **Quy định & cấu hình nhóm** — `CLAUDE.md`, các hook trong `.claude/`, GitHub Ruleset, quy ước định dạng notebook (mục 6 của `PROJECT_CONTEXT.md`).
+
+**Thành viên vẫn tự do làm (không cần xin phép):** viết nội dung code/notebook/SQL/app **bên trong** cấu trúc đã có, thêm file mới **đúng chỗ** theo quy ước, sửa lỗi, viết báo cáo.
+
+**Nếu bạn thấy cần đổi một thứ thuộc phạm vi trên:** đừng tự sửa. Đề xuất với nhóm trưởng (nhắn nhóm hoặc mở một *issue*/PR để thảo luận). Nhóm trưởng đồng ý thì mới thực hiện. Điều này giúp cả nhóm luôn làm trên một khung thống nhất, tránh mỗi người một kiểu gây rối và conflict.
 
 ---
 
