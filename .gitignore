@@ -34,3 +34,6 @@ models/*
 
 # OMC (oh-my-claudecode) - trạng thái công cụ, không commit
 .omc/
+
+# Khai bao ten thanh vien (moi may 1 lan) - rieng tung may, khong commit
+.claude/whoami
