@@ -5,7 +5,7 @@
 
 ## Đang làm
 
-- **Task:** <tên task / mã trong Task_Tracker.xlsx>
+- **Task:** <tên task / mã trong Google Sheet>
 - **Nhánh:** `feature/<...>`
 - **Trạng thái:** <đang làm / chờ review / xong>
 

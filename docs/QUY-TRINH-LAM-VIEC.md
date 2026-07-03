@@ -55,7 +55,7 @@ git pull
 
 1. **Đọc `PROJECT_CONTEXT.md`** — tập trung mục **3. Trạng thái hiện tại** và **4. Việc tiếp theo** để biết dự án đang đến đâu, người trước vừa làm gì. Làm việc với Claude thì chỉ cần gõ:
    > *"Đọc file PROJECT_CONTEXT.md để nắm ngữ cảnh dự án, sau đó tiếp tục làm việc với tôi."*
-2. Xem phân công trong `Task_Tracker.xlsx` hoặc kênh chat nhóm. Biết task rồi mới biết cần nhánh nào.
+2. Xem phân công trong **Google Sheet theo dõi task** (link ở nhóm chat) hoặc kênh chat nhóm. Biết task rồi mới biết cần nhánh nào.
 
 ### Bước 4: Vào đúng nhánh làm việc
 
@@ -81,7 +81,7 @@ Công thức chung:
 ```
 
 - Viết **tiếng Việt không dấu, chữ thường, nối bằng dấu gạch ngang** (`-`).
-- Nếu task có mã trong `Task_Tracker.xlsx` (T01, T02...) thì đưa mã vào đầu mô tả — nhìn tên nhánh biết ngay task nào: `feature/t05-feature-engineering`.
+- Nếu task có mã trong **Google Sheet** (T01, T02...) thì đưa mã vào đầu mô tả — nhìn tên nhánh biết ngay task nào: `feature/t05-feature-engineering`.
 
 | Tiền tố | Dùng khi | Ví dụ |
 |---|---|---|
@@ -202,7 +202,7 @@ Người review làm 4 bước:
 2. Nhóm trưởng mở PR, bấm **Files changed** review lần cuối → bấm **Merge pull request** → **Confirm merge**.
 3. Bấm **Delete branch** (nút hiện ra ngay sau khi merge) — nhánh đã gộp xong thì xóa cho gọn.
 4. **Nhắn nhóm: "main đã có code mới, mọi người pull nhé"** — ai đang làm việc thì chạy `git pull --rebase origin main` trên nhánh của mình.
-5. Người làm task cập nhật trạng thái trong `Task_Tracker.xlsx`.
+5. Người làm task cập nhật trạng thái trong **Google Sheet theo dõi task**.
 
 ---
 
