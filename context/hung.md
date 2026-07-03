@@ -4,18 +4,18 @@
 
 ## Đang làm
 
-- **Task:** Thiết lập quy trình làm việc nhóm (context cá nhân + khai báo tên đầu phiên)
-- **Nhánh:** `docs/noi-quy-khoa-cau-truc-quy-trinh`
+- **Task:** Cập nhật PROJECT_CONTEXT.md sau khi hoàn thiện quy trình nhóm
+- **Nhánh:** `docs/cap-nhat-project-context`
 - **Trạng thái:** đang làm
 
 ## Làm tới đâu (cập nhật mới nhất ở trên)
 
-- **2026-07-03:** Thêm nội quy "chỉ nhóm trưởng được đổi cấu trúc/quy trình". Tách file context riêng cho từng thành viên trong `context/` để tránh conflict. Thêm cơ chế khai báo tên đầu phiên qua `.claude/whoami` + hook tự chào.
+- **2026-07-03:** Đã merge (PR #5, #6, #7): nội quy "chỉ nhóm trưởng đổi cấu trúc/quy trình", context cá nhân theo từng thành viên, khai báo tên qua `.claude/whoami`, hook `edit-branch-guard` chặn sửa file trên main. Đang cập nhật `PROJECT_CONTEXT.md`.
 
 ## Còn dở / việc tiếp theo của tôi
 
-- [ ] Merge PR quy trình vào main
-- [ ] Nhắc mỗi thành viên tạo `.claude/whoami` và file `context/<ten>.md` của họ
+- [ ] Merge PR cập nhật PROJECT_CONTEXT.md
+- [ ] Nhắc mỗi thành viên: pull main, tạo `.claude/whoami` + `context/<ten>.md`, khởi động lại Claude Code để nạp hook
 
 ## Ghi chú riêng
 
