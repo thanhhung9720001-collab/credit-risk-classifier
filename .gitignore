@@ -37,3 +37,6 @@ models/*
 
 # Khai bao ten thanh vien (moi may 1 lan) - rieng tung may, khong commit
 .claude/whoami
+
+# Task Tracker - nhom truong quan ly rieng ben ngoai repo, khong commit
+Task_Tracker.xlsx
