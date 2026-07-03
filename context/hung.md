@@ -4,17 +4,19 @@
 
 ## Đang làm
 
-- **Task:** Cập nhật PROJECT_CONTEXT.md sau khi hoàn thiện quy trình nhóm
-- **Nhánh:** `docs/cap-nhat-project-context`
-- **Trạng thái:** đang làm
+- **Task:** T01 — Notebook 01 Tìm hiểu dữ liệu (`notebooks/01_data_understanding.ipynb`)
+- **Nhánh:** `feature/notebook-01-data-understanding`
+- **Trạng thái:** đã xong nội dung + chạy nhúng output, chờ tạo PR & merge
 
 ## Làm tới đâu (cập nhật mới nhất ở trên)
 
-- **2026-07-03:** Đã merge (PR #5, #6, #7): nội quy "chỉ nhóm trưởng đổi cấu trúc/quy trình", context cá nhân theo từng thành viên, khai báo tên qua `.claude/whoami`, hook `edit-branch-guard` chặn sửa file trên main. Đang cập nhật `PROJECT_CONTEXT.md`.
+- **2026-07-03:** Hoàn thành notebook 01 (32 cell, đúng quy ước format nhóm): (1) chuẩn bị môi trường; (2) tổng quan 8 bảng — dòng/cột/RAM/tỷ lệ thiếu; (3) bảng trung tâm `application_train` (307.511×122): kiểu dữ liệu, `TARGET` mất cân bằng ~8%, missing (67 cột thiếu), thống kê mô tả; (4) bảng phụ & quan hệ khóa `SK_ID_CURR/BUREAU/PREV`; (5) từ điển dữ liệu; (6) tổng kết dẫn sang notebook 02. Đã `nbconvert --execute` nhúng output thật (3 biểu đồ), không lỗi. Đã cài `nbconvert` để thực thi notebook (chưa thêm vào `requirements.txt` — thuộc task README/requirements riêng).
+- **2026-07-03:** Đã merge (PR #5, #6, #7): nội quy "chỉ nhóm trưởng đổi cấu trúc/quy trình", context cá nhân theo từng thành viên, khai báo tên qua `.claude/whoami`, hook `edit-branch-guard` chặn sửa file trên main. Đã cập nhật `PROJECT_CONTEXT.md`.
 
 ## Còn dở / việc tiếp theo của tôi
 
-- [ ] Merge PR cập nhật PROJECT_CONTEXT.md
+- [ ] Push nhánh `feature/notebook-01-data-understanding` + tạo PR, review rồi merge
+- [ ] Sau khi merge: cập nhật mục 3 & 4 trong `PROJECT_CONTEXT.md` (đánh dấu notebook 01 đã có nội dung)
 - [ ] Nhắc mỗi thành viên: pull main, tạo `.claude/whoami` + `context/<ten>.md`, khởi động lại Claude Code để nạp hook
 
 ## Ghi chú riêng
