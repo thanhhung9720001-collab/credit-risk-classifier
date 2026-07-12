@@ -34,7 +34,7 @@
 4. **Models** (`models/`): lưu `model.pkl` và `scaler.pkl` sau khi train
 5. **Báo cáo** (`reports/`): báo cáo Word + slide PowerPoint theo mẫu trường (`docs/2. Mau tai lieu.docx`, `docs/3. Mau bao cao.pptx`); theo dõi tiến độ nhóm bằng **Google Sheet** (nhóm trưởng quản lý, link ở nhóm chat — không nằm trong repo)
 
-## 3. Trạng thái hiện tại (cập nhật 2026-07-03)
+## 3. Trạng thái hiện tại (cập nhật 2026-07-12)
 
 - ✅ Đã dựng xong cấu trúc thư mục hoàn chỉnh
 - ✅ Đã tải đầy đủ dữ liệu Home Credit vào `data/raw/`
@@ -48,18 +48,23 @@
 - ✅ **Context cá nhân (2026-07-03)**: mỗi thành viên có 1 file `context/<tên>.md` (chỉ chủ nhân sửa → hết conflict); khai báo tên đầu phiên qua `.claude/whoami` (không commit). `PROJECT_CONTEXT.md` từ nay do **nhóm trưởng làm chủ** (bức tranh tổng)
 - 🔄 **Bắt đầu triển khai nội dung code**:
   - ✅ **Notebook 01 (`01_data_understanding.ipynb`) — HOÀN THÀNH** (T01, merge PR #12): 32 cell đúng quy ước format; tổng quan 8 bảng, phân tích `application_train` (307.511×122, `TARGET` mất cân bằng ~8%, 67 cột thiếu, thống kê mô tả), quan hệ khóa các bảng phụ, từ điển dữ liệu, tổng kết. Đã chạy nhúng output thật.
-  - ❌ Các notebook 02→07 vẫn chỉ có cell tiêu đề; tất cả file SQL, tất cả file trong `app/`, `README.md`, `requirements.txt`, `models/*.pkl` vẫn rỗng
+  - ✅ **Script SQL 01 (`01_create_tables.sql`) — HOÀN THÀNH** (T02, merge PR #15): Schema 8 bảng thô PostgreSQL, tối ưu kiểu dữ liệu số thực (`DOUBLE PRECISION` cho 25 cột thay vì `INT`).
+  - ✅ **Script SQL 02 (`02_import_data.sql`) — HOÀN THÀNH** (T03, merge PR #16, #17): Hỗ trợ import dữ liệu hàng loạt từ CSV vào database bằng lệnh `COPY` / `\copy`, kèm ghi chú đổi đường dẫn CSV phù hợp với cấu hình của từng máy.
+  - ❌ Các notebook 02→07 vẫn chỉ có cell tiêu đề; các file SQL 03, 04, 05, các file trong `app/`, `README.md`, `requirements.txt`, và `models/*.pkl` vẫn rỗng.
 
 ## 4. Việc tiếp theo (chưa quyết định thứ tự, cần hỏi user)
 
 **Với mọi thành viên trước khi bắt đầu:** đọc `docs/QUY-TRINH-LAM-VIEC.md` và làm theo checklist đầu phiên (pull code mới → **khai báo tên** `echo <tên> > .claude/whoami` + tạo `context/<tên>.md` → tạo/chuyển nhánh, KHÔNG code trên main). Ai đã kéo quy trình mới về nhớ **khởi động lại Claude Code** để nạp hook.
 
-Các hướng tiếp theo khả dĩ (mỗi việc = 1 nhánh riêng, đưa mã task vào đầu tên nhánh nếu có — vd `feature/t02-...`; xem gợi ý phân công 5 người trong quy trình):
-- Notebook `02_posgrespl_pipline.ipynb` (pipeline PostgreSQL) — nối tiếp notebook 01
-- Script SQL tạo bảng + import dữ liệu vào PostgreSQL — nhánh `feature/sql-tao-bang-import`
+Các hướng tiếp theo khả dĩ (mỗi việc = 1 nhánh riêng, đưa mã task vào đầu tên nhánh nếu có — vd `feature/t0x-...`; xem gợi ý phân công 5 người trong quy trình):
+- Notebook `02_posgrespl_pipline.ipynb` (pipeline PostgreSQL) — nối tiếp notebook 01 để nạp dữ liệu từ PostgreSQL vào Jupyter Notebook.
+- Viết tiếp các script SQL còn lại: `03_views.sql` (tạo views liên kết bảng), `04_aggregation.sql` (tổng hợp dữ liệu), `05_indexes.sql` (tối ưu hóa hiệu năng truy vấn).
 - Viết `README.md` và `requirements.txt` (kèm `pandas/numpy/matplotlib/seaborn/nbconvert` mà notebook 01 cần) — nhánh `docs/readme-va-requirements`
 
-> ✅ Đã xong: Notebook `01_data_understanding.ipynb` (T01, PR #12).
+> ✅ Đã xong:
+> - Notebook `01_data_understanding.ipynb` (T01, PR #12).
+> - Script SQL `01_create_tables.sql` (T02, PR #15).
+> - Script SQL `02_import_data.sql` (T03, PR #16, #17).
 
 ## 5. Ghi chú làm việc
 
