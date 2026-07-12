@@ -4,12 +4,14 @@
 
 ## Đang làm
 
-- **Task:** T05 SQL 03 - Tạo views (create_views)
-- **Nhánh:** `feature/t05-sql-create-views`
-- **Trạng thái:** Đã hoàn thành (đang tạo PR)
+- **Task:** Cập nhật `PROJECT_CONTEXT.md` và `context/hung.md` sau khi hoàn thành SQL Views (T05)
+- **Nhánh:** `docs/cap-nhat-project-context-views`
+- **Trạng thái:** Đang thực hiện (đã chỉnh sửa file cục bộ, chuẩn bị push PR)
 
 ## Làm tới đâu (cập nhật mới nhất ở trên)
 
+- **2026-07-12:** Tạo nhánh `docs/cap-nhat-project-context-views` và cập nhật `PROJECT_CONTEXT.md` để ghi nhận việc hoàn thành và merge thành công task T05 (tạo views - PR #19) vào `main`.
+- **2026-07-12:** Merge thành công PR #19 gộp task T05 (views) vào `main`, sau đó switch về `main` cục bộ và `git pull` để đồng bộ code mới nhất.
 - **2026-07-12:** Thực hiện và hoàn thành viết mã cho [03_views.sql](file:///d:/FPT%20Polytechnic/2026/HK%20Summer%202026/Block2/Du-an-01/credit-risk-classifier/sql/03_views.sql) bao gồm 7 views chi tiết làm sạch và tính toán đặc trưng tài chính từ 8 bảng thô. Đã khắc phục lỗi cú pháp UNION và bổ sung comment giải thích nghiệp vụ (như khái niệm CIC, cách tính tỷ lệ nợ/sử dụng thẻ, số ngày trễ hạn).
 - **2026-07-12:** Đã merge nhánh `docs/hung-cap-nhat-project-context` để cập nhật trạng thái chung của dự án sau khi hoàn thành tạo bảng (T02) và import (T03).
 - **2026-07-03:** Dựng `AGENTS.md` làm nguồn sự thật duy nhất cho quy định nhóm (mirror nội dung CLAUDE.md cũ); `CLAUDE.md` giờ chỉ còn `@AGENTS.md` (Claude Code tự nạp). Mục đích: dùng xen kẽ Claude Code và Antigravity mà không lệch quy định. Lưu ý đã ghi trong AGENTS.md: hook `.claude/` chỉ Claude Code chạy, Antigravity không có — dựa vào GitHub Ruleset + kỷ luật.
@@ -19,8 +21,8 @@
 
 ## Còn dở / việc tiếp theo của tôi
 
-- [ ] Push nhánh `feature/t05-sql-create-views` lên GitHub và tạo Pull Request (PR).
-- [ ] Nhờ thành viên khác trong nhóm review chéo và tiến hành merge vào `main`.
+- [ ] Push nhánh `docs/cap-nhat-project-context-views` lên GitHub, tạo Pull Request và tự merge vào `main` (sau khi review kỹ).
+- [ ] Phối hợp với nhóm để chốt và phân công các task tiếp theo (Notebook 02, SQL Views/Aggregations/Indexes, README & Requirements).
 
 ## Ghi chú riêng
 
