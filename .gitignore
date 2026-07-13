@@ -40,3 +40,6 @@ models/*
 
 # Task Tracker - nhom truong quan ly rieng ben ngoai repo, khong commit
 Task_Tracker.xlsx
+
+# File cau hinh bien moi truong local - rieng tung may, khong commit
+.env
