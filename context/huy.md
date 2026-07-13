@@ -5,30 +5,28 @@
 
 ## Đang làm
 
-- **Task:** T04 Notebook 02 - Pipeline PostgreSQL (kết nối, load)
-- **Nhánh:** `feature/t04-postgres-pipeline`
-- **Trạng thái:** Xong (Đã push lên GitHub thành công, chờ tạo PR)
+- **Task:** T09 Notebook 04 - EDA & trực quan hóa
+- **Nhánh:** `feature/t09-eda-visualization`
+- **Trạng thái:** Xong (Đã hoàn thành phân tích và vẽ biểu đồ, thực thi notebook thành công)
 
 ## Làm tới đâu (cập nhật mới nhất ở trên)
 
 - **2026-07-13:**
-  - Được cấp quyền Collaborator và push thành công nhánh `feature/t04-postgres-pipeline` lên GitHub.
-- **2026-07-09:**
-  - Khai báo định danh `huy` trong `.claude/whoami`.
-  - Switch sang nhánh `feature/t04-postgres-pipeline` và rebase với `main` mới nhất.
-  - Thêm các thư viện cần thiết (`psycopg2-binary`, `pandas`, `python-dotenv`, `sqlalchemy`) vào [requirements.txt](file:///d:/du%20an%201/requirements.txt) và cài đặt thành công.
-  - Tạo file cấu hình [.env.example](file:///d:/du%20an%201/.env.example) và file `.env` local với mật khẩu chính xác là `h`.
-  - Viết xong 3 script SQL còn thiếu: [03_views.sql](file:///d:/du%20an%201/sql/03_views.sql), [04_aggregation.sql](file:///d:/du%20an%201/sql/04_aggregation.sql), [05_indexes.sql](file:///d:/du%20an%201/sql/05_indexes.sql).
-  - Hoàn thiện notebook [02_posgrespl_pipline.ipynb](file:///d:/du%20an%201/notebooks/02_posgrespl_pipline.ipynb) theo quy ước format của nhóm.
-  - Thực thi thành công pipeline, nạp toàn bộ dữ liệu CSV thô từ `data/raw/` vào PostgreSQL database `credit-risk-classifier-DB` và kiểm chứng số dòng hoàn toàn khớp.
+  - Khai báo danh tính `huy`, chuyển hướng sang thực hiện task T09.
+  - Cài đặt thư viện `nbconvert` và `ipykernel` phục vụ chạy tự động notebook.
+  - Hoàn thiện toàn bộ notebook [04_eda_visualization.ipynb](file:///d:/du%20an%201/notebooks/04_eda_visualization.ipynb) với đầy đủ các phân tích đơn biến, đa biến, phân tích tương quan từ các bảng phụ (`bureau`, `installments_payments`) và ma trận tương quan Heatmap.
+  - Sử dụng SQL kết nối trực tiếp đến PostgreSQL cục bộ để truy vấn lấy mẫu ngẫu nhiên (50,000 dòng) giúp tối ưu hóa bộ nhớ và hiệu năng vẽ biểu đồ.
+  - Chạy thực nghiệm thành công toàn bộ notebook, xuất và nhúng đầy đủ tất cả biểu đồ trực quan hóa.
+  - Rút ra các phát hiện nghiệp vụ quan trọng (Insights) định hướng cho Feature Engineering.
 
 ## Còn dở / việc tiếp theo của tôi
 
-- [x] Sửa mật khẩu kết nối database trong file `.env` cho khớp với mật khẩu PostgreSQL local.
-- [x] Chạy thực nghiệm toàn bộ Notebook 02 để xác thực dữ liệu được import đầy đủ và chính xác.
-- [ ] Tạo PR và nhờ nhóm trưởng Hưng review & merge vào `main`.
+- [ ] Tạo nhánh mới `feature/t09-eda-visualization` và commit file notebook 04 cùng các thay đổi lên GitHub.
+- [ ] Tạo PR cho task T09 gửi nhóm trưởng Hưng duyệt.
 
 ## Ghi chú riêng
 
-- Sử dụng `copy_expert` giúp chạy pipeline linh hoạt không phụ thuộc đường dẫn tuyệt đối của server PostgreSQL và tránh lỗi phân quyền Windows.
+- Các biểu đồ đều tuân thủ định dạng của nhóm (Title, Label, Legend) và có cell Markdown nhận xét ngay bên dưới.
+- Không load trực tiếp file CSV 2.5GB vào Pandas mà sử dụng SQL qua PostgreSQL để lấy mẫu nhanh gọn.
+
 

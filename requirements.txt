@@ -1,4 +1,7 @@
 psycopg2-binary
 pandas
+numpy
 python-dotenv
 sqlalchemy
+matplotlib
+seaborn
