@@ -4,12 +4,13 @@
 
 ## Đang làm
 
-- **Task:** Cập nhật `PROJECT_CONTEXT.md` và `context/hung.md` sau khi hoàn thành SQL Views (T05)
-- **Nhánh:** `docs/cap-nhat-project-context-views`
-- **Trạng thái:** Đang thực hiện (đã chỉnh sửa file cục bộ, chuẩn bị push PR)
+- **Task:** Sửa lỗi env path + nạp trùng dữ liệu trong notebook 02 (pipeline PostgreSQL) của Huy
+- **Nhánh:** `fix/t02-env-path-error`
+- **Trạng thái:** Đã sửa + chạy lại notebook xác nhận đúng, chuẩn bị commit/push PR
 
 ## Làm tới đâu (cập nhật mới nhất ở trên)
 
+- **2026-07-13:** Sửa notebook 02 (task của Huy): (1) đổi `load_dotenv('../.env')` -> `load_dotenv(find_dotenv(), override=True)` để tìm `.env` bất kể thư mục chạy, sửa default `db_name` thành `credit_risk_db`; (2) phát hiện `installments_payments` và `credit_card_balance` bị nạp gấp đôi (27.2M/7.6M) do hàm import không xóa bảng trước khi COPY -> thêm `TRUNCATE TABLE ... RESTART IDENTITY` (chung transaction với COPY) cho chạy lại an toàn (idempotent); (3) thêm cell markdown "Chuẩn bị trước khi chạy" liệt kê 4 bước cho thành viên pull về (pip install, tạo DB rỗng, tạo `.env` từ mẫu, tải CSV vào `data/raw/`). Đã Restart & Run All: số dòng về đúng chuẩn (installments 13.605.401, credit_card 3.840.312), không lỗi.
 - **2026-07-12:** Tạo nhánh `docs/cap-nhat-project-context-views` và cập nhật `PROJECT_CONTEXT.md` để ghi nhận việc hoàn thành và merge thành công task T05 (tạo views - PR #19) vào `main`.
 - **2026-07-12:** Merge thành công PR #19 gộp task T05 (views) vào `main`, sau đó switch về `main` cục bộ và `git pull` để đồng bộ code mới nhất.
 - **2026-07-12:** Thực hiện và hoàn thành viết mã cho [03_views.sql](file:///d:/FPT%20Polytechnic/2026/HK%20Summer%202026/Block2/Du-an-01/credit-risk-classifier/sql/03_views.sql) bao gồm 7 views chi tiết làm sạch và tính toán đặc trưng tài chính từ 8 bảng thô. Đã khắc phục lỗi cú pháp UNION và bổ sung comment giải thích nghiệp vụ (như khái niệm CIC, cách tính tỷ lệ nợ/sử dụng thẻ, số ngày trễ hạn).
