@@ -4,12 +4,14 @@
 
 ## Đang làm
 
-- **Task:** Sửa lỗi env path + nạp trùng dữ liệu trong notebook 02 (pipeline PostgreSQL) của Huy
-- **Nhánh:** `fix/t02-env-path-error`
-- **Trạng thái:** Đã sửa + chạy lại notebook xác nhận đúng, chuẩn bị commit/push PR
+- **Task:** Sửa notebook 04 (EDA) — đồng bộ fix env path, bổ sung biểu đồ mục 4, vá requirements.txt thiếu thư viện
+- **Nhánh:** `fix/nb04-env-path-va-bieu-do-bureau`
+- **Trạng thái:** Đã sửa + chạy lại notebook xác nhận đúng, đã commit, chuẩn bị push PR
 
 ## Làm tới đâu (cập nhật mới nhất ở trên)
 
+- **2026-07-13:** Rà soát + sửa notebook 04 (EDA & Visualization): (1) cell kết nối DB dính đúng lỗi env path như NB02 -> áp cùng bản fix `load_dotenv(find_dotenv(), override=True)` + default `db_name='credit_risk_db'`, `db_password='postgres'`; (2) Mục 4 (Bureau) chỉ query dữ liệu mà KHÔNG vẽ biểu đồ, nhận xét lại mô tả cột không có trong query -> thêm boxplot (số khoản vay Active + tổng nợ quá hạn theo TARGET, dùng symlog) và sửa nhận xét khớp dữ liệu thật; (3) phát hiện `requirements.txt` THIẾU `matplotlib`, `seaborn`, `numpy` (NB01/NB04 đều dùng để vẽ) -> đã bổ sung; (4) thêm cell "Điều kiện trước khi chạy" ở đầu NB04 (phải chạy NB02 trước, có `.env`, cài requirements). Đã Restart & Run All: execution 1..9 liền mạch, có biểu đồ bureau, không lỗi.
+- **2026-07-13:** Đánh giá chéo các task SQL của nhóm: T07 `05_indexes.sql` (Thắng) đạt tốt — chỉ 1 index hơi thừa (`idx_bureau_balance_bureau` bị composite bao trùm), không chặn merge; `04_aggregation.sql` (Huy) tốt, chọn đúng materialized view + unique index cho refresh concurrent.
 - **2026-07-13:** Sửa notebook 02 (task của Huy): (1) đổi `load_dotenv('../.env')` -> `load_dotenv(find_dotenv(), override=True)` để tìm `.env` bất kể thư mục chạy, sửa default `db_name` thành `credit_risk_db`; (2) phát hiện `installments_payments` và `credit_card_balance` bị nạp gấp đôi (27.2M/7.6M) do hàm import không xóa bảng trước khi COPY -> thêm `TRUNCATE TABLE ... RESTART IDENTITY` (chung transaction với COPY) cho chạy lại an toàn (idempotent); (3) thêm cell markdown "Chuẩn bị trước khi chạy" liệt kê 4 bước cho thành viên pull về (pip install, tạo DB rỗng, tạo `.env` từ mẫu, tải CSV vào `data/raw/`). Đã Restart & Run All: số dòng về đúng chuẩn (installments 13.605.401, credit_card 3.840.312), không lỗi.
 - **2026-07-12:** Tạo nhánh `docs/cap-nhat-project-context-views` và cập nhật `PROJECT_CONTEXT.md` để ghi nhận việc hoàn thành và merge thành công task T05 (tạo views - PR #19) vào `main`.
 - **2026-07-12:** Merge thành công PR #19 gộp task T05 (views) vào `main`, sau đó switch về `main` cục bộ và `git pull` để đồng bộ code mới nhất.
