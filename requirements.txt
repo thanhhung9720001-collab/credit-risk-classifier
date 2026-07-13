@@ -5,3 +5,5 @@ python-dotenv
 sqlalchemy
 matplotlib
 seaborn
+scikit-learn
+joblib
