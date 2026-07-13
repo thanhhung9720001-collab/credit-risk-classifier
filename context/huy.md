@@ -7,10 +7,12 @@
 
 - **Task:** T04 Notebook 02 - Pipeline PostgreSQL (kết nối, load)
 - **Nhánh:** `feature/t04-postgres-pipeline`
-- **Trạng thái:** Xong (Đã hoàn thành viết code, nạp database và kiểm chứng thành công)
+- **Trạng thái:** Xong (Đã push lên GitHub thành công, chờ tạo PR)
 
 ## Làm tới đâu (cập nhật mới nhất ở trên)
 
+- **2026-07-13:**
+  - Được cấp quyền Collaborator và push thành công nhánh `feature/t04-postgres-pipeline` lên GitHub.
 - **2026-07-09:**
   - Khai báo định danh `huy` trong `.claude/whoami`.
   - Switch sang nhánh `feature/t04-postgres-pipeline` và rebase với `main` mới nhất.
