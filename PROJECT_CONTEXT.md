@@ -34,7 +34,7 @@
 4. **Models** (`models/`): lưu `model.pkl` và `scaler.pkl` sau khi train
 5. **Báo cáo** (`reports/`): báo cáo Word + slide PowerPoint theo mẫu trường (`docs/2. Mau tai lieu.docx`, `docs/3. Mau bao cao.pptx`); theo dõi tiến độ nhóm bằng **Google Sheet** (nhóm trưởng quản lý, link ở nhóm chat — không nằm trong repo)
 
-## 3. Trạng thái hiện tại (cập nhật 2026-07-12)
+## 3. Trạng thái hiện tại (cập nhật 2026-07-13)
 
 - ✅ Đã dựng xong cấu trúc thư mục hoàn chỉnh
 - ✅ Đã tải đầy đủ dữ liệu Home Credit vào `data/raw/`
@@ -46,27 +46,28 @@
   - **Tài liệu**: `docs/QUY-TRINH-LAM-VIEC.md` (quy trình chi tiết + Phần 0 quyền đổi cấu trúc + Phần 6 context cá nhân) + `CLAUDE.md` (quy tắc cho Claude)
 - ✅ **Nội quy (2026-07-03)**: chỉ **nhóm trưởng (Hưng)** được thay đổi cấu trúc thư mục / quy trình / quy định (Phần 0 quy trình)
 - ✅ **Context cá nhân (2026-07-03)**: mỗi thành viên có 1 file `context/<tên>.md` (chỉ chủ nhân sửa → hết conflict); khai báo tên đầu phiên qua `.claude/whoami` (không commit). `PROJECT_CONTEXT.md` từ nay do **nhóm trưởng làm chủ** (bức tranh tổng)
-- 🔄 **Bắt đầu triển khai nội dung code**:
-  - ✅ **Notebook 01 (`01_data_understanding.ipynb`) — HOÀN THÀNH** (T01, merge PR #12): 32 cell đúng quy ước format; tổng quan 8 bảng, phân tích `application_train` (307.511×122, `TARGET` mất cân bằng ~8%, 67 cột thiếu, thống kê mô tả), quan hệ khóa các bảng phụ, từ điển dữ liệu, tổng kết. Đã chạy nhúng output thật.
-  - ✅ **Script SQL 01 (`01_create_tables.sql`) — HOÀN THÀNH** (T02, merge PR #15): Schema 8 bảng thô PostgreSQL, tối ưu kiểu dữ liệu số thực (`DOUBLE PRECISION` cho 25 cột thay vì `INT`).
-  - ✅ **Script SQL 02 (`02_import_data.sql`) — HOÀN THÀNH** (T03, merge PR #16, #17): Hỗ trợ import dữ liệu hàng loạt từ CSV vào database bằng lệnh `COPY` / `\copy`, kèm ghi chú đổi đường dẫn CSV phù hợp với cấu hình của từng máy.
-  - ✅ **Script SQL 03 (`03_views.sql`) — HOÀN THÀNH** (T05, merge PR #19): Tạo 7 views chi tiết làm sạch, tính toán các chỉ số nghiệp vụ tài chính (CIC, tỷ lệ dư nợ, số ngày trễ hạn, tỷ lệ sử dụng thẻ) từ 8 bảng thô, kèm chú thích tiếng Việt chi tiết.
-  - ❌ Các notebook 02→07 vẫn chỉ có cell tiêu đề; các file SQL 04, 05, các file trong `app/`, `README.md`, `requirements.txt`, và `models/*.pkl` vẫn rỗng.
+- 🔄 **Triển khai nội dung code** (cập nhật 2026-07-13):
+  - ✅ **Toàn bộ 5 script SQL — HOÀN THÀNH**: `01_create_tables.sql` (T02, PR #15 — schema 8 bảng, tối ưu kiểu số); `02_import_data.sql` (T03, PR #16/#17 — import CSV bằng `COPY`, ghi chú đổi đường dẫn từng máy); `03_views.sql` (T05, PR #19 — 7 view làm sạch + chỉ số nghiệp vụ CIC/dư nợ/trễ hạn/dùng thẻ); `04_aggregation.sql` (kèm pipeline T04, PR #23 — 3 materialized view tổng hợp installments/pos_cash/credit_card theo khách hàng, có unique index); `05_indexes.sql` (T07, PR #25 — index khóa ngoại + composite/partial cho bureau_balance & target).
+  - ✅ **Notebook 01 (`01_data_understanding.ipynb`) — HOÀN THÀNH** (T01, PR #12): 32 cell; tổng quan 8 bảng, phân tích `application_train` (307.511×122, `TARGET` ~8%, 67 cột thiếu), quan hệ khóa, từ điển dữ liệu.
+  - ✅ **Notebook 02 (`02_posgrespl_pipline.ipynb`) — HOÀN THÀNH** (T04, PR #23): pipeline PostgreSQL bằng Python (tạo bảng → import `copy_expert` → view/aggregation/index → validation). **Đã sửa** lỗi env path (`find_dotenv`) và lỗi nạp trùng dữ liệu (thêm `TRUNCATE` cho idempotent) — fix PR #27.
+  - ✅ **Notebook 04 (`04_eda_visualization.ipynb`) — HOÀN THÀNH** (T09, PR #24): EDA đơn/đa biến, tương quan, biểu đồ theo `TARGET`. **Đã sửa** đồng bộ env path + bổ sung biểu đồ mục 4 (bureau) + nhận xét — fix PR #28.
+  - ✅ **Notebook 05 (`05_feature_engineering.ipynb`) — HOÀN THÀNH** (T10, PR #26/#29): tổng hợp đặc trưng từ 5 bảng phụ, biến nghiệp vụ (DTI, ext_source...), One-Hot, StandardScaler (fit trên train, tránh leakage), xuất `data/processed/*.csv` + `models/scaler.pkl`. **Đã vá** `reduce_mem_usage` để chạy được trên pandas 3.0/numpy 2.x. Lưu ý: cờ `DEBUG=True` mặc định chỉ xuất dữ liệu MẪU (15k/5k) — đổi `DEBUG=False` để tạo bộ đầy đủ.
+  - ✅ **`requirements.txt`** — đã có đủ thư viện: `psycopg2-binary, pandas, numpy, python-dotenv, sqlalchemy, matplotlib, seaborn, scikit-learn, joblib`.
+  - ❌ **Còn lại (chưa làm):** notebook `03_data_cleaning`, `06_machine_learnig`, `07_prediction_demo` mới có cell tiêu đề; các file trong `app/` (Streamlit) còn rỗng; `README.md` rỗng; `models/model.pkl` chưa có (mới có `scaler.pkl` do NB05 sinh, đã gitignore).
+  - ⚠️ **Bài học chung (2026-07-13):** NB02/04/05 đều dính lỗi kiểu *"chạy được máy tác giả, hỏng máy khác"* — đường dẫn cứng, thiếu thư viện trong `requirements.txt`, và **lệch phiên bản** (pandas 3.0/numpy 2.x vs bản cũ). Nên **ghim phiên bản thư viện** trong `requirements.txt` để cả nhóm chạy giống nhau.
 
 ## 4. Việc tiếp theo (chưa quyết định thứ tự, cần hỏi user)
 
 **Với mọi thành viên trước khi bắt đầu:** đọc `docs/QUY-TRINH-LAM-VIEC.md` và làm theo checklist đầu phiên (pull code mới → **khai báo tên** `echo <tên> > .claude/whoami` + tạo `context/<tên>.md` → tạo/chuyển nhánh, KHÔNG code trên main). Ai đã kéo quy trình mới về nhớ **khởi động lại Claude Code** để nạp hook.
 
 Các hướng tiếp theo khả dĩ (mỗi việc = 1 nhánh riêng, đưa mã task vào đầu tên nhánh nếu có — vd `feature/t0x-...`; xem gợi ý phân công 5 người trong quy trình):
-- Notebook `02_posgrespl_pipline.ipynb` (pipeline PostgreSQL) — nối tiếp notebook 01 để nạp dữ liệu từ PostgreSQL vào Jupyter Notebook.
-- Viết tiếp các script SQL còn lại: `04_aggregation.sql` (tổng hợp dữ liệu), `05_indexes.sql` (tối ưu hóa hiệu năng truy vấn).
-- Viết `README.md` và `requirements.txt` (kèm `pandas/numpy/matplotlib/seaborn/nbconvert` mà notebook 01 cần) — nhánh `docs/readme-va-requirements`
+- **Notebook `03_data_cleaning.ipynb`** (làm sạch dữ liệu) — hiện mới có cell tiêu đề. Lưu ý: NB05 đã tự làm sạch tối thiểu vì NB03 chưa có; cần chốt lại vai trò của NB03 trong pipeline.
+- **Notebook `06_machine_learnig.ipynb`** (huấn luyện & so sánh mô hình ML) — đọc `data/processed/*.csv` từ NB05, train, đánh giá, lưu `models/model.pkl`. **Nhắc:** trước khi train thật phải chạy NB05 với `DEBUG=False` để có bộ đặc trưng đầy đủ (mặc định đang xuất dữ liệu mẫu).
+- **Notebook `07_prediction_demo.ipynb`** + **`app/` (Streamlit)** — demo dự đoán, nạp `model.pkl` + `scaler.pkl`.
+- **`README.md`** (hiện rỗng) — hướng dẫn cài đặt & chạy dự án.
+- **Ghim phiên bản thư viện trong `requirements.txt`** (vd cố định `pandas`, `numpy`, `scikit-learn`) để cả nhóm chạy đồng nhất, tránh lỗi lệch phiên bản như đã gặp ở NB05.
 
-> ✅ Đã xong:
-> - Notebook `01_data_understanding.ipynb` (T01, PR #12).
-> - Script SQL `01_create_tables.sql` (T02, PR #15).
-> - Script SQL `02_import_data.sql` (T03, PR #16, #17).
-> - Script SQL `03_views.sql` (T05, PR #19).
+> ✅ Đã xong: Notebook 01 (T01, PR #12), 02 (T04, PR #23 + fix #27), 04 (T09, PR #24 + fix #28), 05 (T10, PR #26/#29); toàn bộ SQL 01–05 (T02/T03/T05/T04/T07); `requirements.txt` cơ bản.
 
 ## 5. Ghi chú làm việc
 
