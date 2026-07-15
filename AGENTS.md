@@ -41,6 +41,8 @@
 ## Hướng dẫn cho AI agent (Claude Code, Antigravity...)
 
 - Đầu phiên làm việc: đọc `PROJECT_CONTEXT.md` (mục 3 và 4) để nắm trạng thái dự án; và đọc `context/<ten>.md` của thành viên đang làm để biết họ đang dở việc gì.
+- **Khi động vào file trong `notebooks/`: đọc thêm `PROJECT_CONTEXT.md` mục 6 (Quy ước định dạng notebook) TRƯỚC KHI sửa** — mục 3/4 không chứa quy ước này.
+  - ⚠️ **Không có quy định "notebook phải đủ 6 mục lớn".** Số mục lớn **không cố định, tuỳ nội dung** (NB01 có 6 mục, NB02–NB06 có 7 — đều đúng). Quy định thật là **mục Tổng kết phải đứng CUỐI**, mang số thứ tự kế tiếp của notebook đó. **Đừng nhồi/gộp mục cho khớp một con số nào cả.**
 - **Trước khi sửa bất kỳ file nào trong repo (Edit/Write): kiểm tra lại nhánh bằng `git branch --show-current` — đừng dựa vào trí nhớ.** Người dùng có thể đã tự đổi về `main` mà AI không biết. Nếu đang ở `main`, chuyển sang nhánh làm việc trước khi sửa (Claude Code có hook `edit-branch-guard.sh` chặn tự động; Antigravity KHÔNG có hook này nên phải tự kiểm tra kỹ hơn).
 - Khi người dùng yêu cầu commit/push: luôn kiểm tra nhánh hiện tại trước. Nếu đang ở `main`, hướng dẫn pull code mới nhất rồi tạo/chuyển nhánh theo quy ước ở trên, sau đó mới commit/push.
 - Đầu phiên làm việc: nhắc người dùng pull code mới nhất nếu nhánh đang chậm hơn remote.
