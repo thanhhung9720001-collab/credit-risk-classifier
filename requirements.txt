@@ -1,9 +1,38 @@
-psycopg2-binary==2.9.12
+# credit-risk-classifier — thư viện Python của dự án
+#
+# Cài đặt:  pip install -r requirements.txt
+# Python:   3.11 (bản cả nhóm đang dùng — xem README mục 3)
+#
+# ⚠️ CÁC PHIÊN BẢN ĐƯỢC GHIM CỨNG (==) CÓ LÝ DO:
+# Nhóm đã nhiều lần dính lỗi "chạy được máy tác giả, hỏng máy khác" do lệch
+# phiên bản (rõ nhất: pandas 3.0 đổi cách đọc cột chữ khiến NB05 lỗi
+# UFuncTypeError, và pandas 3.0 bật Copy-on-Write làm NB03 sai âm thầm).
+# Đừng gỡ dấu ghim nếu chưa bàn với cả nhóm.
+
+# ----- Xử lý dữ liệu -----
 pandas==3.0.3
 numpy==2.4.6
+
+# ----- Kết nối PostgreSQL (NB02, NB04) -----
+# Dùng psycopg2 trực tiếp, KHÔNG qua SQLAlchemy. Khi truyền connection của
+# psycopg2 vào pandas.read_sql, pandas sẽ in cảnh báo gợi ý dùng SQLAlchemy —
+# đó chỉ là cảnh báo, code vẫn chạy đúng, không cần cài thêm.
+psycopg2-binary==2.9.12
 python-dotenv>=1.0.1
-sqlalchemy==2.0.50
+
+# ----- Trực quan hóa (NB01, NB03, NB04) -----
 matplotlib==3.10.9
 seaborn==0.13.2
+
+# ----- Machine Learning (NB05, NB06) -----
 scikit-learn==1.8.0
 joblib==1.5.3
+
+# ----- Chạy notebook -----
+# Đủ để chạy notebook trong VS Code. Muốn mở bằng trình duyệt thì tự cài thêm:
+#   pip install jupyterlab      ->  rồi chạy: jupyter lab
+ipykernel==7.2.0
+
+# ----- App demo Streamlit (app/) -----
+# Ghi chú: app/ hiện còn rỗng, thư viện thêm sẵn cho người làm task app sau.
+streamlit==1.58.0
