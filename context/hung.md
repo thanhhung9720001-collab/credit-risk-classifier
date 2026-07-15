@@ -4,11 +4,18 @@
 
 ## Đang làm
 
-- **Task:** Vá lỗi âm thầm ở NB03 (Copy-on-Write) và NB05 (output là dữ liệu mẫu dù code ghi `DEBUG=False`), chạy lại cả hai trên toàn bộ dữ liệu
-- **Nhánh:** `fix/nb03-replace-copy-on-write`
-- **Trạng thái:** Đã xong phần code — 2 commit (`8144b0a` vá Copy-on-Write NB03, `c39ef84` chạy full data NB03+NB05). Còn lại: push nhánh + tạo PR + merge.
+- **Task:** T19 — viết `README.md` + kiện toàn `requirements.txt` (Data Engineering)
+- **Nhánh:** `feature/t19-readme-va-requirements`
+- **Trạng thái:** Đã xong nội dung (commit `35029d9`). Còn lại: push + tạo PR + merge.
 
 ## Làm tới đâu (cập nhật mới nhất ở trên)
+
+- **2026-07-15 (T19):** Viết `README.md` (trước đó rỗng 0 byte) 8 mục + kiện toàn `requirements.txt`.
+  - **Phát hiện quan trọng khi rà soát — pipeline KHÔNG phải đường thẳng 01→07** như cả nhóm vẫn hình dung. Thực tế là **2 nhánh độc lập**: nhánh CSV (NB01, NB03 → NB05 → NB06 → NB07, **không cần PostgreSQL**) và nhánh Database (NB02 → NB04, cần PostgreSQL). Hệ quả: ai chỉ làm NB06 (train mô hình) thì **khỏi phải cài PostgreSQL** — trước giờ không ai nói rõ điều này. Đã vẽ sơ đồ + lập bảng "cần gì trước / sinh ra gì" cho từng notebook trong README mục 5.
+  - **`requirements.txt` thiếu `ipykernel`** → ai chạy `pip install -r requirements.txt` xong **không mở nổi notebook**. Đúng kiểu lỗi "chạy được máy tác giả, hỏng máy khác" mà nhóm dính mãi. Đã thêm (chọn ipykernel thay vì jupyterlab cho nhẹ — cả nhóm dùng VS Code; ai muốn trình duyệt thì tự `pip install jupyterlab`).
+  - **Bỏ `sqlalchemy==2.0.50`** — đã kiểm chứng không file nào import; nó chỉ xuất hiện trong dòng *cảnh báo* của pandas ("consider using SQLAlchemy") do NB02/04 truyền thẳng connection psycopg2 vào `read_sql`. Cảnh báo chứ không phải lỗi.
+  - **Thêm `streamlit==1.58.0`** sẵn cho task app/ sau này. Tiện thể: streamlit kéo theo `pyarrow` → **hỗ trợ parquet giờ có sẵn miễn phí**, đỡ phải cài thêm khi chuyển `train_features.csv` sang parquet.
+  - **Cách kiểm chứng đã dùng** (nên lặp lại cho task sau): quét import toàn bộ notebook để đối chiếu với requirements; `pip check`; `pip install --dry-run --ignore-installed` (exit 0 = resolve được, không xung đột); đối chiếu 10/10 bản ghim với bản đang cài; và verify từng khẳng định trong README bằng lệnh thật (URL repo, file được trỏ tới có tồn tại, NB01 có check FileNotFoundError, NB02 có TRUNCATE, DEBUG=False ở cả NB03/NB05).
 
 - **2026-07-15:** Phát hiện và vá **2 lỗi âm thầm** trong pipeline làm sạch → đặc trưng:
   - **NB03 — `replace` không ăn do Copy-on-Write:** pandas 3 bật CoW nên `df['cot'].replace(..., inplace=True)` KHÔNG bao giờ ghi được vào DataFrame gốc. Hai bước làm sạch thất bại âm thầm: `DAYS_EMPLOYED = 365243` (~1000 năm) không được thay bằng NaN (2672/15000 dòng còn giá trị bẩn), và `CODE_GENDER = 'XNA'` không được gộp về 'F'. **Thủ phạm giấu lỗi:** `warnings.filterwarnings("ignore")` đã nuốt mất `ChainedAssignmentError` của pandas. Sửa: dùng phép gán thay chained inplace, thêm `assert` kiểm chứng sau mỗi bước thay thế, bỏ blanket filterwarnings (chỉ tắt riêng FutureWarning/DeprecationWarning/PerformanceWarning).
@@ -33,11 +40,13 @@
 
 ## Còn dở / việc tiếp theo của tôi
 
-- [ ] Push nhánh `fix/nb03-replace-copy-on-write` lên GitHub, tạo PR và merge vào `main` (2 commit: `8144b0a`, `c39ef84` + commit docs này).
+- [ ] Push nhánh `feature/t19-readme-va-requirements`, tạo PR và merge (T19 — README + requirements).
+- [ ] Sau khi merge T19: cập nhật `PROJECT_CONTEXT.md` — mục 3 còn ghi "`README.md` rỗng" (nay đã viết xong), mục 4 còn liệt kê README là việc tiếp theo.
 - [ ] Phân công **Notebook 06 (huấn luyện ML)** — việc ưu tiên số 1, dữ liệu đã sẵn sàng (`train_features.csv` 307.511×299). Nhắc người nhận: `TARGET` mất cân bằng ~8% → dùng AUC-ROC thay accuracy, cân nhắc class_weight/SMOTE.
-- [ ] Phân công `README.md` (đang rỗng) và `app/` Streamlit + NB07.
-- [ ] Cân nhắc chuyển `data/processed/*.csv` sang **parquet** — `train_features.csv` đang 1,87 GB, đọc lại ở NB06 sẽ chậm và tốn RAM.
-- [ ] Nhắc nhóm về 3 bài học lỗi âm thầm (mục 3 PROJECT_CONTEXT) — nhất là thói quen Restart & Run All trước khi commit notebook.
+- [ ] Phân công `app/` Streamlit + NB07 (thư viện `streamlit` đã ghim sẵn trong requirements).
+- [ ] Cân nhắc chuyển `data/processed/*.csv` sang **parquet** — `train_features.csv` đang 1,87 GB, đọc lại ở NB06 sẽ chậm và tốn RAM. `pyarrow` nay đã có sẵn (streamlit kéo theo) nên không cần cài thêm gì.
+- [ ] Nhắc nhóm về 3 bài học lỗi âm thầm (mục 3 PROJECT_CONTEXT + mục 7 README) — nhất là thói quen Restart & Run All trước khi commit notebook.
+- [ ] Phổ biến cho nhóm: **NB06 không cần cài PostgreSQL** (phát hiện khi làm T19 — pipeline có 2 nhánh độc lập, xem README mục 5).
 
 ## Ghi chú riêng
 
