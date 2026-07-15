@@ -27,6 +27,12 @@ data/sample/*
 # Bỏ qua toàn bộ nội dung trong models ngoại trừ tệp .gitkeep
 models/*
 !models/.gitkeep
+# Ngoại lệ: model_metadata.json (~10KB) mô tả thứ tự 297 cột đầu vào của model.
+# App Streamlit và NB07 cần đúng thứ tự này mới dự đoán ra kết quả đúng; thiếu nó
+# thì phải chạy lại NB06 (~5 phút + cần train_features.csv 1,87GB) chỉ để lấy 10KB.
+# File nhỏ nên không trái lý do "tránh đẩy tệp dung lượng lớn" ở trên.
+# (Nhóm trưởng Hưng đã đồng ý cho ngoại lệ này — T11.)
+!models/model_metadata.json
 
 # Jupyter Notebook checkpoints
 .ipynb_checkpoints/
