@@ -4,11 +4,17 @@
 
 ## Đang làm
 
-- **Task:** Thêm cell hướng dẫn chuẩn bị trước khi chạy và kiểm tra dữ liệu thô tự động cho notebook 01, đồng thời ghim phiên bản thư viện trong `requirements.txt`
-- **Nhánh:** `fix/nb01-huong-dan-chay-va-kiem-tra-file`
-- **Trạng thái:** Đã hoàn thành thêm cell prerequisites và assertion check trong Notebook 01; hoàn thành ghim phiên bản thư viện trong `requirements.txt`
+- **Task:** Vá lỗi âm thầm ở NB03 (Copy-on-Write) và NB05 (output là dữ liệu mẫu dù code ghi `DEBUG=False`), chạy lại cả hai trên toàn bộ dữ liệu
+- **Nhánh:** `fix/nb03-replace-copy-on-write`
+- **Trạng thái:** Đã xong phần code — 2 commit (`8144b0a` vá Copy-on-Write NB03, `c39ef84` chạy full data NB03+NB05). Còn lại: push nhánh + tạo PR + merge.
 
 ## Làm tới đâu (cập nhật mới nhất ở trên)
+
+- **2026-07-15:** Phát hiện và vá **2 lỗi âm thầm** trong pipeline làm sạch → đặc trưng:
+  - **NB03 — `replace` không ăn do Copy-on-Write:** pandas 3 bật CoW nên `df['cot'].replace(..., inplace=True)` KHÔNG bao giờ ghi được vào DataFrame gốc. Hai bước làm sạch thất bại âm thầm: `DAYS_EMPLOYED = 365243` (~1000 năm) không được thay bằng NaN (2672/15000 dòng còn giá trị bẩn), và `CODE_GENDER = 'XNA'` không được gộp về 'F'. **Thủ phạm giấu lỗi:** `warnings.filterwarnings("ignore")` đã nuốt mất `ChainedAssignmentError` của pandas. Sửa: dùng phép gán thay chained inplace, thêm `assert` kiểm chứng sau mỗi bước thay thế, bỏ blanket filterwarnings (chỉ tắt riêng FutureWarning/DeprecationWarning/PerformanceWarning).
+  - **NB05 — chữ nói full, output là mẫu:** source ghi `DEBUG=False` và markdown khẳng định "đã chạy trên toàn bộ dữ liệu", nhưng ô cấu hình có `execution_count=None` (chưa hề chạy) nên các ô sau chạy bằng `DEBUG=True` còn sót trong kernel → `train_features.csv` chỉ có 15.000 dòng. **Bằng chứng quyết định là dấu thời gian:** train_features.csv ghi lúc 10:09, TRƯỚC khi application_train_clean.csv ghi xong lúc 10:16 → NB05 đã đọc nhầm bản clean mẫu cũ. Sửa: Restart & Run All bằng nbconvert với `DEBUG=False` → train (307511, 299), test (48744, 298), execution 1..13 liền mạch, 0 lỗi, đỉnh RAM ~3,3 GB (thấp hơn nhiều so với mức 8 GB tôi từng cảnh báo trong notebook). Số cột 293→299 do One-Hot trên dữ liệu đầy đủ sinh thêm hạng mục mà mẫu 15k không có.
+  - **Bẫy phụ đã dính:** `nbconvert` chỉ cập nhật output, KHÔNG đụng markdown → sau khi chạy lại vẫn còn 2 cell nhận xét mô tả sai (cell 4 "DEBUG mặc định bật"; cell 5 tả `read_by_chunks` "chỉ giữ dòng trong danh sách lấy mẫu" trong khi `DEBUG=False` đọc nguyên file không lọc — đây mới là bước tốn RAM nhất). Đã sửa tay.
+  - **Rút kinh nghiệm cho cả nhóm (đã ghi vào PROJECT_CONTEXT mục 3):** (1) không dùng `filterwarnings("ignore")` toàn cục; (2) Restart & Run All trước khi commit, kiểm tra execution_count liền mạch 1,2,3...; (3) thêm `assert` sau mỗi bước biến đổi dữ liệu quan trọng để lỗi phải nổ thay vì trôi qua.
 
 - **2026-07-14:** Sửa notebook 01 và ghim dependencies: (1) Thêm cell Markdown "⚙️ Hướng dẫn chuẩn bị trước khi chạy (Đọc kỹ)" hướng dẫn tải dữ liệu từ Kaggle vào `data/raw/`, chạy `pip install -r requirements.txt`, và cảnh báo RAM trống tối thiểu 4GB-8GB. (2) Bổ sung code assert/raise FileNotFoundError tự động kiểm tra xem có thiếu bất kỳ file CSV thô nào không trước khi load nhằm cảnh báo sớm và đưa ra hướng dẫn rõ ràng. (3) Ghim cứng các phiên bản thư viện thực tế đang chạy ổn định của dự án (pandas==3.0.3, numpy==2.4.6, scikit-learn==1.8.0, psycopg2-binary==2.9.12, sqlalchemy==2.0.50, matplotlib==3.10.9, seaborn==0.13.2, joblib==1.5.3, python-dotenv>=1.0.1) vào `requirements.txt`.
 - **2026-07-13:** Rà soát + vá notebook 05 (Feature Engineering - task T10 của Thắng): phát hiện hàm `reduce_mem_usage` báo `UFuncTypeError` trên máy dùng **pandas 3.0 / numpy 2.x** (pandas 3.0 đọc cột chữ thành dtype `str` chứ không còn là `object`, khiến điều kiện `dtype != object` cho cột chữ lọt vào nhánh so sánh số -> numpy 2.x ném lỗi) -> vá bằng `is_numeric_dtype`, bỏ qua bool/cột toàn NaN, cột chữ -> category. Bổ sung `scikit-learn`, `joblib` vào `requirements.txt` (NB05 dùng mà còn thiếu); thêm cell "Điều kiện trước khi chạy" đầu NB05 (đọc CSV raw, không cần DB/`.env`; lưu ý cờ DEBUG mặc định xuất dữ liệu mẫu 15k/5k). Chạy lại bằng nbconvert: hết lỗi, execution 1..13 liền mạch. **Bài học chung:** cả NB02/04/05 đều lỗi kiểu "chạy được máy tác giả, hỏng máy khác" (đường dẫn cứng / thiếu thư viện / lệch phiên bản) -> nên ghim version thư viện trong requirements.
@@ -27,8 +33,11 @@
 
 ## Còn dở / việc tiếp theo của tôi
 
-- [ ] Push nhánh `docs/cap-nhat-project-context-views` lên GitHub, tạo Pull Request và tự merge vào `main` (sau khi review kỹ).
-- [ ] Phối hợp với nhóm để chốt và phân công các task tiếp theo (Notebook 02, SQL Views/Aggregations/Indexes, README & Requirements).
+- [ ] Push nhánh `fix/nb03-replace-copy-on-write` lên GitHub, tạo PR và merge vào `main` (2 commit: `8144b0a`, `c39ef84` + commit docs này).
+- [ ] Phân công **Notebook 06 (huấn luyện ML)** — việc ưu tiên số 1, dữ liệu đã sẵn sàng (`train_features.csv` 307.511×299). Nhắc người nhận: `TARGET` mất cân bằng ~8% → dùng AUC-ROC thay accuracy, cân nhắc class_weight/SMOTE.
+- [ ] Phân công `README.md` (đang rỗng) và `app/` Streamlit + NB07.
+- [ ] Cân nhắc chuyển `data/processed/*.csv` sang **parquet** — `train_features.csv` đang 1,87 GB, đọc lại ở NB06 sẽ chậm và tốn RAM.
+- [ ] Nhắc nhóm về 3 bài học lỗi âm thầm (mục 3 PROJECT_CONTEXT) — nhất là thói quen Restart & Run All trước khi commit notebook.
 
 ## Ghi chú riêng
 

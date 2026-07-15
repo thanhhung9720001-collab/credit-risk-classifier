@@ -34,7 +34,7 @@
 4. **Models** (`models/`): lưu `model.pkl` và `scaler.pkl` sau khi train
 5. **Báo cáo** (`reports/`): báo cáo Word + slide PowerPoint theo mẫu trường (`docs/2. Mau tai lieu.docx`, `docs/3. Mau bao cao.pptx`); theo dõi tiến độ nhóm bằng **Google Sheet** (nhóm trưởng quản lý, link ở nhóm chat — không nằm trong repo)
 
-## 3. Trạng thái hiện tại (cập nhật 2026-07-13)
+## 3. Trạng thái hiện tại (cập nhật 2026-07-15)
 
 - ✅ Đã dựng xong cấu trúc thư mục hoàn chỉnh
 - ✅ Đã tải đầy đủ dữ liệu Home Credit vào `data/raw/`
@@ -51,23 +51,27 @@
   - ✅ **Notebook 01 (`01_data_understanding.ipynb`) — HOÀN THÀNH** (T01, PR #12): 32 cell; tổng quan 8 bảng, phân tích `application_train` (307.511×122, `TARGET` ~8%, 67 cột thiếu), quan hệ khóa, từ điển dữ liệu.
   - ✅ **Notebook 02 (`02_posgrespl_pipline.ipynb`) — HOÀN THÀNH** (T04, PR #23): pipeline PostgreSQL bằng Python (tạo bảng → import `copy_expert` → view/aggregation/index → validation). **Đã sửa** lỗi env path (`find_dotenv`) và lỗi nạp trùng dữ liệu (thêm `TRUNCATE` cho idempotent) — fix PR #27.
   - ✅ **Notebook 04 (`04_eda_visualization.ipynb`) — HOÀN THÀNH** (T09, PR #24): EDA đơn/đa biến, tương quan, biểu đồ theo `TARGET`. **Đã sửa** đồng bộ env path + bổ sung biểu đồ mục 4 (bureau) + nhận xét — fix PR #28.
-  - ✅ **Notebook 05 (`05_feature_engineering.ipynb`) — HOÀN THÀNH** (T10, PR #26/#29): tổng hợp đặc trưng từ 5 bảng phụ, biến nghiệp vụ (DTI, ext_source...), One-Hot, StandardScaler (fit trên train, tránh leakage), xuất `data/processed/*.csv` + `models/scaler.pkl`. **Đã vá** `reduce_mem_usage` để chạy được trên pandas 3.0/numpy 2.x. Lưu ý: cờ `DEBUG=True` mặc định chỉ xuất dữ liệu MẪU (15k/5k) — đổi `DEBUG=False` để tạo bộ đầy đủ.
+  - ✅ **Notebook 03 (`03_data_cleaning.ipynb`) — HOÀN THÀNH** (PR #33/#34): làm sạch `application_train/test` (DAYS_EMPLOYED 365243 → NaN, gộp CODE_GENDER 'XNA', cap thu nhập...), xuất `data/processed/application_*_clean.csv`. **Đã vá 2 lỗi âm thầm** (2026-07-15): (1) pandas 3 bật Copy-on-Write khiến cú pháp `df['cot'].replace(..., inplace=True)` KHÔNG ghi được vào DataFrame gốc → 2 bước làm sạch thất bại mà không báo lỗi, vì `warnings.filterwarnings("ignore")` đã nuốt mất `ChainedAssignmentError`; (2) đã thêm `assert` kiểm chứng sau mỗi bước thay thế để lỗi không thể tái diễn âm thầm.
+  - ✅ **Notebook 05 (`05_feature_engineering.ipynb`) — HOÀN THÀNH** (T10, PR #26/#29): tổng hợp đặc trưng từ 5 bảng phụ, biến nghiệp vụ (DTI, ext_source...), One-Hot, StandardScaler (fit trên train, tránh leakage), xuất `data/processed/*.csv` + `models/scaler.pkl`. **Đã vá** `reduce_mem_usage` để chạy được trên pandas 3.0/numpy 2.x.
+  - ✅ **NB03 + NB05 đã chạy trên TOÀN BỘ dữ liệu** (2026-07-15): cờ `DEBUG` của cả hai notebook nay **mặc định `False`** — output nhúng trong file là dữ liệu thật (`train_features.csv` 307.511×299, `test_features.csv` 48.744×298, ~1,87 GB + 296 MB, đều đã gitignore). Trước đó NB05 ghi `DEBUG=False` trong code và markdown khẳng định "đã chạy full", nhưng ô cấu hình chưa hề chạy (`execution_count=None`) nên output vẫn là mẫu 15k/5k — kiểu lỗi "chữ nói một đằng, output một nẻo". **Muốn chạy lại:** phải chạy NB03 trước rồi mới tới NB05, và giữ cờ `DEBUG` giống nhau ở cả hai. Máy yếu RAM đặt `DEBUG=True` để chạy thử (đỉnh RAM khi chạy full đo được ~3,3 GB).
   - ✅ **`requirements.txt`** — đã có đủ thư viện: `psycopg2-binary, pandas, numpy, python-dotenv, sqlalchemy, matplotlib, seaborn, scikit-learn, joblib`.
-  - ❌ **Còn lại (chưa làm):** notebook `03_data_cleaning`, `06_machine_learnig`, `07_prediction_demo` mới có cell tiêu đề; các file trong `app/` (Streamlit) còn rỗng; `README.md` rỗng; `models/model.pkl` chưa có (mới có `scaler.pkl` do NB05 sinh, đã gitignore).
-  - ⚠️ **Bài học chung (2026-07-13):** NB02/04/05 đều dính lỗi kiểu *"chạy được máy tác giả, hỏng máy khác"* — đường dẫn cứng, thiếu thư viện trong `requirements.txt`, và **lệch phiên bản** (pandas 3.0/numpy 2.x vs bản cũ). Nên **ghim phiên bản thư viện** trong `requirements.txt` để cả nhóm chạy giống nhau.
+  - ❌ **Còn lại (chưa làm):** notebook `06_machine_learnig`, `07_prediction_demo` mới có cell tiêu đề; các file trong `app/` (Streamlit) còn rỗng; `README.md` rỗng; `models/model.pkl` hiện là **file rỗng 0 byte** (placeholder — chưa train mô hình nào; mới có `scaler.pkl` thật do NB05 sinh, cả hai đã gitignore).
+  - ⚠️ **Bài học chung (2026-07-13):** NB02/04/05 đều dính lỗi kiểu *"chạy được máy tác giả, hỏng máy khác"* — đường dẫn cứng, thiếu thư viện trong `requirements.txt`, và **lệch phiên bản** (pandas 3.0/numpy 2.x vs bản cũ). Đã **ghim phiên bản thư viện** trong `requirements.txt` để cả nhóm chạy giống nhau.
+  - 🔴 **Bài học quan trọng (2026-07-15) — lỗi ÂM THẦM nguy hiểm hơn lỗi báo đỏ:** NB03 và NB05 đều từng ở trạng thái *"code/chữ nói một đằng, dữ liệu thật một nẻo"* mà không ai phát hiện. Ba nguyên nhân gốc cần cả nhóm tránh:
+    1. **Đừng dùng `warnings.filterwarnings("ignore")` cho TẤT CẢ cảnh báo** — chính nó đã nuốt `ChainedAssignmentError` của pandas 3, khiến bước làm sạch thất bại trong im lặng. Chỉ tắt riêng loại cảnh báo ồn ào (`FutureWarning`, `DeprecationWarning`, `PerformanceWarning`).
+    2. **Notebook phải Restart & Run All trước khi commit.** NB05 từng có ô cấu hình `execution_count=None` (chưa chạy) trong khi các ô sau chạy bằng giá trị cũ còn sót trong kernel → output nhúng là dữ liệu mẫu dù code ghi `DEBUG=False`. Kiểm tra nhanh: execution_count phải liền mạch 1,2,3...
+    3. **Thêm `assert` kiểm chứng sau mỗi bước biến đổi dữ liệu quan trọng** — để lỗi phải nổ ra thay vì trôi qua. Và nhớ **markdown/nhận xét cũng phải sửa theo** khi đổi code: `nbconvert` chỉ cập nhật output, KHÔNG đụng tới markdown.
 
 ## 4. Việc tiếp theo (chưa quyết định thứ tự, cần hỏi user)
 
 **Với mọi thành viên trước khi bắt đầu:** đọc `docs/QUY-TRINH-LAM-VIEC.md` và làm theo checklist đầu phiên (pull code mới → **khai báo tên** `echo <tên> > .claude/whoami` + tạo `context/<tên>.md` → tạo/chuyển nhánh, KHÔNG code trên main). Ai đã kéo quy trình mới về nhớ **khởi động lại Claude Code** để nạp hook.
 
 Các hướng tiếp theo khả dĩ (mỗi việc = 1 nhánh riêng, đưa mã task vào đầu tên nhánh nếu có — vd `feature/t0x-...`; xem gợi ý phân công 5 người trong quy trình):
-- **Notebook `03_data_cleaning.ipynb`** (làm sạch dữ liệu) — hiện mới có cell tiêu đề. Lưu ý: NB05 đã tự làm sạch tối thiểu vì NB03 chưa có; cần chốt lại vai trò của NB03 trong pipeline.
-- **Notebook `06_machine_learnig.ipynb`** (huấn luyện & so sánh mô hình ML) — đọc `data/processed/*.csv` từ NB05, train, đánh giá, lưu `models/model.pkl`. **Nhắc:** trước khi train thật phải chạy NB05 với `DEBUG=False` để có bộ đặc trưng đầy đủ (mặc định đang xuất dữ liệu mẫu).
+- **Notebook `06_machine_learnig.ipynb`** (huấn luyện & so sánh mô hình ML) — **việc ưu tiên số 1**. Đọc `data/processed/train_features.csv` (đã sẵn sàng: 307.511×299 dữ liệu đầy đủ), train, đánh giá, lưu `models/model.pkl`. Lưu ý: `TARGET` mất cân bằng ~8% → cần xử lý (class_weight / SMOTE / chọn metric AUC-ROC thay vì accuracy). File train 1,87 GB nên cân nhắc đọc bằng `dtype` phù hợp hoặc chuyển sang parquet cho nhẹ.
 - **Notebook `07_prediction_demo.ipynb`** + **`app/` (Streamlit)** — demo dự đoán, nạp `model.pkl` + `scaler.pkl`.
 - **`README.md`** (hiện rỗng) — hướng dẫn cài đặt & chạy dự án.
-- **Ghim phiên bản thư viện trong `requirements.txt`** (vd cố định `pandas`, `numpy`, `scikit-learn`) để cả nhóm chạy đồng nhất, tránh lỗi lệch phiên bản như đã gặp ở NB05.
 
-> ✅ Đã xong: Notebook 01 (T01, PR #12), 02 (T04, PR #23 + fix #27), 04 (T09, PR #24 + fix #28), 05 (T10, PR #26/#29); toàn bộ SQL 01–05 (T02/T03/T05/T04/T07); `requirements.txt` cơ bản.
+> ✅ Đã xong: Notebook 01 (T01, PR #12), 02 (T04, PR #23 + fix #27), 03 (PR #33/#34 + fix Copy-on-Write), 04 (T09, PR #24 + fix #28), 05 (T10, PR #26/#29 — đã chạy full data); toàn bộ SQL 01–05 (T02/T03/T05/T04/T07); `requirements.txt` đã ghim phiên bản.
 
 ## 5. Ghi chú làm việc
 
