@@ -78,7 +78,7 @@
    - ⚠️ Hệ quả: **người làm NB06 KHÔNG cần cài PostgreSQL** — chỉ cần chạy NB03 → NB05.
 2. **SQL** (`sql/`, PostgreSQL): `01_create_tables.sql` → `02_import_data.sql` → `03_views.sql` → `04_aggregation.sql` → `05_indexes.sql`
 3. **App** (`app/`): demo bằng **Streamlit** (`stream_app.py`, `pages/`, `prediction.py`) + có thể thêm API (`api.py`)
-4. **Models** (`models/`): `model.pkl` (từ NB06) + `scaler.pkl` (từ NB05)
+4. **Models** (`models/`): `model.pkl` (từ NB06) + `scaler.pkl` (từ NB05) + `model_metadata.json` (từ NB06 — **file duy nhất trong `models/` được commit lên GitHub**, ngoại lệ .gitignore do nhóm trưởng duyệt; chứa thứ tự 297 cột đầu vào + ngưỡng quyết định)
 5. **Báo cáo** (`reports/`): Word + PowerPoint theo mẫu trường; theo dõi tiến độ nhóm bằng **Google Sheet** (nhóm trưởng quản lý, link ở nhóm chat — không nằm trong repo). ⚠️ Đề bài nhắc tới **Jira/Trello + ảnh bảng Kanban** (Chương 5 + slide 12) — cần hỏi giảng viên xem Google Sheet có được chấp nhận thay thế không.
 
 ## 3. Trạng thái hiện tại (cập nhật 2026-07-15)
@@ -102,7 +102,13 @@
   - ✅ **Notebook 05 (`05_feature_engineering.ipynb`) — HOÀN THÀNH** (T10, PR #26/#29): tổng hợp đặc trưng từ 5 bảng phụ, biến nghiệp vụ (DTI, ext_source...), One-Hot, StandardScaler (fit trên train, tránh leakage), xuất `data/processed/*.csv` + `models/scaler.pkl`. **Đã vá** `reduce_mem_usage` để chạy được trên pandas 3.0/numpy 2.x.
   - ✅ **NB03 + NB05 đã chạy trên TOÀN BỘ dữ liệu** (2026-07-15): cờ `DEBUG` của cả hai notebook nay **mặc định `False`** — output nhúng trong file là dữ liệu thật (`train_features.csv` 307.511×299, `test_features.csv` 48.744×298, ~1,87 GB + 296 MB, đều đã gitignore). Trước đó NB05 ghi `DEBUG=False` trong code và markdown khẳng định "đã chạy full", nhưng ô cấu hình chưa hề chạy (`execution_count=None`) nên output vẫn là mẫu 15k/5k — kiểu lỗi "chữ nói một đằng, output một nẻo". **Muốn chạy lại:** phải chạy NB03 trước rồi mới tới NB05, và giữ cờ `DEBUG` giống nhau ở cả hai. Máy yếu RAM đặt `DEBUG=True` để chạy thử (đỉnh RAM khi chạy full đo được ~3,3 GB).
   - ✅ **`README.md` + `requirements.txt` — HOÀN THÀNH** (T19, PR #36): README 8 mục (giới thiệu đề tài, cấu trúc, yêu cầu môi trường, cài đặt 4 bước, sơ đồ pipeline 2 nhánh, trạng thái, **các bẫy đã biết**, quy trình nhóm). `requirements.txt`: **bỏ** `sqlalchemy` (đã kiểm chứng không file nào import — nó chỉ xuất hiện trong dòng *cảnh báo* của pandas); **thêm** `ipykernel` (trước đây THIẾU → `pip install -r requirements.txt` xong không mở nổi notebook) và `streamlit` (cho task app/). Đã verify: `pip check` sạch, `pip install --dry-run` exit 0.
-  - ❌ **Còn lại (chưa làm):** notebook `06_machine_learnig`, `07_prediction_demo` mới có cell tiêu đề; các file trong `app/` (Streamlit) còn rỗng; `models/model.pkl` hiện là **file rỗng 0 byte** (placeholder — chưa train mô hình nào; mới có `scaler.pkl` thật do NB05 sinh, cả hai đã gitignore).
+  - ✅ **Notebook 06 (`06_machine_learnig.ipynb`) — HOÀN THÀNH** (T11, PR #38 — Thắng): 34 cell (12 cell code), Restart & Run All trên **toàn bộ 307.511 dòng** (`DEBUG=False`, execution_count liền mạch 1→12, 3 biểu đồ nhúng thật). **Đây là mốc gỡ nút thắt lớn nhất của dự án** — `models/model.pkl` từ file rỗng 0 byte nay là model thật 1,0 MB.
+    - **Kết quả (61.503 dòng kiểm định):** HistGradientBoosting **AUC-ROC = 0,7792** (được chọn) > Logistic Regression 0,7691 > Random Forest 0,7630 > Dummy 0,5000. Chỉ dùng scikit-learn, **không thêm thư viện nào** vào `requirements.txt`.
+    - ✅ Thoả yêu cầu "so sánh HOẶC tối ưu mô hình" (Phần A mục 8) bằng **so sánh 4 mô hình**.
+    - 🔴 **Ai làm `app/` hoặc NB07 phải đọc kỹ:** ngưỡng mặc định 0,5 của sklearn **chỉ bắt được 3,24% khách vỡ nợ** → notebook chốt **ngưỡng Youden J = 0,0747** (bắt 73% khách vỡ nợ, đổi lại từ chối oan 17.398 khách tốt). **Đọc `decision_threshold` từ `models/model_metadata.json`, ĐỪNG dùng `.predict()` mặc định.**
+    - **Phát hiện dùng được cho báo cáo:** `EXT_SOURCES_MEAN` (biến phái sinh của NB05) quan trọng **gấp 13 lần** biến kế tiếp; **3/7 đặc trưng mạnh nhất đào từ bảng phụ** (installments, POS_CASH) → đúng bằng chứng cho **Phần B** đề bài. Ba mô hình chỉ chênh ~0,016 ⇒ **muốn tăng điểm thì đầu tư thêm đặc trưng, đừng đổi thuật toán**.
+    - **Suýt dính lại bẫy cũ:** markdown nháp ghi sẵn "EXT_SOURCE_1/2/3 đứng đầu" nhưng số chạy thật khác hẳn → đã sửa nhận xét theo output thật. Lại một lần nữa: `nbconvert` KHÔNG đụng markdown.
+  - ❌ **Còn lại (chưa làm):** notebook `07_prediction_demo` mới có cell tiêu đề; các file trong `app/` (Streamlit) còn rỗng 0 byte.
   - 🔴 **Báo cáo & slide — CHƯA BẮT ĐẦU, vẫn là file mẫu trắng** (phát hiện 2026-07-15): `reports/slide-du-an-nhom-01.pptx` có **md5 TRÙNG KHÍT** `docs/3. Mau bao cao.pptx` → bản copy chưa sửa một chữ. `reports/tai-lieu-du-an-nhom-01.docx` vẫn còn `<<TÊN ĐỀ TÀI>>` và "GVHD: Thầy Nguyễn Văn A". `reports/images/` rỗng. **Đây là 2 trong 4 sản phẩm phải nộp** (xem mục 2.2) và chiếm trọn tiêu chí Y4.
   - 🔴 **Dashboard interactive — CHƯA CÓ** (phát hiện 2026-07-15): NB04 chỉ dùng `matplotlib` + `seaborn` = **biểu đồ tĩnh**. Đã quét toàn bộ notebook: không có `plotly`/`bokeh`/`altair`/`ipywidgets`. Trong khi Phần A mục 7 của đề bài **bắt buộc** dashboard tương tác (filter, chọn thời gian, nhóm dữ liệu). Xem mục 4.
   - ⚠️ **Bài học chung (2026-07-13):** NB02/04/05 đều dính lỗi kiểu *"chạy được máy tác giả, hỏng máy khác"* — đường dẫn cứng, thiếu thư viện trong `requirements.txt`, và **lệch phiên bản** (pandas 3.0/numpy 2.x vs bản cũ). Đã **ghim phiên bản thư viện** trong `requirements.txt` để cả nhóm chạy giống nhau.
@@ -111,17 +117,17 @@
     2. **Notebook phải Restart & Run All trước khi commit.** NB05 từng có ô cấu hình `execution_count=None` (chưa chạy) trong khi các ô sau chạy bằng giá trị cũ còn sót trong kernel → output nhúng là dữ liệu mẫu dù code ghi `DEBUG=False`. Kiểm tra nhanh: execution_count phải liền mạch 1,2,3...
     3. **Thêm `assert` kiểm chứng sau mỗi bước biến đổi dữ liệu quan trọng** — để lỗi phải nổ ra thay vì trôi qua. Và nhớ **markdown/nhận xét cũng phải sửa theo** khi đổi code: `nbconvert` chỉ cập nhật output, KHÔNG đụng tới markdown.
 
-## 4. Việc tiếp theo (cập nhật 2026-07-15 sau khi rà soát lại đề bài gốc)
+## 4. Việc tiếp theo (cập nhật 2026-07-15 sau khi merge T11 — notebook 06)
 
 **Với mọi thành viên trước khi bắt đầu:** đọc `docs/QUY-TRINH-LAM-VIEC.md` và làm theo checklist đầu phiên (pull code mới → **khai báo tên** `echo <tên> > .claude/whoami` + tạo `context/<tên>.md` → tạo/chuyển nhánh, KHÔNG code trên main). Ai đã kéo quy trình mới về nhớ **khởi động lại Claude Code** để nạp hook.
 
-### ⚠️ Đọc trước khi phân công: rủi ro lớn nhất KHÔNG phải NB06
+### ⚠️ Đọc trước khi phân công: nút thắt đã gỡ, rủi ro dồn hết sang báo cáo & app
 
-Rà soát lại đề bài gốc ngày 2026-07-15 cho thấy bức tranh khác với hình dung trước đây. **Phần code đang là mảng KHOẺ nhất** của dự án (5/7 notebook + toàn bộ SQL đã xong, dữ liệu đặc trưng đầy đủ đã sẵn sàng). Ngược lại, **3 trong 4 sản phẩm phải nộp đang ở mức 0%**:
+T11 (NB06) merge xong nghĩa là **`model.pkl` đã có thật** — mọi việc từng bị chặn vì "chưa có mô hình" nay đều mở. **Phần code là mảng KHOẺ nhất** của dự án (6/7 notebook + toàn bộ SQL đã xong). Nhưng bức tranh sản phẩm phải nộp vẫn đáng lo: **3 trong 4 sản phẩm còn ở mức rất thấp**:
 
 | Sản phẩm phải nộp | Mức hoàn thành |
 |---|---|
-| Mã nguồn `.ipynb` | 🟡 ~70% (thiếu NB06, NB07) |
+| Mã nguồn `.ipynb` | 🟢 ~85% (chỉ còn NB07) |
 | **Whitepaper `.docx` 6 chương** | 🔴 **0% — vẫn là file mẫu trắng** |
 | **Slide `.pptx`** | 🔴 **0% — md5 trùng khít file mẫu** |
 | **Ứng dụng web** | 🔴 **0% — `app/` gồm 4 file 0 byte** |
@@ -130,17 +136,16 @@ Cộng thêm **dashboard interactive** (Phần A mục 7) hiện chưa có và t
 
 ### Thứ tự đề xuất
 
-1. **Notebook `06_machine_learnig.ipynb`** — mở đường cho mọi thứ còn lại (app cần `model.pkl`, báo cáo cần số liệu thật). Đọc `data/processed/train_features.csv` (sẵn sàng: 307.511×299), train, đánh giá, lưu `models/model.pkl`.
-   - ⚠️ `TARGET` mất cân bằng ~8% → **dùng AUC-ROC, KHÔNG dùng accuracy** (đoán bừa "không vỡ nợ" đã được ~92% accuracy nhưng mô hình vô dụng). Cân nhắc `class_weight` / SMOTE.
-   - ⚠️ Đề bài (Phần A mục 8) đòi **"có so sánh HOẶC tối ưu mô hình"** → không được train đúng 1 model rồi thôi.
-   - ⚠️ Không cần cài PostgreSQL cho task này (xem mục 2.6). File train 1,87 GB → cân nhắc chuyển parquet (`pyarrow` đã có sẵn nhờ streamlit).
-2. **`app/` (Streamlit) + dashboard interactive** — **gộp 2 yêu cầu vào 1 task**: mục 9 (ứng dụng web nhập liệu → dự đoán) và mục 7 (dashboard tương tác có filter). Streamlit vốn tương tác sẵn, và đã kéo theo `altair` + `pyarrow` khi cài → không cần thêm thư viện nào.
-3. **Notebook `07_prediction_demo.ipynb`** — demo dự đoán, nạp `model.pkl` + `scaler.pkl`.
-4. **Whitepaper `.docx` (6 chương) + slide `.pptx`** — làm sau cùng vì lúc đó mới có số liệu thật. Nhưng **phải bắt đầu sớm hơn cảm giác**: 6 chương + 16 slide là khối lượng lớn, và nhóm đang ở 0%. Có thể viết song song Chương 1/2/3/5 ngay từ bây giờ (không phụ thuộc NB06).
-5. **Chốt "3 Insights quan trọng"** (tiêu chí Y1) — NB04 có phân tích nhưng nhóm chưa chốt đâu là 3 insight chính thức để đưa vào báo cáo/slide.
+1. **`app/` (Streamlit) + dashboard interactive** — 🔴 **ưu tiên số 1 hiện nay**. **Gộp 2 yêu cầu vào 1 task**: mục 9 (ứng dụng web nhập liệu → dự đoán) và mục 7 (dashboard tương tác có filter). Streamlit vốn tương tác sẵn, đã kéo theo `altair` + `pyarrow` khi cài → không cần thêm thư viện nào. Nạp `models/model.pkl` + `scaler.pkl` + `model_metadata.json`.
+   - 🔴 **Bẫy chí mạng — đọc kỹ:** **KHÔNG dùng `.predict()` mặc định.** Ngưỡng 0,5 của sklearn chỉ bắt được **3,24%** khách vỡ nợ → app sẽ gần như luôn trả lời "khách này an toàn" và trông như đang chạy đúng. Phải dùng `.predict_proba()` rồi so với `decision_threshold` (= 0,0747) đọc từ `model_metadata.json`.
+   - ⚠️ Thứ tự 297 cột đầu vào cũng nằm trong `model_metadata.json` — sai thứ tự thì mô hình vẫn chạy nhưng ra kết quả rác.
+2. **Notebook `07_prediction_demo.ipynb`** — demo dự đoán, nạp `model.pkl` + `scaler.pkl` + `model_metadata.json`. Cùng bẫy ngưỡng như trên.
+3. **Whitepaper `.docx` (6 chương) + slide `.pptx`** — 🔴 **đừng đợi nữa, giờ đã có số liệu thật để viết**: Chương 4 (Mô hình hóa) nay viết được đầy đủ nhờ NB06 (AUC 0,7792, so sánh 4 mô hình, ý nghĩa ngưỡng quyết định). Chương 1/2/3/5 vốn không phụ thuộc NB06 và lẽ ra đã viết được từ lâu. 6 chương + 16 slide là khối lượng lớn mà nhóm đang ở 0% — **đây là rủi ro lớn nhất còn lại của dự án**.
+4. **Chốt "3 Insights quan trọng"** (tiêu chí Y1) — NB04 có phân tích nhưng nhóm chưa chốt đâu là 3 insight chính thức để đưa vào báo cáo/slide. **Gợi ý từ NB06:** `EXT_SOURCES_MEAN` quan trọng gấp 13 lần biến kế tiếp; 3/7 đặc trưng mạnh nhất đào từ bảng phụ (bằng chứng trực tiếp cho Phần B).
+5. **T24 — tối ưu mô hình (không bắt buộc, làm nếu còn thời gian):** đã thoả Phần A mục 8 bằng so sánh 4 mô hình, nên đây là điểm cộng. **Lấy AUC 0,7792 làm mốc nền.** Thứ tự đáng thử: (1) thêm/tinh chỉnh đặc trưng — vì 3 mô hình chỉ chênh ~0,016 nên thuật toán không phải nút thắt; (2) tinh chỉnh siêu tham số HistGradientBoosting; (3) cross-validation thay holdout; (4) thử SMOTE.
 6. **Hỏi giảng viên về Jira/Trello** — đề bài đòi "Nhật ký Jira" (Chương 5) + ảnh bảng Kanban (slide 12); nhóm đang dùng Google Sheet. Hỏi sớm, đừng để tới lúc nộp mới biết.
 
-> ✅ Đã xong: Notebook 01 (T01, PR #12), 02 (T04, PR #23 + fix #27), 03 (PR #33/#34 + fix Copy-on-Write), 04 (T09, PR #24 + fix #28), 05 (T10, PR #26/#29 — đã chạy full data); toàn bộ SQL 01–05 (T02/T03/T05/T04/T07); `README.md` + `requirements.txt` (T19, PR #36).
+> ✅ Đã xong: Notebook 01 (T01, PR #12), 02 (T04, PR #23 + fix #27), 03 (PR #33/#34 + fix Copy-on-Write), 04 (T09, PR #24 + fix #28), 05 (T10, PR #26/#29 — đã chạy full data), 06 (T11, PR #38 — AUC 0,7792, sinh `model.pkl` thật); toàn bộ SQL 01–05 (T02/T03/T05/T04/T07); `README.md` + `requirements.txt` (T19, PR #36).
 
 ## 5. Ghi chú làm việc
 

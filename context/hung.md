@@ -4,11 +4,17 @@
 
 ## Đang làm
 
-- **Task:** T19 — viết `README.md` + kiện toàn `requirements.txt` (Data Engineering)
-- **Nhánh:** `feature/t19-readme-va-requirements`
-- **Trạng thái:** Đã xong nội dung (commit `35029d9`). Còn lại: push + tạo PR + merge.
+- **Task:** Cập nhật `PROJECT_CONTEXT.md` sau khi merge T11 (NB06) — việc nhóm trưởng
+- **Nhánh:** `docs/cap-nhat-project-context-sau-t11`
+- **Trạng thái:** Đã xong nội dung. Còn lại: push + tạo PR + merge.
 
 ## Làm tới đâu (cập nhật mới nhất ở trên)
+
+- **2026-07-15 (sau merge PR #38):** Cập nhật `PROJECT_CONTEXT.md` mục 3 + 4 ghi nhận **T11 (NB06) của Thắng đã xong** — nút thắt lớn nhất dự án đã gỡ.
+  - **Đổi thứ tự ưu tiên:** NB06 rời khỏi vị trí số 1, `app/` Streamlit + dashboard interactive lên thay. Whitepaper/slide vẫn 0% và **giờ là rủi ro lớn nhất còn lại** — không còn cớ "đợi số liệu" vì Chương 4 nay viết được đầy đủ.
+  - **Ghi đậm vào mục 4 cái bẫy ngưỡng quyết định** cho người làm app/NB07: ngưỡng mặc định 0,5 chỉ bắt 3,24% khách vỡ nợ → app sẽ **trông như chạy đúng** mà gần như luôn trả lời "an toàn". Phải đọc `decision_threshold` = 0,0747 từ `model_metadata.json`. Đúng kiểu lỗi âm thầm nhóm dính mãi — nên tôi để ở mục 4 chứ không giấu trong mục 3.
+  - Ghi nhận ngoại lệ `.gitignore` cho `models/model_metadata.json` (10KB) vào mục 2.6 — file duy nhất trong `models/` lên GitHub.
+  - **Lưu ý về máy này:** `.claude/whoami` đang là `thang` (Thắng làm T11 trên máy này) → đã đổi về `hung`. Ai dùng chung máy nhớ kiểm tra whoami đầu phiên.
 
 - **2026-07-15 (T19):** Viết `README.md` (trước đó rỗng 0 byte) 8 mục + kiện toàn `requirements.txt`.
   - **Phát hiện quan trọng khi rà soát — pipeline KHÔNG phải đường thẳng 01→07** như cả nhóm vẫn hình dung. Thực tế là **2 nhánh độc lập**: nhánh CSV (NB01, NB03 → NB05 → NB06 → NB07, **không cần PostgreSQL**) và nhánh Database (NB02 → NB04, cần PostgreSQL). Hệ quả: ai chỉ làm NB06 (train mô hình) thì **khỏi phải cài PostgreSQL** — trước giờ không ai nói rõ điều này. Đã vẽ sơ đồ + lập bảng "cần gì trước / sinh ra gì" cho từng notebook trong README mục 5.
@@ -40,10 +46,15 @@
 
 ## Còn dở / việc tiếp theo của tôi
 
-- [ ] Push nhánh `feature/t19-readme-va-requirements`, tạo PR và merge (T19 — README + requirements).
-- [ ] Sau khi merge T19: cập nhật `PROJECT_CONTEXT.md` — mục 3 còn ghi "`README.md` rỗng" (nay đã viết xong), mục 4 còn liệt kê README là việc tiếp theo.
-- [ ] Phân công **Notebook 06 (huấn luyện ML)** — việc ưu tiên số 1, dữ liệu đã sẵn sàng (`train_features.csv` 307.511×299). Nhắc người nhận: `TARGET` mất cân bằng ~8% → dùng AUC-ROC thay accuracy, cân nhắc class_weight/SMOTE.
-- [ ] Phân công `app/` Streamlit + NB07 (thư viện `streamlit` đã ghim sẵn trong requirements).
+- [x] Push nhánh `feature/t19-readme-va-requirements`, tạo PR và merge (T19 — README + requirements → PR #36).
+- [x] Sau khi merge T19: cập nhật `PROJECT_CONTEXT.md` (PR #37).
+- [x] Phân công **Notebook 06 (huấn luyện ML)** → Thắng nhận T11, xong, merge PR #38 (AUC 0,7792).
+- [ ] Push nhánh `docs/cap-nhat-project-context-sau-t11`, tạo PR và merge.
+- [ ] **Phân công `app/` Streamlit + dashboard interactive — ưu tiên số 1 hiện nay** (gộp mục 7 + mục 9 đề bài vào 1 task; `streamlit` đã ghim sẵn trong requirements). **Bắt buộc nhắc người nhận:** đọc `decision_threshold` = 0,0747 từ `model_metadata.json`, KHÔNG dùng `.predict()` mặc định — nếu không app sẽ chạy êm mà gần như luôn báo "an toàn".
+- [ ] Phân công NB07 (prediction demo) — cùng bẫy ngưỡng như app.
+- [ ] 🔴 **Phân công whitepaper + slide NGAY** — rủi ro lớn nhất còn lại, vẫn 0% và không còn cớ "đợi số liệu". Chương 4 nay viết được đầy đủ từ NB06; Chương 1/2/3/5 vốn không phụ thuộc gì.
+- [ ] Chốt **3 Insights quan trọng** (tiêu chí Y1) — NB06 cho sẵn 2 ứng viên mạnh: `EXT_SOURCES_MEAN` quan trọng gấp 13 lần biến kế tiếp; 3/7 đặc trưng mạnh nhất đào từ bảng phụ (bằng chứng Phần B).
+- [ ] Hỏi giảng viên: Google Sheet có thay được "Nhật ký Jira" + ảnh Kanban (Chương 5, slide 12) không.
 - [ ] Cân nhắc chuyển `data/processed/*.csv` sang **parquet** — `train_features.csv` đang 1,87 GB, đọc lại ở NB06 sẽ chậm và tốn RAM. `pyarrow` nay đã có sẵn (streamlit kéo theo) nên không cần cài thêm gì.
 - [ ] Nhắc nhóm về 3 bài học lỗi âm thầm (mục 3 PROJECT_CONTEXT + mục 7 README) — nhất là thói quen Restart & Run All trước khi commit notebook.
 - [ ] Phổ biến cho nhóm: **NB06 không cần cài PostgreSQL** (phát hiện khi làm T19 — pipeline có 2 nhánh độc lập, xem README mục 5).
