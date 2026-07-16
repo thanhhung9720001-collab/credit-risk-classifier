@@ -6,9 +6,19 @@
 
 - **Task:** Bổ sung diễn giải kỹ thuật cho NB01 (`01_data_understanding.ipynb`)
 - **Nhánh:** `docs/t01-giai-thich-lai-nb01`
-- **Trạng thái:** Đã xong nội dung + Restart & Run All (execution 1→14 liền mạch, 0 lỗi). Còn lại: push + tạo PR + merge.
+- **Trạng thái:** Đã xong nội dung + Restart & Run All (execution 1→14 liền mạch, 0 lỗi) + thêm mục 1 "Bài toán & phương pháp tiếp cận". Còn lại: push + tạo PR + merge.
 
 ## Làm tới đâu (cập nhật mới nhất ở trên)
+
+- **2026-07-16 (bổ sung, cùng nhánh):** Thêm **mục 1 "Bài toán & phương pháp tiếp cận"** — NB01 trước đó nhảy thẳng vào `import` mà **không hề phát biểu bài toán**. Theo CRISP-DM, pha đầu là *Business Understanding*; NB01 bỏ qua hẳn pha này.
+  - **NB01 nay có 7 mục** (1. Bài toán → 7. Tổng kết), khớp NB02–NB06. Đã dồn số 10 tiêu đề (mục cũ 1→2 … 6→7) bằng script có `assert` khớp tiêu đề cũ trước khi đổi, nên không sửa nhầm.
+  - **1.1 Bối cảnh nghiệp vụ:** Home Credit phục vụ nhóm *unbanked/underbanked* — thế lưỡng nan "từ chối hết thì mất thị phần, cho vay bừa thì mất vốn" → lối ra là lượng hóa rủi ro từ **dữ liệu thay thế**. Đây chính là lý do bộ dữ liệu có tới **6 bảng lịch sử**. Kèm link Kaggle (phục vụ Y4 — trích dẫn nguồn).
+  - **1.2 Phát biểu bài toán (đáp Y2 — mapping Kaggle → mô hình AI, notebook trước nay chưa hề nói):** đầu vào/đầu ra, **phân loại nhị phân có giám sát**, chỉ số **ROC-AUC**. Giải thích **vì sao không phải hồi quy** (đầu ra là nhãn rời rạc, xác suất chỉ là độ tin cậy của nhãn) và **vì sao không phải phân cụm** (đã có nhãn sẵn ⇒ có giám sát).
+  - **1.3 Bốn thách thức — có bảng bằng chứng định lượng + cột "kiểm chứng tại mục nào"**, thay vì nói suông "bài này khó". Nhấn mạnh: **độ khó nằm ở dữ liệu, không ở thuật toán** (khớp với phát hiện của NB06: 3 mô hình chỉ chênh ~0,016 AUC).
+  - **1.4 Phương pháp tiếp cận:** sơ đồ pipeline 2 nhánh + bảng **giải thích vì sao công đoạn nào làm ở SQL, công đoạn nào ở Python** — **đề bài Phần A mục 6 bắt buộc phải giải thích điều này mà chưa notebook nào nói**. Lý do chốt: SQL xử lý theo khối trên đĩa + có index (hợp thách thức 1–2); Python có cơ chế `fit`/`transform` để học tham số trên train rồi áp lại test — thứ SQL không có.
+  - **Viết lại mục 7 Tổng kết thành 3 mục con:** 7.1 đối chiếu 4 thách thức nêu ở 1.3 với bằng chứng thu được (khép vòng lập luận); 7.2 bốn phát hiện bổ sung; 7.3 bước tiếp theo.
+    - **Sửa một điểm sai cũ:** Tổng kết cũ ghi "Bước tiếp theo → Notebook 02" theo tư duy pipeline đường thẳng. Thực tế pipeline **tách 2 nhánh** từ NB01 (Database → NB02; CSV → NB03). Nay ghi đúng cả hai.
+  - **Đã verify:** `nbformat.validate` hợp lệ; execution_count vẫn **1→14 liền mạch** (chỉ sửa markdown nên không cần chạy lại); **đối chiếu 21/21 con số** markdown khẳng định với output thật (8 số dòng bảng, TARGET 24.825/282.686 và 8,07%/91,93%, 67/122 cột thiếu, thiếu cao nhất 69,87%, 365243×55.374 lần, RAM 830,4 MB, EXT_SOURCE_1 134.133 giá trị, trung vị thu nhập 147.150 vs max 117.000.000, từ điển (219,4)) → **0 sai lệch**. Diff 50 thêm/17 xoá trên file 2.949 dòng ⇒ không bị format lại toàn file.
 
 - **2026-07-16:** Rà soát và bổ sung diễn giải cho **NB01** — notebook đúng số liệu nhưng trình bày *kết quả* mà thiếu *lập luận*, chưa đạt Y3 (tổ chức code) và Y4 (diễn giải bằng ngôn ngữ khoa học).
   - **Thêm markdown giải trình** cho cả 6 mục: vai trò từng thư viện; vì sao `profile_table` nạp-rồi-`gc.collect()` từng bảng (đỉnh RAM = bảng lớn nhất 830 MB thay vì tổng 2,5 GB); ba nhóm dtype; `NaN` và vì sao **tỷ lệ thiếu cao KHÔNG đủ để xoá cột**; `describe()` và vì sao đọc cả mean lẫn median; quy ước `DAYS_*` âm.
