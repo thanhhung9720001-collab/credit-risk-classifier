@@ -10,6 +10,14 @@
 
 ## Làm tới đâu (cập nhật mới nhất ở trên)
 
+- **2026-07-16 (bổ sung 2, cùng nhánh):** Thêm **định nghĩa `accuracy` và `ROC-AUC`** vào NB01 mục 1.2 — notebook đang **dùng thuật ngữ mà chưa hề định nghĩa**, người đọc gặp từ lạ không có chỗ tra. Dùng cách hiểu gọn nhất của AUC: *bốc ngẫu nhiên 1 khách vỡ nợ + 1 khách an toàn, AUC = xác suất mô hình chấm điểm người vỡ nợ cao hơn* → từ đó suy ra ngay vì sao AUC **miễn nhiễm mất cân bằng** (phép đo luôn so 1 cặp gồm 1 người mỗi nhóm, tỷ lệ 8/92 không tham gia).
+  - **KHÔNG viết thêm gì cho NB06 — vì Thắng đã làm sẵn và làm tốt.** Trước khi định viết, tôi rà lại NB06 và thấy nó **đã có đủ**: mục 4 có hẳn tiểu mục *"Vì sao dùng AUC-ROC mà KHÔNG dùng accuracy?"* với đúng định nghĩa "xác suất xếp đúng cặp"; mục 4.1 vẽ đường cong ROC + giải thích 2 trục là phép đánh đổi kinh doanh; mục 5.1 giải thích ngưỡng + Youden J; nhận xét cuối có bảng 3 ngưỡng quy ra người thật. **Viết thêm chỉ gây trùng lặp.**
+    - **Phép thử đối chứng của NB06 rất đáng dùng cho slide/whitepaper:** Dummy đạt accuracy **91,93%**, mô hình tốt nhất **92,01%** — chênh **0,08 điểm phần trăm**. Chấm bằng accuracy sẽ kết luận 297 đặc trưng của NB05 là vô giá trị. Nhìn AUC mới lộ ra: **0,5000 vs 0,7792**.
+    - NB06 còn một nhận định sắc nên đưa vào báo cáo: từ chối thẳng 34% hồ sơ (hệ quả của ngưỡng 0,0747) là **không chấp nhận được về mặt kinh doanh** → nên dùng để **phân luồng thẩm định**, không loại tự động.
+  - NB01 nay **trỏ sang NB06** thay vì tự giải thích lại đường cong/ngưỡng — đúng phân vai: NB01 nêu bài toán, NB06 là nơi thật sự tính ra chỉ số.
+  - **Đã verify:** `nbformat.validate` hợp lệ; execution_count vẫn 1→14 liền mạch (chỉ sửa markdown); 4 con số NB01 trích từ NB06 (91,93% / 92,01% / 0,5000 / 0,7792) đều **đối chiếu khớp với chính NB06**; `models/model_metadata.json` xác nhận `auc_roc_valid = 0.7792`, `decision_threshold = 0.0747`.
+  - **Việc nhỏ còn bỏ ngỏ (chưa làm, tách task riêng vì thuộc NB06):** NB06 dùng `TPR`/`FPR` trong công thức Youden J mà chưa định nghĩa 2 ký hiệu này. Sửa thì nên đi cùng nhánh riêng cho NB06, không gộp vào PR NB01.
+
 - **2026-07-16 (bổ sung, cùng nhánh):** Thêm **mục 1 "Bài toán & phương pháp tiếp cận"** — NB01 trước đó nhảy thẳng vào `import` mà **không hề phát biểu bài toán**. Theo CRISP-DM, pha đầu là *Business Understanding*; NB01 bỏ qua hẳn pha này.
   - **NB01 nay có 7 mục** (1. Bài toán → 7. Tổng kết), khớp NB02–NB06. Đã dồn số 10 tiêu đề (mục cũ 1→2 … 6→7) bằng script có `assert` khớp tiêu đề cũ trước khi đổi, nên không sửa nhầm.
   - **1.1 Bối cảnh nghiệp vụ:** Home Credit phục vụ nhóm *unbanked/underbanked* — thế lưỡng nan "từ chối hết thì mất thị phần, cho vay bừa thì mất vốn" → lối ra là lượng hóa rủi ro từ **dữ liệu thay thế**. Đây chính là lý do bộ dữ liệu có tới **6 bảng lịch sử**. Kèm link Kaggle (phục vụ Y4 — trích dẫn nguồn).
