@@ -4,11 +4,23 @@
 
 ## Đang làm
 
-- **Task:** Cập nhật `PROJECT_CONTEXT.md` sau khi merge T11 (NB06) — việc nhóm trưởng
-- **Nhánh:** `docs/cap-nhat-project-context-sau-t11`
-- **Trạng thái:** Đã xong nội dung. Còn lại: push + tạo PR + merge.
+- **Task:** Bổ sung diễn giải kỹ thuật cho NB01 (`01_data_understanding.ipynb`)
+- **Nhánh:** `docs/t01-giai-thich-lai-nb01`
+- **Trạng thái:** Đã xong nội dung + Restart & Run All (execution 1→14 liền mạch, 0 lỗi). Còn lại: push + tạo PR + merge.
 
 ## Làm tới đâu (cập nhật mới nhất ở trên)
+
+- **2026-07-16:** Rà soát và bổ sung diễn giải cho **NB01** — notebook đúng số liệu nhưng trình bày *kết quả* mà thiếu *lập luận*, chưa đạt Y3 (tổ chức code) và Y4 (diễn giải bằng ngôn ngữ khoa học).
+  - **Thêm markdown giải trình** cho cả 6 mục: vai trò từng thư viện; vì sao `profile_table` nạp-rồi-`gc.collect()` từng bảng (đỉnh RAM = bảng lớn nhất 830 MB thay vì tổng 2,5 GB); ba nhóm dtype; `NaN` và vì sao **tỷ lệ thiếu cao KHÔNG đủ để xoá cột**; `describe()` và vì sao đọc cả mean lẫn median; quy ước `DAYS_*` âm.
+  - **Trích định nghĩa gốc của `TARGET`** từ `HomeCredit_columns_description.csv` vào notebook: *"late payment more than X days on at least one of the first Y installments"*. **Sắc thái quan trọng cho báo cáo:** nhãn 1 = **khó khăn trả nợ giai đoạn đầu**, KHÔNG phải "khách đã phá sản" — trước giờ notebook chỉ ghi chung chung "vỡ nợ/default". Home Credit cố ý chọn tín hiệu sớm để can thiệp kịp.
+  - **Viết lại nhận xét `TARGET`** thành 3 hệ quả có căn cứ (accuracy 92% của mô hình rỗng; ngưỡng 0,5 mặc định vô dụng; hai loại sai lầm giá khác nhau → ưu tiên Recall). Đây là phần **trích thẳng sang whitepaper Chương 4** được.
+  - **Thêm sơ đồ quan hệ 8 bảng (ASCII)** ở mục 4 — thứ khó hiểu nhất của bộ dữ liệu, trước chỉ mô tả bằng chữ. Cố ý dùng ASCII thay vì mermaid: `requirements.txt` ghi nhóm chạy notebook trong **VS Code**, không cài JupyterLab → mermaid rủi ro hiện ra chữ thô. ASCII hiển thị y hệt ở VS Code / JupyterLab / GitHub / export Word-PDF cho whitepaper.
+    - **Điểm dễ bỏ sót đã ghi vào notebook:** 3 bảng số dư có sẵn cả `SK_ID_CURR` lẫn `SK_ID_PREV` → tổng hợp thẳng về khách được; riêng `bureau_balance` **chỉ có `SK_ID_BUREAU`** → buộc phải nối vòng qua `bureau` để mượn `SK_ID_CURR`.
+  - **Viết lại 1 cell code** (thống kê biến phân loại): tách list-comprehension lồng điều kiện thành vòng lặp tường minh. Đã đối chiếu output trước/sau: **16 dòng giống hệt từng giá trị**, chỉ thêm nhãn chỉ mục `Cột` — đồng bộ với cell 6 vốn đã đặt `overview.index.name = "Bảng"`.
+  - **Đã verify:** `nbconvert --execute` exit 0, execution_count **1→14 liền mạch**, 0 cell lỗi. Đối chiếu lại mọi con số markdown khẳng định với output thật: 307.511×122; TARGET 24.825 (8,07%) / 282.686 (91,93%); 67/122 cột thiếu; `DAYS_EMPLOYED`=365243 xuất hiện 55.374 lần; từ điển (219, 4); dtype `float64` 65 / `int64` 41 / `str` 16; và **cả 8 số dòng trong sơ đồ ASCII** khớp bảng tổng quan cell 6.
+  - **Quyết định KHÔNG thêm biểu đồ** dù ban đầu định thêm: đã liệt kê toàn bộ biểu đồ NB04 (barplot+pie TARGET, boxplot thu nhập/khoản vay/niên kim/**tuổi**/số năm làm việc, countplot 4 biến phân loại, barplot tỷ lệ nợ xấu, kdeplot EXT_SOURCE, boxplot bureau, heatmap tương quan) → **Y3 đã được NB04 lo trọn**, mọi ý tưởng thêm cho NB01 đều trùng NB04 cell 8.
+    - **NB01 vốn đã trùng NB04** ở biểu đồ TARGET → **giữ nguyên, có lý do**: pipeline là 2 nhánh độc lập (CSV 01→03→05→06 / DB 02→04), người chạy nhánh CSV không cài PostgreSQL nên **không bao giờ mở NB04** ⇒ NB01 phải tự đứng vững một mình.
+  - **Chưa làm (cố ý, tách task riêng):** không gỡ `warnings.filterwarnings("ignore")` ở cell 3. Đây đúng là thủ phạm nuốt `ChainedAssignmentError` ở NB03, nhưng **NB01 chỉ đọc dữ liệu, không biến đổi** nên không có rủi ro tương tự — gỡ thì nên làm đồng loạt cả nhóm notebook, không gộp vào PR này.
 
 - **2026-07-15 (sau merge PR #38):** Cập nhật `PROJECT_CONTEXT.md` mục 3 + 4 ghi nhận **T11 (NB06) của Thắng đã xong** — nút thắt lớn nhất dự án đã gỡ.
   - **Đổi thứ tự ưu tiên:** NB06 rời khỏi vị trí số 1, `app/` Streamlit + dashboard interactive lên thay. Whitepaper/slide vẫn 0% và **giờ là rủi ro lớn nhất còn lại** — không còn cớ "đợi số liệu" vì Chương 4 nay viết được đầy đủ.
@@ -53,7 +65,9 @@
 - [x] Push nhánh `feature/t19-readme-va-requirements`, tạo PR và merge (T19 — README + requirements → PR #36).
 - [x] Sau khi merge T19: cập nhật `PROJECT_CONTEXT.md` (PR #37).
 - [x] Phân công **Notebook 06 (huấn luyện ML)** → Thắng nhận T11, xong, merge PR #38 (AUC 0,7792).
-- [ ] Push nhánh `docs/cap-nhat-project-context-sau-t11`, tạo PR và merge.
+- [x] Push nhánh `docs/cap-nhat-project-context-sau-t11`, tạo PR và merge (PR #39).
+- [ ] Push nhánh `docs/t01-giai-thich-lai-nb01`, tạo PR và merge (bổ sung diễn giải NB01).
+- [ ] Cân nhắc áp cách diễn giải của NB01 sang NB02–NB06 — cùng lý do Y3/Y4. Ưu tiên **sau** app/whitepaper vì các notebook kia đã có nhận xét đầy đủ hơn NB01.
 - [ ] **Phân công `app/` Streamlit + dashboard interactive — ưu tiên số 1 hiện nay** (gộp mục 7 + mục 9 đề bài vào 1 task; `streamlit` đã ghim sẵn trong requirements). **Bắt buộc nhắc người nhận:** đọc `decision_threshold` = 0,0747 từ `model_metadata.json`, KHÔNG dùng `.predict()` mặc định — nếu không app sẽ chạy êm mà gần như luôn báo "an toàn".
 - [ ] Phân công NB07 (prediction demo) — cùng bẫy ngưỡng như app.
 - [ ] 🔴 **Phân công whitepaper + slide NGAY** — rủi ro lớn nhất còn lại, vẫn 0% và không còn cớ "đợi số liệu". Chương 4 nay viết được đầy đủ từ NB06; Chương 1/2/3/5 vốn không phụ thuộc gì.
