@@ -4,11 +4,15 @@
 
 ## Đang làm
 
-- **Task:** Bổ sung diễn giải kỹ thuật cho NB01 (`01_data_understanding.ipynb`)
-- **Nhánh:** `docs/t01-giai-thich-lai-nb01`
-- **Trạng thái:** Đã xong nội dung + Restart & Run All (execution 1→14 liền mạch, 0 lỗi) + thêm mục 1 "Bài toán & phương pháp tiếp cận". Còn lại: push + tạo PR + merge.
+- **Task:** Whitepaper — bắt đầu viết bản thảo theo chương (CRISP-DM).
+- **Nhánh gần nhất:** `docs/chuong-1-business-understanding` (Chương 1) — đã merge **PR #41**.
+- **Trạng thái:** Chương 1 Business Understanding đã có bản thảo (`docs/Business_Understanding.docx`); trang bìa whitepaper (`docs/2. Mau tai lieu.docx`) đã điền tiêu đề + danh sách thành viên. Trước đó diễn giải kỹ thuật NB01 đã merge (**PR #40**). Còn lại: Chương 2–6 + ghép nội dung vào file nộp `reports/tai-lieu-du-an-nhom-01.docx`.
 
 ## Làm tới đâu (cập nhật mới nhất ở trên)
+
+- **2026-07-16 (Chương 1 whitepaper — nhánh `docs/chuong-1-business-understanding`, PR #41):** Viết bản thảo **Chương 1 Business Understanding** (`docs/Business_Understanding.docx`) theo mạch CRISP-DM: mở đầu → tình huống hai khách hàng cùng thu nhập nhưng khác lịch sử tín dụng → bài toán Home Credit (cân bằng giảm rủi ro vs duy trì tăng trưởng) → vai trò AI (**hỗ trợ định lượng, không thay chuyên viên tín dụng**) → phát biểu bài toán → ý nghĩa `TARGET` (0 = trả nợ bình thường / 1 = gặp khó khăn trả nợ) → vì sao là **phân loại nhị phân** → giá trị hệ thống → bộ câu hỏi chốt trước khi sang Data Understanding → kết luận.
+  - **Trang bìa `docs/2. Mau tai lieu.docx`:** điền tiêu đề *"Xây dựng Mô hình Phân loại nhị phân — Dự báo Rủi ro Khách hàng Vay vốn"* + danh sách 5 thành viên (Hưng PS47270 — trưởng nhóm; Huy PS48224; Thái PS47694; Qui Anh PS48165; Thắng PS48172). Bốn bạn còn để "Vai trò" — chờ nhóm chốt phân công.
+  - **Phạm vi (ghi rõ để khỏi hiểu nhầm):** đây mới là **bản thảo Chương 1 đặt ở `docs/`**, CHƯA ghép vào file nộp `reports/tai-lieu-du-an-nhom-01.docx` (vẫn là mẫu trắng). Whitepaper còn Chương 2–6.
 
 - **2026-07-16 (bổ sung 2, cùng nhánh):** Thêm **định nghĩa `accuracy` và `ROC-AUC`** vào NB01 mục 1.2 — notebook đang **dùng thuật ngữ mà chưa hề định nghĩa**, người đọc gặp từ lạ không có chỗ tra. Dùng cách hiểu gọn nhất của AUC: *bốc ngẫu nhiên 1 khách vỡ nợ + 1 khách an toàn, AUC = xác suất mô hình chấm điểm người vỡ nợ cao hơn* → từ đó suy ra ngay vì sao AUC **miễn nhiễm mất cân bằng** (phép đo luôn so 1 cặp gồm 1 người mỗi nhóm, tỷ lệ 8/92 không tham gia).
   - **KHÔNG viết thêm gì cho NB06 — vì Thắng đã làm sẵn và làm tốt.** Trước khi định viết, tôi rà lại NB06 và thấy nó **đã có đủ**: mục 4 có hẳn tiểu mục *"Vì sao dùng AUC-ROC mà KHÔNG dùng accuracy?"* với đúng định nghĩa "xác suất xếp đúng cặp"; mục 4.1 vẽ đường cong ROC + giải thích 2 trục là phép đánh đổi kinh doanh; mục 5.1 giải thích ngưỡng + Youden J; nhận xét cuối có bảng 3 ngưỡng quy ra người thật. **Viết thêm chỉ gây trùng lặp.**
@@ -84,11 +88,12 @@
 - [x] Sau khi merge T19: cập nhật `PROJECT_CONTEXT.md` (PR #37).
 - [x] Phân công **Notebook 06 (huấn luyện ML)** → Thắng nhận T11, xong, merge PR #38 (AUC 0,7792).
 - [x] Push nhánh `docs/cap-nhat-project-context-sau-t11`, tạo PR và merge (PR #39).
-- [ ] Push nhánh `docs/t01-giai-thich-lai-nb01`, tạo PR và merge (bổ sung diễn giải NB01).
+- [x] Push nhánh `docs/t01-giai-thich-lai-nb01`, tạo PR và merge (bổ sung diễn giải NB01 — **PR #40**).
+- [x] Viết bản thảo **Chương 1 Business Understanding** + điền trang bìa whitepaper (**PR #41**).
 - [ ] Cân nhắc áp cách diễn giải của NB01 sang NB02–NB06 — cùng lý do Y3/Y4. Ưu tiên **sau** app/whitepaper vì các notebook kia đã có nhận xét đầy đủ hơn NB01.
 - [ ] **Phân công `app/` Streamlit + dashboard interactive — ưu tiên số 1 hiện nay** (gộp mục 7 + mục 9 đề bài vào 1 task; `streamlit` đã ghim sẵn trong requirements). **Bắt buộc nhắc người nhận:** đọc `decision_threshold` = 0,0747 từ `model_metadata.json`, KHÔNG dùng `.predict()` mặc định — nếu không app sẽ chạy êm mà gần như luôn báo "an toàn".
 - [ ] Phân công NB07 (prediction demo) — cùng bẫy ngưỡng như app.
-- [ ] 🔴 **Phân công whitepaper + slide NGAY** — rủi ro lớn nhất còn lại, vẫn 0% và không còn cớ "đợi số liệu". Chương 4 nay viết được đầy đủ từ NB06; Chương 1/2/3/5 vốn không phụ thuộc gì.
+- [ ] 🔴 **Whitepaper + slide — rủi ro lớn nhất còn lại.** Chương 1 đã có bản thảo (`docs/Business_Understanding.docx`, PR #41); còn **Chương 2–6 + slide + ghép vào file nộp `reports/`**. Chương 4 viết được đầy đủ từ NB06; Chương 2/3/5 không phụ thuộc gì thêm.
 - [ ] Chốt **3 Insights quan trọng** (tiêu chí Y1) — NB06 cho sẵn 2 ứng viên mạnh: `EXT_SOURCES_MEAN` quan trọng gấp 13 lần biến kế tiếp; 3/7 đặc trưng mạnh nhất đào từ bảng phụ (bằng chứng Phần B).
 - [ ] Hỏi giảng viên: Google Sheet có thay được "Nhật ký Jira" + ảnh Kanban (Chương 5, slide 12) không.
 - [ ] Cân nhắc chuyển `data/processed/*.csv` sang **parquet** — `train_features.csv` đang 1,87 GB, đọc lại ở NB06 sẽ chậm và tốn RAM. `pyarrow` nay đã có sẵn (streamlit kéo theo) nên không cần cài thêm gì.
