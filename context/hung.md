@@ -4,11 +4,19 @@
 
 ## Đang làm
 
-- **Task:** Củng cố Business Understanding + Data Understanding trước khi đi tiếp.
-- **Nhánh hiện tại:** `docs/bo-sung-ly-do-chon-home-credit`.
-- **Trạng thái:** Đã bổ sung Chương 1 Business Understanding (`docs/Business_Understanding.docx`) với lý do chọn dataset, tầm quan trọng trong ngành AI và SWOT; tạo `docs/Data_Understanding.docx` để nhóm thống nhất 5 ý lớn + 6 câu tự kiểm tra; sắp xếp lại NB01 theo mạch Data Understanding, thêm ERD PNG và format gọn bảng overview. Còn lại: commit/push/PR nhánh này, sau đó ghép nội dung vào file nộp `reports/tai-lieu-du-an-nhom-01.docx` khi làm whitepaper chính thức.
+- **Task:** Tổng hợp Hướng Dẫn Giảng Viên & tài liệu tham chiếu cho AI Agent.
+- **Nhánh hiện tại:** `docs/huong-dan-giang-vien`.
+- **Trạng thái:** Đã tạo bộ Markdown `docs/huong-dan-giang-vien/` gồm README định hướng, danh sách tài liệu tham chiếu trong `docs/`, và tổng hợp video Buổi 1, Buổi 2, Buổi 4, clip học xưởng buổi tối 1. Đã ghi rõ đây là hướng dẫn/tham khảo của giảng viên, không phải yêu cầu bắt buộc phải làm y nguyên. Còn lại: bổ sung Buổi 3/Buổi 5/clip xưởng 2 khi thầy upload hoặc Hưng gửi thêm.
 
 ## Làm tới đâu (cập nhật mới nhất ở trên)
+
+- **2026-07-17 (Hướng Dẫn Giảng Viên & tài liệu tham chiếu — nhánh `docs/huong-dan-giang-vien`):** Tạo bộ tài liệu trung tâm để AI Agent sau này hiểu hướng dẫn của thầy mà không nhầm thành quy định cứng.
+  - **Thư mục mới:** `docs/huong-dan-giang-vien/`.
+  - **`README.md`:** giải thích mục đích, cách AI Agent nên dùng tài liệu, thứ tự ưu tiên khi có mâu thuẫn với `AGENTS.md`/`PROJECT_CONTEXT.md`/Assignment, và trạng thái các nguồn đã tổng hợp.
+  - **`tai-lieu-tham-chieu.md`:** liệt kê các file gốc đang có trong `docs/` như Assignment, mẫu tài liệu, mẫu slide, Business/Data Understanding, hướng dẫn viết tài liệu dự án.
+  - **`video-bai-giang.md`:** tổng hợp Buổi 1, Buổi 2, Buổi 4 và clip học xưởng buổi tối 1; ghi rõ Buổi 3 và clip xưởng 2 chưa có video/chưa được cung cấp.
+  - **`AGENTS.md`:** thêm một dòng hướng dẫn AI Agent đọc `docs/huong-dan-giang-vien/README.md` khi cần hiểu hướng dẫn/bài giảng/tài liệu tham chiếu của giảng viên.
+  - **Ghi chú:** chưa đọc transcript trực tiếp từ YouTube; bản tổng hợp hiện dựa trên ghi chú/timestamp do Hưng cung cấp và có thể bổ sung sau.
 
 - **2026-07-17 (Business/Data Understanding — nhánh `docs/bo-sung-ly-do-chon-home-credit`):** Củng cố lại phần nền tảng để nhóm không bị phụ thuộc mù vào AI.
   - **Business Understanding (`docs/Business_Understanding.docx`):** bổ sung mục "Lý do lựa chọn bộ dữ liệu Home Credit" theo 2 lớp: (1) lý do học tập — thử thách với dữ liệu lớn/phức tạp, nhiều bảng; (2) lý do nghiệp vụ — bài toán rủi ro tín dụng có giá trị thực tế. Bổ sung thêm "Tầm quan trọng của bài toán trong ngành AI" (AI hỗ trợ ra quyết định kinh doanh, dữ liệu thật nhiều nguồn/nhiễu/mất cân bằng, cần dùng có trách nhiệm) và **mục SWOT** đúng mẫu báo cáo: Strengths/Weaknesses/Opportunities/Threats. File hiện có 13 mục nhỏ, kết thúc ở `1.13 Kết luận`.

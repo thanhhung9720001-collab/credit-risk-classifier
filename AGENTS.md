@@ -41,6 +41,7 @@
 ## Hướng dẫn cho AI agent (Claude Code, Antigravity...)
 
 - Đầu phiên làm việc: đọc `PROJECT_CONTEXT.md` (mục 3 và 4) để nắm trạng thái dự án; và đọc `context/<ten>.md` của thành viên đang làm để biết họ đang dở việc gì.
+- Khi cần hiểu hướng dẫn, bài giảng và tài liệu tham chiếu của giảng viên: đọc `docs/huong-dan-giang-vien/README.md`. Đây là nguồn tham khảo để hiểu định hướng của thầy, không thay thế `AGENTS.md`, `PROJECT_CONTEXT.md` hay đề bài gốc.
 - **Khi động vào file trong `notebooks/`: đọc thêm `PROJECT_CONTEXT.md` mục 6 (Quy ước định dạng notebook) TRƯỚC KHI sửa** — mục 3/4 không chứa quy ước này.
   - ⚠️ **Không có quy định "notebook phải đủ 6 mục lớn".** Số mục lớn **không cố định, tuỳ nội dung** (NB01 có 6 mục, NB02–NB06 có 7 — đều đúng). Quy định thật là **mục Tổng kết phải đứng CUỐI**, mang số thứ tự kế tiếp của notebook đó. **Đừng nhồi/gộp mục cho khớp một con số nào cả.**
 - **Trước khi sửa bất kỳ file nào trong repo (Edit/Write): kiểm tra lại nhánh bằng `git branch --show-current` — đừng dựa vào trí nhớ.** Người dùng có thể đã tự đổi về `main` mà AI không biết. Nếu đang ở `main`, chuyển sang nhánh làm việc trước khi sửa (Claude Code có hook `edit-branch-guard.sh` chặn tự động; Antigravity KHÔNG có hook này nên phải tự kiểm tra kỹ hơn).
