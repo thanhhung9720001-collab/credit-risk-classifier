@@ -81,11 +81,12 @@
 4. **Models** (`models/`): `model.pkl` (từ NB06) + `scaler.pkl` (từ NB05) + `model_metadata.json` (từ NB06 — **file duy nhất trong `models/` được commit lên GitHub**, ngoại lệ .gitignore do nhóm trưởng duyệt; chứa thứ tự 297 cột đầu vào + ngưỡng quyết định)
 5. **Báo cáo** (`reports/`): Word + PowerPoint theo mẫu trường; theo dõi tiến độ nhóm bằng **Google Sheet** (nhóm trưởng quản lý, link ở nhóm chat — không nằm trong repo). ⚠️ Đề bài nhắc tới **Jira/Trello + ảnh bảng Kanban** (Chương 5 + slide 12) — cần hỏi giảng viên xem Google Sheet có được chấp nhận thay thế không.
 
-## 3. Trạng thái hiện tại (cập nhật 2026-07-16)
+## 3. Trạng thái hiện tại (cập nhật 2026-07-17)
 
 - ✅ Đã dựng xong cấu trúc thư mục hoàn chỉnh
 - ✅ Đã tải đầy đủ dữ liệu Home Credit vào `data/raw/`
 - ✅ Có tài liệu môn học trong `docs/` (assignment, mẫu tài liệu, mẫu báo cáo)
+- ✅ **Đã tạo bộ Hướng Dẫn Giảng Viên & tài liệu tham chiếu cho AI Agent** (`docs/huong-dan-giang-vien/`, nhánh `docs/huong-dan-giang-vien`): gồm README định hướng, danh sách tài liệu gốc trong `docs/`, tổng hợp video Buổi 1, Buổi 2, Buổi 4 và clip học xưởng buổi tối 1. `AGENTS.md` đã nhắc AI Agent đọc bộ tài liệu này khi cần hiểu hướng dẫn/bài giảng của thầy. Lưu ý: đây là **nguồn tham khảo/định hướng**, không thay thế đề bài gốc, `AGENTS.md` hay `PROJECT_CONTEXT.md`.
 - ✅ Đã chốt **quy ước định dạng notebook** (xem mục 6) và tạo cell tiêu đề chuẩn cho cả 7 notebook
 - ✅ Đã thiết lập **quy trình làm việc nhóm qua git** — gồm nhiều lớp:
   - **GitHub Ruleset**: `protect-main` (cấm push thẳng, bắt buộc PR, chặn force-push/xóa nhánh) + `chi-co-nhom-truong-duoc-merge` (chỉ nhóm trưởng merge được vào main)
@@ -120,6 +121,8 @@
 ## 4. Việc tiếp theo (cập nhật 2026-07-17 — sau khi bổ sung Business/Data Understanding và sắp xếp lại NB01)
 
 **Với mọi thành viên trước khi bắt đầu:** đọc `docs/QUY-TRINH-LAM-VIEC.md` và làm theo checklist đầu phiên (pull code mới → **khai báo tên** `echo <tên> > .claude/whoami` + tạo `context/<tên>.md` → tạo/chuyển nhánh, KHÔNG code trên main). Ai đã kéo quy trình mới về nhớ **khởi động lại Claude Code** để nạp hook.
+
+**Khi cần hiểu hướng dẫn của giảng viên:** đọc `docs/huong-dan-giang-vien/README.md` trước, sau đó xem `tai-lieu-tham-chieu.md` và `video-bai-giang.md`. Nếu thầy upload thêm video/file mới, bổ sung tiếp vào cùng thư mục này để AI Agent và thành viên mới không mất ngữ cảnh.
 
 ### ⚠️ Đọc trước khi phân công: nút thắt đã gỡ, rủi ro dồn hết sang báo cáo & app
 
