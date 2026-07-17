@@ -4,11 +4,19 @@
 
 ## Đang làm
 
-- **Task:** Whitepaper — bắt đầu viết bản thảo theo chương (CRISP-DM).
-- **Nhánh gần nhất:** `docs/chuong-1-business-understanding` (Chương 1) — đã merge **PR #41**.
-- **Trạng thái:** Chương 1 Business Understanding đã có bản thảo (`docs/Business_Understanding.docx`); trang bìa whitepaper (`docs/2. Mau tai lieu.docx`) đã điền tiêu đề + danh sách thành viên. Trước đó diễn giải kỹ thuật NB01 đã merge (**PR #40**). Còn lại: Chương 2–6 + ghép nội dung vào file nộp `reports/tai-lieu-du-an-nhom-01.docx`.
+- **Task:** Củng cố Business Understanding + Data Understanding trước khi đi tiếp.
+- **Nhánh hiện tại:** `docs/bo-sung-ly-do-chon-home-credit`.
+- **Trạng thái:** Đã bổ sung Chương 1 Business Understanding (`docs/Business_Understanding.docx`) với lý do chọn dataset, tầm quan trọng trong ngành AI và SWOT; tạo `docs/Data_Understanding.docx` để nhóm thống nhất 5 ý lớn + 6 câu tự kiểm tra; sắp xếp lại NB01 theo mạch Data Understanding, thêm ERD PNG và format gọn bảng overview. Còn lại: commit/push/PR nhánh này, sau đó ghép nội dung vào file nộp `reports/tai-lieu-du-an-nhom-01.docx` khi làm whitepaper chính thức.
 
 ## Làm tới đâu (cập nhật mới nhất ở trên)
+
+- **2026-07-17 (Business/Data Understanding — nhánh `docs/bo-sung-ly-do-chon-home-credit`):** Củng cố lại phần nền tảng để nhóm không bị phụ thuộc mù vào AI.
+  - **Business Understanding (`docs/Business_Understanding.docx`):** bổ sung mục "Lý do lựa chọn bộ dữ liệu Home Credit" theo 2 lớp: (1) lý do học tập — thử thách với dữ liệu lớn/phức tạp, nhiều bảng; (2) lý do nghiệp vụ — bài toán rủi ro tín dụng có giá trị thực tế. Bổ sung thêm "Tầm quan trọng của bài toán trong ngành AI" (AI hỗ trợ ra quyết định kinh doanh, dữ liệu thật nhiều nguồn/nhiễu/mất cân bằng, cần dùng có trách nhiệm) và **mục SWOT** đúng mẫu báo cáo: Strengths/Weaknesses/Opportunities/Threats. File hiện có 13 mục nhỏ, kết thúc ở `1.13 Kết luận`.
+  - **Data Understanding doc (`docs/Data_Understanding.docx`):** tạo file Word mới cho cả nhóm đọc chung, gồm mục tiêu Data Understanding, **5 ý lớn cần nắm** (bảng nào, ý nghĩa nghiệp vụ từng bảng, mỗi dòng là gì, khóa nối, vấn đề dữ liệu) và **6 câu hỏi tự kiểm tra** kèm câu trả lời mẫu. Đây là tài liệu nền để trước khi vào NB01 ai cũng hiểu "dữ liệu đang kể câu chuyện cho vay nào".
+  - **Notebook 01 (`notebooks/01_data_understanding.ipynb`):** sắp xếp lại từ mạch hơi rời rạc thành 9 mục: mục tiêu/câu hỏi dẫn đường → bối cảnh bài toán → chuẩn bị môi trường → bản đồ dữ liệu → bảng trung tâm → bảng phụ/khóa → từ điển dữ liệu → thách thức/phương pháp → tổng kết. Thêm checklist tự kiểm tra ở cuối notebook.
+  - **ERD:** tạo `reports/images/home_credit_erd.png` và chèn vào mục quan hệ khóa của NB01; vẫn giữ sơ đồ ASCII làm fallback. ERD gộp `application_train/test` làm bảng trung tâm, thể hiện nhánh `bureau → bureau_balance` và `previous_application → installments/POS/credit_card`, nhấn mạnh các bảng 1-n phải aggregate về `SK_ID_CURR`.
+  - **Format output NB01:** bảng overview 8 CSV trước hiển thị mọi số dạng `xxxx.0000`; đã đổi code sang `overview.style.format` và cập nhật output lưu sẵn: cột đếm là số nguyên, `RAM (MB)` 1 chữ số, `Ô thiếu (%)` 2 chữ số. Notebook vẫn đọc JSON bình thường; code cell giữ execution_count 1→14 liền mạch; không chạy lại toàn bộ vì chủ yếu sửa markdown/output hiển thị.
+  - **Verify:** kiểm tra JSON NB01 hợp lệ, link ảnh tồn tại, `git diff --check` sạch. Render DOCX bằng tool documents vẫn không chạy được do máy thiếu LibreOffice/headless renderer (`FileNotFoundError`), nên chỉ QA cấu trúc/nội dung Word bằng `python-docx`.
 
 - **2026-07-16 (Chương 1 whitepaper — nhánh `docs/chuong-1-business-understanding`, PR #41):** Viết bản thảo **Chương 1 Business Understanding** (`docs/Business_Understanding.docx`) theo mạch CRISP-DM: mở đầu → tình huống hai khách hàng cùng thu nhập nhưng khác lịch sử tín dụng → bài toán Home Credit (cân bằng giảm rủi ro vs duy trì tăng trưởng) → vai trò AI (**hỗ trợ định lượng, không thay chuyên viên tín dụng**) → phát biểu bài toán → ý nghĩa `TARGET` (0 = trả nợ bình thường / 1 = gặp khó khăn trả nợ) → vì sao là **phân loại nhị phân** → giá trị hệ thống → bộ câu hỏi chốt trước khi sang Data Understanding → kết luận.
   - **Trang bìa `docs/2. Mau tai lieu.docx`:** điền tiêu đề *"Xây dựng Mô hình Phân loại nhị phân — Dự báo Rủi ro Khách hàng Vay vốn"* + danh sách 5 thành viên (Hưng PS47270 — trưởng nhóm; Huy PS48224; Thái PS47694; Qui Anh PS48165; Thắng PS48172). Bốn bạn còn để "Vai trò" — chờ nhóm chốt phân công.
@@ -90,10 +98,14 @@
 - [x] Push nhánh `docs/cap-nhat-project-context-sau-t11`, tạo PR và merge (PR #39).
 - [x] Push nhánh `docs/t01-giai-thich-lai-nb01`, tạo PR và merge (bổ sung diễn giải NB01 — **PR #40**).
 - [x] Viết bản thảo **Chương 1 Business Understanding** + điền trang bìa whitepaper (**PR #41**).
+- [x] Bổ sung Business Understanding: lý do chọn dataset, tầm quan trọng trong ngành AI, SWOT.
+- [x] Tạo `docs/Data_Understanding.docx` để nhóm thống nhất mục tiêu/5 ý lớn/6 câu tự kiểm tra.
+- [x] Sắp xếp lại NB01 theo mạch Data Understanding, thêm ERD PNG và format gọn bảng overview.
+- [ ] Push nhánh `docs/bo-sung-ly-do-chon-home-credit`, tạo PR và merge.
 - [ ] Cân nhắc áp cách diễn giải của NB01 sang NB02–NB06 — cùng lý do Y3/Y4. Ưu tiên **sau** app/whitepaper vì các notebook kia đã có nhận xét đầy đủ hơn NB01.
 - [ ] **Phân công `app/` Streamlit + dashboard interactive — ưu tiên số 1 hiện nay** (gộp mục 7 + mục 9 đề bài vào 1 task; `streamlit` đã ghim sẵn trong requirements). **Bắt buộc nhắc người nhận:** đọc `decision_threshold` = 0,0747 từ `model_metadata.json`, KHÔNG dùng `.predict()` mặc định — nếu không app sẽ chạy êm mà gần như luôn báo "an toàn".
 - [ ] Phân công NB07 (prediction demo) — cùng bẫy ngưỡng như app.
-- [ ] 🔴 **Whitepaper + slide — rủi ro lớn nhất còn lại.** Chương 1 đã có bản thảo (`docs/Business_Understanding.docx`, PR #41); còn **Chương 2–6 + slide + ghép vào file nộp `reports/`**. Chương 4 viết được đầy đủ từ NB06; Chương 2/3/5 không phụ thuộc gì thêm.
+- [ ] 🔴 **Whitepaper + slide — rủi ro lớn nhất còn lại.** Chương 1 đã có bản thảo tốt hơn (`docs/Business_Understanding.docx`) và có thêm nền Data Understanding (`docs/Data_Understanding.docx`); còn **Chương 2–6 + slide + ghép vào file nộp `reports/`**. Chương 4 viết được đầy đủ từ NB06; Chương 2/3/5 không phụ thuộc gì thêm.
 - [ ] Chốt **3 Insights quan trọng** (tiêu chí Y1) — NB06 cho sẵn 2 ứng viên mạnh: `EXT_SOURCES_MEAN` quan trọng gấp 13 lần biến kế tiếp; 3/7 đặc trưng mạnh nhất đào từ bảng phụ (bằng chứng Phần B).
 - [ ] Hỏi giảng viên: Google Sheet có thay được "Nhật ký Jira" + ảnh Kanban (Chương 5, slide 12) không.
 - [ ] Cân nhắc chuyển `data/processed/*.csv` sang **parquet** — `train_features.csv` đang 1,87 GB, đọc lại ở NB06 sẽ chậm và tốn RAM. `pyarrow` nay đã có sẵn (streamlit kéo theo) nên không cần cài thêm gì.
