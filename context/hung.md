@@ -4,11 +4,16 @@
 
 ## Đang làm
 
-- **Task:** Tổng hợp Hướng Dẫn Giảng Viên & tài liệu tham chiếu cho AI Agent.
-- **Nhánh hiện tại:** `docs/huong-dan-giang-vien`.
-- **Trạng thái:** Đã tạo bộ Markdown `docs/huong-dan-giang-vien/` gồm README định hướng, danh sách tài liệu tham chiếu trong `docs/`, và tổng hợp video Buổi 1, Buổi 2, Buổi 4, clip học xưởng buổi tối 1. Đã ghi rõ đây là hướng dẫn/tham khảo của giảng viên, không phải yêu cầu bắt buộc phải làm y nguyên. Còn lại: bổ sung Buổi 3/Buổi 5/clip xưởng 2 khi thầy upload hoặc Hưng gửi thêm.
+- **Task:** Tạo folder gốc mới `plans/` làm nơi lưu các file kế hoạch làm việc của nhóm.
+- **Nhánh hiện tại:** `feature/tao-folder-plans`.
+- **Trạng thái:** Đã làm Bước 2 — tạo `plans/README.md` (mục đích folder + quy ước đặt tên `plan-<tên-việc>.md`, file trong đây commit chung cho cả nhóm, khác context cá nhân). **Chưa** cập nhật tài liệu cấu trúc (PROJECT_CONTEXT mục 2.6 / README / AGENTS phạm vi khóa) và **chưa** commit/push/PR — chờ quyết.
 
 ## Làm tới đâu (cập nhật mới nhất ở trên)
+
+- **2026-07-18 (Tạo folder `plans/` — nhánh `feature/tao-folder-plans`):** Thêm folder gốc mới `plans/` làm nơi lưu các file kế hoạch làm việc của nhóm (kế hoạch app Streamlit, whitepaper, slide, NB07... — mỗi việc một file).
+  - **Dọn `main` trước khi tạo nhánh:** NB01 có 1 thay đổi lạc chưa commit (mất icon ⚙️ ở tiêu đề mục "Hướng dẫn chuẩn bị", nghi gõ nhầm) → `git restore` cho `main` sạch rồi mới `git switch -c`.
+  - **`plans/README.md`:** giải thích mục đích folder, quy ước đặt tên `plan-<tên-việc>.md` (viết thường không dấu), và ghi rõ file trong đây **commit chung** cho cả nhóm đọc (khác `context/<tên>.md` là ghi chú cá nhân).
+  - **Mới làm Bước 2** (folder + README). Còn lại: Bước 3 cập nhật tài liệu cấu trúc (PROJECT_CONTEXT 2.6, README, AGENTS phạm vi khóa) + Bước 4 commit/push/PR/merge.
 
 - **2026-07-17 (Hướng Dẫn Giảng Viên & tài liệu tham chiếu — nhánh `docs/huong-dan-giang-vien`):** Tạo bộ tài liệu trung tâm để AI Agent sau này hiểu hướng dẫn của thầy mà không nhầm thành quy định cứng.
   - **Thư mục mới:** `docs/huong-dan-giang-vien/`.
