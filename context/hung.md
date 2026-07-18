@@ -4,16 +4,26 @@
 
 ## Đang làm
 
-- **Task:** Tạo folder gốc mới `plans/` làm nơi lưu các file kế hoạch làm việc của nhóm.
-- **Nhánh hiện tại:** `feature/tao-folder-plans`.
-- **Trạng thái:** Đã làm Bước 2 — tạo `plans/README.md` (mục đích folder + quy ước đặt tên `plan-<tên-việc>.md`, file trong đây commit chung cho cả nhóm, khác context cá nhân). **Chưa** cập nhật tài liệu cấu trúc (PROJECT_CONTEXT mục 2.6 / README / AGENTS phạm vi khóa) và **chưa** commit/push/PR — chờ quyết.
+- **Task:** Sửa feedback giảng viên cho NB01/NB02/NB03: bỏ icon, giảm văn phong "mùi AI", thêm markdown trước code, làm rõ NB02 là Database Pipeline trung tâm và NB03 cleaning có chủ đích.
+- **Nhánh hiện tại:** `fix/feedback-giang-vien-nb02-nb03`.
+- **Trạng thái:** Đã dọn Git trước khi sửa notebook: xử lý thay đổi lạc trong working tree, push nhánh `docs/bo-sung-video-feature-engineering` lên remote; chưa tạo được PR bằng connector do GitHub API báo 403. Đã lưu ghi chú feedback của thầy tại `docs/huong-dan-giang-vien/feedback-giang-vien-nb02-nb03-2026-07-18.md`. Pass sửa "mùi AI" cho NB01/NB02/NB03 đã làm xong ở mức markdown/văn phong: bỏ icon, thêm dẫn code, sửa các câu quá bóng thành ngắn hơn. Chuẩn bị commit/push nhánh này để thành viên khác đọc bối cảnh; chưa Restart & Run All.
 
 ## Làm tới đâu (cập nhật mới nhất ở trên)
 
-- **2026-07-18 (Tạo folder `plans/` — nhánh `feature/tao-folder-plans`):** Thêm folder gốc mới `plans/` làm nơi lưu các file kế hoạch làm việc của nhóm (kế hoạch app Streamlit, whitepaper, slide, NB07... — mỗi việc một file).
-  - **Dọn `main` trước khi tạo nhánh:** NB01 có 1 thay đổi lạc chưa commit (mất icon ⚙️ ở tiêu đề mục "Hướng dẫn chuẩn bị", nghi gõ nhầm) → `git restore` cho `main` sạch rồi mới `git switch -c`.
-  - **`plans/README.md`:** giải thích mục đích folder, quy ước đặt tên `plan-<tên-việc>.md` (viết thường không dấu), và ghi rõ file trong đây **commit chung** cho cả nhóm đọc (khác `context/<tên>.md` là ghi chú cá nhân).
-  - **Mới làm Bước 2** (folder + README). Còn lại: Bước 3 cập nhật tài liệu cấu trúc (PROJECT_CONTEXT 2.6, README, AGENTS phạm vi khóa) + Bước 4 commit/push/PR/merge.
+- **2026-07-18 (Feedback giảng viên NB01/NB02/NB03 — nhánh `fix/feedback-giang-vien-nb02-nb03`):** Dọn Git và bắt đầu sửa 3 notebook theo feedback của thầy.
+  - **Dọn Git trước:** đang ở `docs/bo-sung-video-feature-engineering`, có commit `docs: bo sung video feature engineering`; đã xử lý thay đổi lạc trong working tree. Đã push nhánh video lên GitHub; connector GitHub không tạo PR được do lỗi quyền `403 Resource not accessible by integration`, link tạo PR thủ công: `https://github.com/thanhhung9720001-collab/credit-risk-classifier/pull/new/docs/bo-sung-video-feature-engineering`.
+  - **Tạo nhánh mới:** từ `main` mới nhất, tạo `fix/feedback-giang-vien-nb02-nb03`.
+  - **Ghi chú feedback:** thêm `docs/huong-dan-giang-vien/feedback-giang-vien-nb02-nb03-2026-07-18.md` để nhắc các điểm: bỏ icon, thêm markdown trước code, NB02 là database pipeline trung tâm, clean/features ghi lại database, NB03 cleaning có bằng chứng/lý do/kiểm tra, code ưu tiên dễ hiểu.
+  - **NB01:** bỏ icon ở tiêu đề/heading, đổi cell mở đầu sang chữ ngắn hơn, thêm markdown "Trước khi chạy code" trước các cell code.
+  - **Bổ sung NB01 theo hướng dẫn giảng viên:** thêm link đọc trước `docs/Business_Understanding.docx`; thêm tiểu mục `5.1.1` kiểm tra dạng `.info()` rút gọn và duplicate (`app.duplicated()`, `SK_ID_CURR.duplicated()`).
+  - **NB02:** viết lại mạch thành **Database Pipeline trung tâm**; thêm mục vai trò NB02, hợp đồng dữ liệu cho NB03/NB04/NB05/NB06 đọc bằng `pd.read_sql`, validation sau import và sau view/aggregation, ghi rõ bảng clean/features cần đưa ngược lại DB.
+  - **NB03:** viết khung quyết định cleaning theo dạng Vấn đề → Bằng chứng → Cách xử lý → Lý do → Kiểm tra; renumber mục; thêm bước ghi `application_train_clean` và `application_test_clean` về PostgreSQL bằng `COPY` nếu máy có `.env`.
+  - **Pass sửa "mùi AI" tiếp theo:** thay các cụm như "Chúng ta sẽ", "Import thành công", "Thực thi thành công", "cực kỳ..." bằng câu ngắn hơn.
+  - **Chỉnh quy tắc markdown theo feedback mới:** markdown trước code chỉ viết 1 câu ngắn dạng "Đoạn code bên dưới...", không viết dài kiểu "cell này làm gì/vì sao/output mong đợi"; markdown sau output dùng cho `**Nhận xét:**`; giải thích kỹ thuật ngắn chuyển vào comment trong code khi cần.
+  - **Lưu quy tắc mới:** cập nhật `AGENTS.md`, `PROJECT_CONTEXT.md` mục 6 và `docs/huong-dan-giang-vien/feedback-giang-vien-nb02-nb03-2026-07-18.md` theo quy tắc trên.
+  - **Sửa phương pháp tiếp cận NB01:** đổi cách trình bày từ "2 nhánh độc lập" sang **database trung tâm + CSV fallback**. NB01 nay ghi rõ NB02 là nơi import raw/tạo view/join/aggregation/index/validation; NB03 có thể đọc DB bằng `pd.read_sql` hoặc đọc CSV để fallback, nhưng output clean nên ghi lại cả `data/processed/` và PostgreSQL; NB05 tạo features cũng nên ghi lại DB.
+  - **Verify đã làm:** JSON 3 notebook load được, mọi code cell parse AST được, `rg` không còn emoji/icon trong NB01/NB02/NB03/ghi chú, `rg` không còn các cụm văn phong quá bóng đã rà, `git diff --check` sạch. Chưa Restart & Run All vì NB02 cần PostgreSQL/dữ liệu local và các thay đổi chủ yếu là markdown/khung pipeline.
+  - **Tạm đẩy nhánh cho nhóm:** commit/push nhánh `fix/feedback-giang-vien-nb02-nb03` để thành viên khác có đủ bối cảnh trước khi làm tiếp các phần sau.
 
 - **2026-07-17 (Hướng Dẫn Giảng Viên & tài liệu tham chiếu — nhánh `docs/huong-dan-giang-vien`):** Tạo bộ tài liệu trung tâm để AI Agent sau này hiểu hướng dẫn của thầy mà không nhầm thành quy định cứng.
   - **Thư mục mới:** `docs/huong-dan-giang-vien/`.

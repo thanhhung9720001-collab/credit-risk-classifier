@@ -15,7 +15,8 @@
 1. Doc file nay de hieu pham vi.
 2. Doc `tai-lieu-tham-chieu.md` de biet cac file goc dang co trong `docs/`.
 3. Doc `video-bai-giang.md` de nam cac diem thay da huong dan theo tung buoi/clip.
-4. Khi co mau thuan giua huong dan trong day va `AGENTS.md`/`PROJECT_CONTEXT.md`, uu tien:
+4. Doc cac file feedback truc tiep, vi du `feedback-giang-vien-nb02-nb03-2026-07-18.md`, khi sua notebook lien quan.
+5. Khi co mau thuan giua huong dan trong day va `AGENTS.md`/`PROJECT_CONTEXT.md`, uu tien:
    - `AGENTS.md` cho quy trinh lam viec nhom va git.
    - `PROJECT_CONTEXT.md` cho trang thai that cua du an.
    - Tai lieu trong thu muc nay cho boi canh, cach trinh bay va cac goi y cua giang vien.
@@ -39,4 +40,4 @@
 | Buoi 5 | Chua hoc |
 | Clip hoc xuong buoi toi 1 | Da tong hop |
 | Clip hoc xuong buoi toi 2 | Thay chua upload / chua duoc cung cap |
-
+| Feedback NB01/NB02/NB03 ngay 2026-07-18 | Da ghi trong `feedback-giang-vien-nb02-nb03-2026-07-18.md` |
