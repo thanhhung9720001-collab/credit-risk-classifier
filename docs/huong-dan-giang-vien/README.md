@@ -39,4 +39,5 @@
 | Buoi 5 | Chua hoc |
 | Clip hoc xuong buoi toi 1 | Da tong hop |
 | Clip hoc xuong buoi toi 2 | Thay chua upload / chua duoc cung cap |
+| 3 clip bo sung ve Feature Engineering | Da tong hop |
 
