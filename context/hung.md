@@ -4,11 +4,16 @@
 
 ## Đang làm
 
-- **Task:** Sửa feedback giảng viên cho NB01/NB02/NB03: bỏ icon, giảm văn phong "mùi AI", thêm markdown trước code, làm rõ NB02 là Database Pipeline trung tâm và NB03 cleaning có chủ đích.
-- **Nhánh hiện tại:** `fix/feedback-giang-vien-nb02-nb03`.
-- **Trạng thái:** Đã dọn Git trước khi sửa notebook: xử lý thay đổi lạc trong working tree, push nhánh `docs/bo-sung-video-feature-engineering` lên remote; chưa tạo được PR bằng connector do GitHub API báo 403. Đã lưu ghi chú feedback của thầy tại `docs/huong-dan-giang-vien/feedback-giang-vien-nb02-nb03-2026-07-18.md`. Pass sửa "mùi AI" cho NB01/NB02/NB03 đã làm xong ở mức markdown/văn phong: bỏ icon, thêm dẫn code, sửa các câu quá bóng thành ngắn hơn. Chuẩn bị commit/push nhánh này để thành viên khác đọc bối cảnh; chưa Restart & Run All.
+- **Task:** Sửa nhỏ NB01 theo góp ý đọc code: tách phần kiểm tra `DAYS_BIRTH` và `DAYS_EMPLOYED` thành 2 cặp markdown/code riêng.
+- **Nhánh hiện tại:** `fix/nb01-tach-cell-days-employed`.
+- **Trạng thái:** Đã tách cell trong NB01 để mỗi đoạn code làm một việc rõ ràng hơn: một cell đổi `DAYS_BIRTH` sang tuổi, một cell kiểm tra giá trị bất thường `DAYS_EMPLOYED = 365243`. Đã kiểm tra JSON notebook đọc được, code cell parse được và `git diff --check` sạch; chưa Restart & Run All.
 
 ## Làm tới đâu (cập nhật mới nhất ở trên)
+
+- **2026-07-18 (Sửa nhỏ NB01 — nhánh `fix/nb01-tach-cell-days-employed`):** Tách cell đang xử lý chung `DAYS_BIRTH` và `DAYS_EMPLOYED` thành 2 markdown + 2 code cell riêng để nhóm dễ giải thích khi bảo vệ.
+  - `DAYS_BIRTH`: đổi số ngày âm sang tuổi để kiểm tra khoảng tuổi khách hàng.
+  - `DAYS_EMPLOYED`: kiểm tra riêng giá trị bất thường `365243`, làm rõ đây là mã đặc biệt cần xử lý ở NB03.
+  - **Verify:** JSON notebook load được, toàn bộ code cell parse AST được, `git diff --check` sạch. Chưa Restart & Run All vì đây là chỉnh cấu trúc cell nhỏ và output được tách lại từ kết quả đã có.
 
 - **2026-07-18 (Feedback giảng viên NB01/NB02/NB03 — nhánh `fix/feedback-giang-vien-nb02-nb03`):** Dọn Git và bắt đầu sửa 3 notebook theo feedback của thầy.
   - **Dọn Git trước:** đang ở `docs/bo-sung-video-feature-engineering`, có commit `docs: bo sung video feature engineering`; đã xử lý thay đổi lạc trong working tree. Đã push nhánh video lên GitHub; connector GitHub không tạo PR được do lỗi quyền `403 Resource not accessible by integration`, link tạo PR thủ công: `https://github.com/thanhhung9720001-collab/credit-risk-classifier/pull/new/docs/bo-sung-video-feature-engineering`.
