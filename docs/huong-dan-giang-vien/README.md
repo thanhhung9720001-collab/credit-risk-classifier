@@ -40,4 +40,5 @@
 | Buoi 5 | Chua hoc |
 | Clip hoc xuong buoi toi 1 | Da tong hop |
 | Clip hoc xuong buoi toi 2 | Thay chua upload / chua duoc cung cap |
+| 3 clip bo sung ve Feature Engineering | Da tong hop |
 | Feedback NB01/NB02/NB03 ngay 2026-07-18 | Da ghi trong `feedback-giang-vien-nb02-nb03-2026-07-18.md` |

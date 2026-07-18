@@ -126,3 +126,87 @@
 
 - Trang thai: thay chua upload / chua duoc cung cap.
 
+## Clip bo sung - Feature Engineering la gi
+
+- Link: [Feature Engineering la gi](http://www.youtube.com/watch?v=ZprLK-wa7MM)
+
+### Y chinh
+
+- Feature Engineering la qua trinh bien doi, ket hop hoac tao moi feature tu du lieu tho ban dau dua tren hieu biet nghiep vu.
+- Muc tieu la giup mo hinh Machine Learning de phat hien quy luat an va nang cao chat luong du doan.
+- Trong ngu canh AI/ML, nen dung tu "feature" de chi dac trung/dac diem cua tung dong du lieu thay vi chi noi chung la cot/truong.
+- Ky thuat pho bien gom:
+  - Tach nhieu feature tu mot feature goc, vi du tu ngay tao ra thu, thang, quy, ngay le.
+  - Ket hop nhieu feature thanh feature moi, vi du thu nhap chia cho so thanh vien gia dinh de ra thu nhap binh quan.
+  - Chuan hoa du lieu bang Standard Scale hoac Min-Max.
+  - Ma hoa bien phan loai bang Label Encoding, One-Hot Encoding, hoac bien doi anh/am thanh thanh vector.
+- Feature tao ra phai xuat phat tu bai toan thuc te va co y nghia logic/nghiep vu cu the.
+
+### Diem thay nhan manh
+
+- `00:46`: Feature Engineering dung ngay truoc buoc huan luyen mo hinh va co the quyet dinh su thanh bai cua du an AI.
+- `04:36`: Giai thich thuat ngu "feature" la dac trung/dac diem cua tung dong du lieu.
+- `18:30`: Vi du One-Hot Encoding bien mau sac do/xanh/vang thanh cac cot so 0/1.
+- `32:49`: Feature Engineering la qua trinh thu nghiem lien tuc, khong phai lam mot lan la xong.
+
+### Ghi chu ap dung cho du an Home Credit
+
+- Notebook 05 can giai thich ro vi sao moi nhom feature duoc tao ra co y nghia voi rui ro tin dung.
+- Cac bien tai chinh/lich su tra no/cac nguon diem ngoai nhu `EXT_SOURCE_*` can duoc dien giai bang nghiep vu, khong chi dua vao code.
+- Viec "bao che" du lieu tho thanh so la bat buoc truoc khi dua vao mo hinh.
+
+## Clip bo sung - Quy trinh Feature Engineering trong du an Machine Learning
+
+- Link: [Quy trinh Feature Engineering trong du an Machine Learning](https://youtu.be/NwV9LhjTnWQ?si=DmTgUpbOQiMh6RFb)
+
+### Y chinh
+
+- Khong co mot quy trinh Feature Engineering co dinh cho moi bai toan; moi linh vuc va muc tieu du doan can cach tao feature khac nhau.
+- Vong lap co ban gom 5 buoc:
+  - Hieu ro bai toan, muc tieu va thach thuc.
+  - Kham pha du lieu bang EDA: hieu y nghia cot, moi quan he, missing/outlier va bieu do nhu box plot, histogram, scatter plot, heatmap.
+  - Xay dung feature moi: tach ngay thang, ket hop cong thuc, chuyen doi don vi, ma hoa One-Hot...
+  - Danh gia dong gop cua feature bang Feature Importance, SHAP value hoac cac phep do phu hop.
+  - Tinh chinh va lap lai neu mo hinh chua dat ky vong hoac feature moi khong dong gop.
+- Tao cot trong EDA va tao feature cho model la hai muc dich khac nhau: EDA de nhin insight, Feature Engineering de phuc vu huan luyen mo hinh.
+
+### Diem thay nhan manh
+
+- `11:42`: Can phan biet tao cot moi de truc quan hoa/tim insight voi tao feature moi de huan luyen mo hinh.
+- `20:07`: Quy trinh khong phai duong thang; neu danh gia model co van de thi phai quay lai cac buoc truoc.
+
+### Ghi chu ap dung cho du an Home Credit
+
+- Co the dung AI de goi y y tuong feature ban dau, nhung nhom phai tu kiem tra bang truc quan hoa, tuong quan va ket qua model.
+- Heatmap, feature importance va cac phep danh gia sau model nen duoc dung de chon feature co y nghia.
+- Khi viet bao cao, nen nhan manh Feature Engineering la vong lap thuc nghiem, khong phai danh sach thao tac co dinh.
+
+## Clip bo sung - Nhung nguyen tac vang trong Feature Engineering
+
+- Link: [Nhung nguyen tac vang trong Feature Engineering](http://www.youtube.com/watch?v=07nQWhfHHk4)
+
+### Y chinh
+
+- Feature phai phuc vu bai toan cu the; khong tao feature theo cam tinh hoac rap khuon tu bai toan khac.
+- Chat luong quan trong hon so luong; feature tot phai co thong tin co gia tri va co kha nang tac dong den bien muc tieu.
+- Moi feature tao ra phai co y nghia. Neu feature khong dong gop hoac hieu qua thap thi can loai bo va rut kinh nghiem.
+- Can tranh Data Leakage: khong duoc dua thong tin tuong lai hoac thong tin chi xuat hien sau thoi diem du doan vao training.
+- Luon danh gia hieu qua feature bang SHAP value, Feature Importance, chi so danh gia phu hop va coi Feature Engineering la cong viec lien tuc.
+
+### Diem thay nhan manh
+
+- `00:23`: Feature phai phuc vu bai toan cu the.
+- `01:38`: Chat luong feature quan trong hon so luong feature.
+- `02:40`: Moi feature tao ra phai co y nghia.
+- `03:39`: Data Leakage la loi nghiem trong khi mo hinh dung thong tin tuong lai de hoc.
+- `05:40`: Vi du khong duoc dung trang thai khoan vay sau 6 thang de du doan khach hang moi nop ho so.
+- `06:07`: Leakage co the lam ket qua test rat tot nhung that bai khi chay thuc te.
+- `07:27`: Can danh gia hieu qua feature va lap lai lien tuc.
+- `10:44`: Nhan manh Data Leakage la dieu bat buoc phai tranh khi lam trong doanh nghiep.
+
+### Ghi chu ap dung cho du an Home Credit
+
+- Home Credit la bai toan rui ro tin dung theo thoi diem nop ho so, nen moi feature phai tuong thich voi thong tin co san tai thoi diem du doan.
+- Khi tong hop tu bang phu, can canh giac voi cac thong tin sau thoi diem vay hien tai neu co nguy co leakage.
+- Khong nen tao feature chi de du so luong; moi feature quan trong can co ly do nghiep vu va/hoac bang chung dong gop tu model.
+
