@@ -72,16 +72,15 @@
 
 ### 2.6. Bản đồ mã nguồn hiện tại
 
-1. **Notebooks** (`notebooks/`) — pipeline **KHÔNG phải đường thẳng 01→07**, mà là **2 nhánh độc lập** (xem `README.md` mục 5):
-   - **Nhánh CSV** (không cần PostgreSQL): `01_data_understanding` → `03_data_cleaning` → `05_feature_engineering` → `06_machine_learnig` → `07_prediction_demo`
-   - **Nhánh Database** (cần PostgreSQL): `02_posgrespl_pipline` → `04_eda_visualization`
-   - ⚠️ Hệ quả: **người làm NB06 KHÔNG cần cài PostgreSQL** — chỉ cần chạy NB03 → NB05.
-2. **SQL** (`sql/`, PostgreSQL): `01_create_tables.sql` → `02_import_data.sql` → `03_views.sql` → `04_aggregation.sql` → `05_indexes.sql`
-3. **App** (`app/`): demo bằng **Streamlit** (`stream_app.py`, `pages/`, `prediction.py`) + có thể thêm API (`api.py`)
-4. **Models** (`models/`): `model.pkl` (từ NB06) + `scaler.pkl` (từ NB05) + `model_metadata.json` (từ NB06 — **file duy nhất trong `models/` được commit lên GitHub**, ngoại lệ .gitignore do nhóm trưởng duyệt; chứa thứ tự 297 cột đầu vào + ngưỡng quyết định)
+> Cập nhật 2026-07-20: sau khi Hưng reset để làm lại gọn hơn, trạng thái thật của repo đã khác pipeline cũ. Không dùng các notebook/SQL cũ làm nguồn sự thật nếu file không còn trong repo.
+
+1. **Notebooks** (`notebooks/`): hiện có `01_data_understanding.ipynb` đã hoàn thành và chạy lại sạch. Các notebook còn lại cần được xây dựng lại theo kế hoạch mới.
+2. **SQL** (`sql/`, PostgreSQL): hiện đang trống sau đợt reset; pipeline SQL sẽ làm lại ở task riêng.
+3. **App** (`app/`): demo bằng **Streamlit** (`stream_app.py`, `pages/`, `prediction.py`) + có thể thêm API (`api.py`), hiện các file chính vẫn rỗng.
+4. **Models** (`models/`): còn `model.pkl`, `scaler.pkl`, `model_metadata.json` từ pipeline cũ. Trước khi dùng cho app/NB07 cần kiểm tra tương thích với pipeline làm lại.
 5. **Báo cáo** (`reports/`): Word + PowerPoint theo mẫu trường; theo dõi tiến độ nhóm bằng **Google Sheet** (nhóm trưởng quản lý, link ở nhóm chat — không nằm trong repo). ⚠️ Đề bài nhắc tới **Jira/Trello + ảnh bảng Kanban** (Chương 5 + slide 12) — cần hỏi giảng viên xem Google Sheet có được chấp nhận thay thế không.
 
-## 3. Trạng thái hiện tại (cập nhật 2026-07-17)
+## 3. Trạng thái hiện tại (cập nhật 2026-07-20)
 
 - ✅ Đã dựng xong cấu trúc thư mục hoàn chỉnh
 - ✅ Đã tải đầy đủ dữ liệu Home Credit vào `data/raw/`
@@ -94,7 +93,17 @@
   - **Tài liệu**: `docs/QUY-TRINH-LAM-VIEC.md` (quy trình chi tiết + Phần 0 quyền đổi cấu trúc + Phần 6 context cá nhân) + `CLAUDE.md` (quy tắc cho Claude)
 - ✅ **Nội quy (2026-07-03)**: chỉ **nhóm trưởng (Hưng)** được thay đổi cấu trúc thư mục / quy trình / quy định (Phần 0 quy trình)
 - ✅ **Context cá nhân (2026-07-03)**: mỗi thành viên có 1 file `context/<tên>.md` (chỉ chủ nhân sửa → hết conflict); khai báo tên đầu phiên qua `.claude/whoami` (không commit). `PROJECT_CONTEXT.md` từ nay do **nhóm trưởng làm chủ** (bức tranh tổng)
-- 🔄 **Triển khai nội dung code** (cập nhật 2026-07-17):
+- 🔄 **Triển khai nội dung code** (cập nhật 2026-07-20):
+  - ✅ **Mốc reset làm lại gọn hơn (PR #52, 2026-07-20):** Hưng đã quyết định reset notebook/SQL để tránh tiếp tục vá trên nền cũ quá dài/khó giải thích. Trạng thái thật sau reset: `notebooks/` hiện chỉ còn NB01; `sql/` hiện trống; các notebook/SQL còn lại sẽ làm lại theo kế hoạch mới.
+  - ✅ **Business Understanding — hoàn thành bản docs mới (PR #53, 2026-07-20):** `docs/Business_Understanding.docx` đã được bổ sung mục tiêu nghiên cứu, giới thiệu dataset, giới thiệu công nghệ, lý do chọn Home Credit, tầm quan trọng trong ngành AI, SWOT và chỉnh lại heading/bullet. Đây là nền để viết Chương 1 trong whitepaper, nhưng vẫn cần ghép vào file nộp trong `reports/`.
+  - ✅ **Data Understanding — hoàn thành giai đoạn hiện tại (PR #54, 2026-07-20):**
+    - `docs/Data_Understanding.docx`: viết lại theo 7 mục rõ ràng, có mục tiêu, bản đồ dataset, khóa nối, kiểm tra cần làm, biểu đồ/tương quan, câu hỏi tự kiểm tra và kết luận.
+    - `reports/images/home_credit_erd.png`: sửa ERD, bỏ bảng `HomeCredit_columns_description` khỏi sơ đồ.
+    - `docs/nb01_data_understanding_outline.md`: lưu outline chốt trước khi viết notebook.
+    - `notebooks/01_data_understanding.ipynb`: hoàn thành NB01 với 8 mục lớn, 62 cell / 21 code cell, `Restart & Run All` thành công, execution_count liền mạch 1→21.
+    - Nội dung NB01 đã có: overview 9 CSV, ERD, khảo sát `application_train`, `nunique`, `describe`, kiểm chứng `DAYS_EMPLOYED = 365243` và `CODE_GENDER = XNA`, missing/duplicate, phân bố `TARGET`, grain/khóa bảng phụ, biểu đồ numeric/category, top correlation với `TARGET`, heatmap và handoff sang notebook sau.
+    - Phạm vi được giữ đúng: NB01 chỉ tìm hiểu dữ liệu, không cleaning, không modeling, không join trực tiếp bảng phụ 1-n.
+  - 📌 **Các dòng lịch sử dưới đây ghi lại pipeline cũ trước reset.** Khi phân công task mới, ưu tiên trạng thái thật ở các dòng cập nhật 2026-07-20 phía trên và kiểm tra file đang tồn tại trong repo.
   - ✅ **Toàn bộ 5 script SQL — HOÀN THÀNH**: `01_create_tables.sql` (T02, PR #15 — schema 8 bảng, tối ưu kiểu số); `02_import_data.sql` (T03, PR #16/#17 — import CSV bằng `COPY`, ghi chú đổi đường dẫn từng máy); `03_views.sql` (T05, PR #19 — 7 view làm sạch + chỉ số nghiệp vụ CIC/dư nợ/trễ hạn/dùng thẻ); `04_aggregation.sql` (kèm pipeline T04, PR #23 — 3 materialized view tổng hợp installments/pos_cash/credit_card theo khách hàng, có unique index); `05_indexes.sql` (T07, PR #25 — index khóa ngoại + composite/partial cho bureau_balance & target).
   - ✅ **Notebook 01 (`01_data_understanding.ipynb`) — HOÀN THÀNH** (T01, PR #12): tổng quan 8 bảng, phân tích `application_train` (307.511×122, `TARGET` ~8%, 67 cột thiếu), quan hệ khóa, từ điển dữ liệu. **Bổ sung diễn giải kỹ thuật (2026-07-16, PR #40):** thêm mục "Bài toán & phương pháp tiếp cận" (phát biểu bài toán, phân loại nhị phân có giám sát, phân biệt ROC-AUC vs accuracy), giải nghĩa thuật ngữ Anh–Việt, sơ đồ quan hệ 8 bảng dạng ASCII, diễn giải từng bước — phục vụ tiêu chí Y3/Y4. **Bổ sung Data Understanding (2026-07-17):** sắp xếp lại mạch notebook thành 9 mục (mục tiêu → bối cảnh → chuẩn bị → bản đồ dữ liệu → bảng trung tâm → bảng phụ/khóa → từ điển → thách thức/phương pháp → tổng kết), thêm checklist 5 ý lớn + 6 câu tự kiểm tra, thêm ERD PNG tại `reports/images/home_credit_erd.png`, format lại bảng overview để số đếm không còn `.0000`. Code cell giữ execution_count 1→14 liền mạch; thay đổi chủ yếu là markdown/output hiển thị.
   - ✅ **Notebook 02 (`02_posgrespl_pipline.ipynb`) — HOÀN THÀNH** (T04, PR #23): pipeline PostgreSQL bằng Python (tạo bảng → import `copy_expert` → view/aggregation/index → validation). **Đã sửa** lỗi env path (`find_dotenv`) và lỗi nạp trùng dữ liệu (thêm `TRUNCATE` cho idempotent) — fix PR #27.
@@ -118,37 +127,36 @@
     2. **Notebook phải Restart & Run All trước khi commit.** NB05 từng có ô cấu hình `execution_count=None` (chưa chạy) trong khi các ô sau chạy bằng giá trị cũ còn sót trong kernel → output nhúng là dữ liệu mẫu dù code ghi `DEBUG=False`. Kiểm tra nhanh: execution_count phải liền mạch 1,2,3...
     3. **Thêm `assert` kiểm chứng sau mỗi bước biến đổi dữ liệu quan trọng** — để lỗi phải nổ ra thay vì trôi qua. Và nhớ **markdown/nhận xét cũng phải sửa theo** khi đổi code: `nbconvert` chỉ cập nhật output, KHÔNG đụng tới markdown.
 
-## 4. Việc tiếp theo (cập nhật 2026-07-17 — sau khi bổ sung Business/Data Understanding và sắp xếp lại NB01)
+## 4. Việc tiếp theo (cập nhật 2026-07-20 — sau khi hoàn thành Data Understanding PR #54)
 
 **Với mọi thành viên trước khi bắt đầu:** đọc `docs/QUY-TRINH-LAM-VIEC.md` và làm theo checklist đầu phiên (pull code mới → **khai báo tên** `echo <tên> > .claude/whoami` + tạo `context/<tên>.md` → tạo/chuyển nhánh, KHÔNG code trên main). Ai đã kéo quy trình mới về nhớ **khởi động lại Claude Code** để nạp hook.
 
 **Khi cần hiểu hướng dẫn của giảng viên:** đọc `docs/huong-dan-giang-vien/README.md` trước, sau đó xem `tai-lieu-tham-chieu.md` và `video-bai-giang.md`. Nếu thầy upload thêm video/file mới, bổ sung tiếp vào cùng thư mục này để AI Agent và thành viên mới không mất ngữ cảnh.
 
-### ⚠️ Đọc trước khi phân công: nút thắt đã gỡ, rủi ro dồn hết sang báo cáo & app
+### ⚠️ Đọc trước khi phân công: trạng thái sau reset
 
-T11 (NB06) merge xong nghĩa là **`model.pkl` đã có thật** — mọi việc từng bị chặn vì "chưa có mô hình" nay đều mở. **Phần code là mảng KHOẺ nhất** của dự án (6/7 notebook + toàn bộ SQL đã xong). Nhưng bức tranh sản phẩm phải nộp vẫn đáng lo: **3 trong 4 sản phẩm còn ở mức rất thấp**:
+Sau đợt reset, nền tảng Business Understanding và Data Understanding đã rõ hơn, nhưng phần pipeline còn lại cần làm lại có chủ đích. Không mặc định dùng trạng thái pipeline cũ nếu file notebook/SQL không còn trong repo.
 
 | Sản phẩm phải nộp | Mức hoàn thành |
 |---|---|
-| Mã nguồn `.ipynb` | 🟢 ~85% (chỉ còn NB07) |
-| **Whitepaper `.docx` 6 chương** | 🟡 **~20% — Chương 1 có bản thảo tốt hơn (`docs/`), file nộp `reports/` còn trắng** |
+| Mã nguồn `.ipynb` | 🟡 **NB01 xong; NB02–NB07 cần làm lại theo kế hoạch mới** |
+| SQL/PostgreSQL | 🔴 **0% sau reset — thư mục `sql/` hiện trống** |
+| **Whitepaper `.docx` 6 chương** | 🟡 **Có bản thảo Business/Data Understanding trong `docs/`; file nộp `reports/` vẫn cần ghép/viết tiếp** |
 | **Slide `.pptx`** | 🔴 **0% — md5 trùng khít file mẫu** |
 | **Ứng dụng web** | 🔴 **0% — `app/` gồm 4 file 0 byte** |
 
-Cộng thêm **dashboard interactive** (Phần A mục 7) hiện chưa có và trước nay chưa ai nhận ra là yêu cầu bắt buộc.
+Cộng thêm **dashboard interactive** (Phần A mục 7) vẫn chưa có và cần được tính vào kế hoạch app/dashboard sau này.
 
 ### Thứ tự đề xuất
 
-1. **`app/` (Streamlit) + dashboard interactive** — 🔴 **ưu tiên số 1 hiện nay**. **Gộp 2 yêu cầu vào 1 task**: mục 9 (ứng dụng web nhập liệu → dự đoán) và mục 7 (dashboard tương tác có filter). Streamlit vốn tương tác sẵn, đã kéo theo `altair` + `pyarrow` khi cài → không cần thêm thư viện nào. Nạp `models/model.pkl` + `scaler.pkl` + `model_metadata.json`.
-   - 🔴 **Bẫy chí mạng — đọc kỹ:** **KHÔNG dùng `.predict()` mặc định.** Ngưỡng 0,5 của sklearn chỉ bắt được **3,24%** khách vỡ nợ → app sẽ gần như luôn trả lời "khách này an toàn" và trông như đang chạy đúng. Phải dùng `.predict_proba()` rồi so với `decision_threshold` (= 0,0747) đọc từ `model_metadata.json`.
-   - ⚠️ Thứ tự 297 cột đầu vào cũng nằm trong `model_metadata.json` — sai thứ tự thì mô hình vẫn chạy nhưng ra kết quả rác.
-2. **Notebook `07_prediction_demo.ipynb`** — demo dự đoán, nạp `model.pkl` + `scaler.pkl` + `model_metadata.json`. Cùng bẫy ngưỡng như trên.
-3. **Whitepaper `.docx` (6 chương) + slide `.pptx`** — 🔴 **rủi ro lớn nhất còn lại của dự án.** ✅ Chương 1 Business Understanding đã có bản thảo (`docs/Business_Understanding.docx`) và đã bổ sung lý do chọn dataset, tầm quan trọng trong ngành AI, SWOT; `docs/Data_Understanding.docx` đã có ghi chú nền để nhóm thống nhất trước khi viết tiếp. Còn lại: **Chương 2–6**, **16 slide**, và **ghép Chương 1 từ `docs/` vào file nộp `reports/tai-lieu-du-an-nhom-01.docx`**. Chương 4 (Mô hình hóa) viết được đầy đủ nhờ NB06 (AUC 0,7792, so sánh 4 mô hình, ý nghĩa ngưỡng quyết định); Chương 2/3/5 không phụ thuộc NB06.
-4. **Chốt "3 Insights quan trọng"** (tiêu chí Y1) — NB04 có phân tích nhưng nhóm chưa chốt đâu là 3 insight chính thức để đưa vào báo cáo/slide. **Gợi ý từ NB06:** `EXT_SOURCES_MEAN` quan trọng gấp 13 lần biến kế tiếp; 3/7 đặc trưng mạnh nhất đào từ bảng phụ (bằng chứng trực tiếp cho Phần B).
-5. **T24 — tối ưu mô hình (không bắt buộc, làm nếu còn thời gian):** đã thoả Phần A mục 8 bằng so sánh 4 mô hình, nên đây là điểm cộng. **Lấy AUC 0,7792 làm mốc nền.** Thứ tự đáng thử: (1) thêm/tinh chỉnh đặc trưng — vì 3 mô hình chỉ chênh ~0,016 nên thuật toán không phải nút thắt; (2) tinh chỉnh siêu tham số HistGradientBoosting; (3) cross-validation thay holdout; (4) thử SMOTE.
+1. **Lên kế hoạch Data Cleaning/NB03** — bước kế tiếp tự nhiên sau Data Understanding. Phạm vi nên bắt đầu từ `application_train/test`: missing values, `DAYS_EMPLOYED = 365243`, `CODE_GENDER = XNA`, outlier tiền tệ, kiểm tra sau xử lý và xuất dữ liệu clean.
+2. **Lên lại kế hoạch SQL/PostgreSQL** — thư mục `sql/` đang trống sau reset, nên cần chốt lại thứ tự tạo bảng/import/view/aggregation/index trước khi viết.
+3. **Lên lại kế hoạch các notebook còn lại** — NB02–NB07 cần khớp với NB01 mới, code đơn giản/dễ giải thích, có comment ngắn ở đoạn kỹ thuật, markdown trước code ngắn và nhận xét sau output.
+4. **Whitepaper `.docx` + slide `.pptx`** — Business/Data Understanding đã có nền trong `docs/`, nhưng file nộp trong `reports/` vẫn cần ghép và viết tiếp Chương 2–6 + 16 slide.
+5. **`app/` Streamlit + dashboard interactive** — vẫn là yêu cầu bắt buộc của đề bài, nhưng nên làm sau khi pipeline clean/features/model mới ổn định. Khi dùng lại model cũ, bắt buộc kiểm tra compatibility với `model_metadata.json`.
 6. **Hỏi giảng viên về Jira/Trello** — đề bài đòi "Nhật ký Jira" (Chương 5) + ảnh bảng Kanban (slide 12); nhóm đang dùng Google Sheet. Hỏi sớm, đừng để tới lúc nộp mới biết.
 
-> ✅ Đã xong: Notebook 01 (T01, PR #12), 02 (T04, PR #23 + fix #27), 03 (PR #33/#34 + fix Copy-on-Write), 04 (T09, PR #24 + fix #28), 05 (T10, PR #26/#29 — đã chạy full data), 06 (T11, PR #38 — AUC 0,7792, sinh `model.pkl` thật); toàn bộ SQL 01–05 (T02/T03/T05/T04/T07); `README.md` + `requirements.txt` (T19, PR #36).
+> ✅ Trạng thái thật sau reset: NB01/Data Understanding đã xong và merge PR #54; Business Understanding docs merge PR #53; `README.md` + `requirements.txt` vẫn có sẵn. Cần làm lại NB02–NB07 và SQL theo kế hoạch mới.
 
 ## 5. Ghi chú làm việc
 
