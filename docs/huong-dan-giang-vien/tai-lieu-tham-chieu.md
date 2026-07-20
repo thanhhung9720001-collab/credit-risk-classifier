@@ -22,6 +22,12 @@
 | `docs/Hướng dẫn viết tài liệu dự án.docx` | Huong dan viet tai lieu du an. Dung khi viet whitepaper va chuan bi nghiem thu. |
 | `docs/QUY-TRINH-LAM-VIEC.md` | Quy trinh lam viec chi tiet cua nhom. Day la quy dinh noi bo, khac voi huong dan giang vien. |
 
+## Nhom file checklist notebook
+
+| File | Vai tro tham chieu |
+|---|---|
+| `docs/Task Checklist for Each Notebook.docx` | Checklist giang vien gui cho tung notebook. Dung de ra soat mach lam notebook; voi NB01 xem them `docs/huong-dan-giang-vien/huong-dan-nb01-task-checklist-2026-07-20.md`. |
+
 ## Ghi chu khi dung file Word/PPT
 
 - File goc nen duoc giu nguyen de doi chieu.
