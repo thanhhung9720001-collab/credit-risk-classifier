@@ -126,6 +126,29 @@
 
 - Trang thai: thay chua upload / chua duoc cung cap.
 
+## Clip bo sung - Task Checklist for Each Notebook
+
+- Link: [Task Checklist for Each Notebook](https://youtu.be/87Eai12Bd_0?si=0IA37d19_9ytAaiB)
+- Ghi chu chi tiet rieng cho NB01: `huong-dan-nb01-task-checklist-2026-07-20.md`.
+
+### Y chinh phan NB01
+
+- NB01 la buoc hieu bai toan va dataset, khong chi doc CSV/in bang.
+- Can gioi thieu bai toan, muc tieu du an va bien target.
+- Can mo ta dataset, xac dinh bang chinh/main table va cac bang phu.
+- Can khao sat cau truc bang chinh: so dong, so cot, `info()`, `describe()`.
+- Can nhin Min/Median/Max de phat hien bat thuong/outlier som.
+- Can kiem tra missing, duplicate va gia tri sai logic nghiep vu.
+- Can khao sat du lieu theo nhom: numeric, category, target.
+- Can kiem tra khoa chinh/khoa ngoai de chuan bi cho cac buoc sau.
+
+### Ghi chu ap dung cho du an Home Credit
+
+- Doi vi du Sales/Rossmann cua thay sang ngon ngu rui ro tin dung/Home Credit.
+- `application_train` la bang chinh vi co `TARGET`; cac bang lich su la bang phu quan he 1-n.
+- NB01 chi phat hien van de va dat cau hoi cho notebook sau, khong cleaning sau.
+- Phai canh bao row explosion khi join bang phu 1-n neu chua aggregate ve `SK_ID_CURR`.
+
 ## Clip bo sung - Feature Engineering la gi
 
 - Link: [Feature Engineering la gi](http://www.youtube.com/watch?v=ZprLK-wa7MM)

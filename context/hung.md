@@ -4,11 +4,16 @@
 
 ## Đang làm
 
-- **Task:** Sửa nhỏ NB01 theo góp ý đọc code: tách phần kiểm tra `DAYS_BIRTH` và `DAYS_EMPLOYED` thành 2 cặp markdown/code riêng.
-- **Nhánh hiện tại:** `fix/nb01-tach-cell-days-employed`.
-- **Trạng thái:** Đã tách cell trong NB01 để mỗi đoạn code làm một việc rõ ràng hơn: một cell đổi `DAYS_BIRTH` sang tuổi, một cell kiểm tra giá trị bất thường `DAYS_EMPLOYED = 365243`. Đã kiểm tra JSON notebook đọc được, code cell parse được và `git diff --check` sạch; chưa Restart & Run All.
+- **Task:** Lưu hướng dẫn giảng viên về checklist NB01 và rà/sửa NB01 theo checklist.
+- **Nhánh hiện tại:** `docs/nb01-huong-dan-checklist-video`.
+- **Trạng thái:** Đã lưu ghi chú `docs/huong-dan-giang-vien/huong-dan-nb01-task-checklist-2026-07-20.md`; đã chỉnh `notebooks/01_data_understanding.ipynb` để bám checklist NB01 hơn: thêm mục tiêu theo checklist, kiểm tra `CODE_GENDER = XNA`, làm rõ aggregate/summary để tránh row explosion, thêm bảng bàn giao phát hiện cho NB02/NB03/NB05/NB06 và sửa tham chiếu mục ở tổng kết. Đã kiểm tra JSON notebook đọc được, code cell parse được, execution_count liền mạch 1→16, `git diff --check` sạch; chưa Restart & Run All bằng nbconvert vì môi trường hiện tại không có Jupyter/ipykernel/matplotlib/seaborn.
 
 ## Làm tới đâu (cập nhật mới nhất ở trên)
+
+- **2026-07-20 (Checklist NB01 theo hướng dẫn giảng viên — nhánh `docs/nb01-huong-dan-checklist-video`):** Lưu và áp dụng hướng dẫn thầy Long cho NB01.
+  - **Tài liệu hướng dẫn:** thêm `docs/huong-dan-giang-vien/huong-dan-nb01-task-checklist-2026-07-20.md`, cập nhật index trong `README.md`, `tai-lieu-tham-chieu.md`, `video-bai-giang.md`.
+  - **NB01:** giữ cấu trúc lớn đã đúng, chỉ sửa scoped theo checklist: mục tiêu/câu hỏi dẫn đường rõ hơn, thêm kiểm tra `CODE_GENDER = XNA`, nhấn mạnh join bảng 1-n gây **nổ số dòng / row explosion** nên cần aggregate/summary, thêm bảng handoff `Phát hiện NB01 → notebook sau → việc cần làm`.
+  - **Verify:** JSON notebook load được, toàn bộ code cell parse AST được, không còn `execution_count=None`, execution_count 1→16 liền mạch, `git diff --check` sạch. Chưa Restart & Run All bằng nbconvert vì môi trường Codex hiện tại thiếu Jupyter/ipykernel/matplotlib/seaborn; output cho các cell bị ảnh hưởng đã được tính lại bằng pandas.
 
 - **2026-07-18 (Sửa nhỏ NB01 — nhánh `fix/nb01-tach-cell-days-employed`):** Tách cell đang xử lý chung `DAYS_BIRTH` và `DAYS_EMPLOYED` thành 2 markdown + 2 code cell riêng để nhóm dễ giải thích khi bảo vệ.
   - `DAYS_BIRTH`: đổi số ngày âm sang tuổi để kiểm tra khoảng tuổi khách hàng.
