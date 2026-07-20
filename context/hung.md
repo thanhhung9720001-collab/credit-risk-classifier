@@ -4,11 +4,24 @@
 
 ## Đang làm
 
-- **Task:** Lưu hướng dẫn giảng viên về checklist NB01 và rà/sửa NB01 theo checklist.
-- **Nhánh hiện tại:** `docs/nb01-huong-dan-checklist-video`.
-- **Trạng thái:** Đã lưu ghi chú `docs/huong-dan-giang-vien/huong-dan-nb01-task-checklist-2026-07-20.md`; đã chỉnh `notebooks/01_data_understanding.ipynb` để bám checklist NB01 hơn: thêm mục tiêu theo checklist, kiểm tra `CODE_GENDER = XNA`, làm rõ aggregate/summary để tránh row explosion, thêm bảng bàn giao phát hiện cho NB02/NB03/NB05/NB06 và sửa tham chiếu mục ở tổng kết. Đã kiểm tra JSON notebook đọc được, code cell parse được, execution_count liền mạch 1→16, `git diff --check` sạch; chưa Restart & Run All bằng nbconvert vì môi trường hiện tại không có Jupyter/ipykernel/matplotlib/seaborn.
+- **Task:** Reset toàn bộ notebook và SQL để làm lại từ đầu.
+- **Nhánh hiện tại:** `fix/nb01-rut-gon-checklist`.
+- **Trạng thái:** Theo quyết định mới của Hưng, đã xóa toàn bộ file `.ipynb` trong `notebooks/` và toàn bộ file `.sql` trong `sql/` để chuẩn bị làm lại từ đầu. Giữ nguyên cấu trúc thư mục, chưa tạo lại nội dung mới.
 
 ## Làm tới đâu (cập nhật mới nhất ở trên)
+
+- **2026-07-20 (Reset notebook/SQL — nhánh `fix/nb01-rut-gon-checklist`):** Hưng quyết định xóa toàn bộ notebook và SQL để làm lại từ đầu.
+  - Đã xóa 7 file notebook trong `notebooks/`: NB01 → NB07.
+  - Đã xóa 5 file SQL trong `sql/`: `01_create_tables.sql` → `05_indexes.sql`.
+  - Chưa tạo lại scaffold/nội dung mới; bước tiếp theo là chốt lại kế hoạch notebook + SQL mới trước khi viết lại.
+
+- **2026-07-20 (Rút gọn NB01 theo checklist — nhánh `fix/nb01-rut-gon-checklist`):** Làm lại mạch đọc NB01 cho ngắn hơn sau khi thấy bản cũ vẫn dài và khó hiểu.
+  - Giữ code/bằng chứng chính, nhưng rút markdown: bỏ các đoạn giảng sâu về ROC-AUC/accuracy, pipeline ASCII dài, thách thức dữ liệu dài.
+  - Bố cục mới gồm 8 mục lớn, đúng tinh thần checklist: bài toán & target → chuẩn bị → dataset → bảng chính → chất lượng dữ liệu → bảng phụ/khóa → từ điển → tổng kết/handoff.
+  - Bổ sung cụm biểu đồ sau `describe()` theo kiểu mỗi nhận xét một biểu đồ riêng: histogram kiểm tra lệch trái/phải của biến tiền tệ, max/median, std/mean, min/median/max của `DAYS_*`, và boxplot `EXT_SOURCE_1/2/3`.
+  - Sửa lỗi chạy cell: `profile_table` không còn dùng `include=["object", "string"]`, tự khai báo lại `TABLES` khi thiếu và bỏ `.style` để tránh phụ thuộc `jinja2`; cell đọc `application_train.csv` tự dò `DATA_RAW` nếu người đọc chạy riêng cell đó.
+  - Chốt lại phạm vi handoff: NB01 chỉ rút insight trực tiếp cho **NB02** (database/import/aggregate) và **NB03** (cleaning), không bàn giao thẳng sang NB05/NB06.
+  - **Verify:** JSON notebook load được, toàn bộ code cell parse AST được, `git diff --check` sạch. Cell biểu đồ mới chưa có output vì chưa Restart & Run All bằng nbconvert; môi trường Codex hiện tại thiếu Jupyter/ipykernel/matplotlib/seaborn.
 
 - **2026-07-20 (Checklist NB01 theo hướng dẫn giảng viên — nhánh `docs/nb01-huong-dan-checklist-video`):** Lưu và áp dụng hướng dẫn thầy Long cho NB01.
   - **Tài liệu hướng dẫn:** thêm `docs/huong-dan-giang-vien/huong-dan-nb01-task-checklist-2026-07-20.md`, cập nhật index trong `README.md`, `tai-lieu-tham-chieu.md`, `video-bai-giang.md`.
