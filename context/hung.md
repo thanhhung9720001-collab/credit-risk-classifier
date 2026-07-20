@@ -4,11 +4,18 @@
 
 ## Đang làm
 
-- **Task:** Reset toàn bộ notebook và SQL để làm lại từ đầu.
-- **Nhánh hiện tại:** `fix/nb01-rut-gon-checklist`.
-- **Trạng thái:** Theo quyết định mới của Hưng, đã xóa toàn bộ file `.ipynb` trong `notebooks/` và toàn bộ file `.sql` trong `sql/` để chuẩn bị làm lại từ đầu. Giữ nguyên cấu trúc thư mục, chưa tạo lại nội dung mới.
+- **Task:** Cập nhật context sau khi hoàn thành Data Understanding.
+- **Nhánh hiện tại:** `docs/cap-nhat-context-data-understanding`.
+- **Trạng thái:** Business Understanding đã merge PR #53; Data Understanding đã merge PR #54 vào `main`. Đang cập nhật `PROJECT_CONTEXT.md` và context cá nhân để phản ánh trạng thái thật sau reset: NB01 xong, `sql/` trống, NB02–NB07 cần làm lại theo kế hoạch mới.
 
 ## Làm tới đâu (cập nhật mới nhất ở trên)
+
+- **2026-07-20 (Cập nhật context sau Data Understanding — nhánh `docs/cap-nhat-context-data-understanding`):** Cập nhật lại bức tranh dự án sau khi PR #53 và PR #54 đã merge vào `main`.
+  - **Business Understanding (PR #53):** `docs/Business_Understanding.docx` đã bổ sung mục tiêu nghiên cứu, giới thiệu dataset, giới thiệu công nghệ, lý do chọn Home Credit, tầm quan trọng trong ngành AI, SWOT và chỉnh heading/bullet.
+  - **Data Understanding (PR #54):** `docs/Data_Understanding.docx`, ERD mới, outline NB01 và `notebooks/01_data_understanding.ipynb` đã merge vào `main`.
+  - **NB01 hiện tại:** 8 mục lớn, 62 cell / 21 code cell, đã Restart & Run All thành công, execution_count 1→21; có overview dataset, `nunique`, `describe`, kiểm chứng bất thường, missing/duplicate, target imbalance, khóa/grain bảng phụ, biểu đồ numeric/category, correlation và heatmap.
+  - **Trạng thái thật sau reset:** `notebooks/` hiện chỉ còn NB01; `sql/` hiện trống; NB02–NB07 và SQL cần làm lại theo kế hoạch mới. Model artifacts trong `models/` còn từ pipeline cũ, cần kiểm tra compatibility trước khi dùng cho app/NB07.
+  - **Việc tiếp theo hợp lý:** lên kế hoạch Data Cleaning/NB03, sau đó lên lại SQL/PostgreSQL và các notebook còn lại.
 
 - **2026-07-20 (Reset notebook/SQL — nhánh `fix/nb01-rut-gon-checklist`):** Hưng quyết định xóa toàn bộ notebook và SQL để làm lại từ đầu.
   - Đã xóa 7 file notebook trong `notebooks/`: NB01 → NB07.
@@ -147,16 +154,18 @@
 - [x] Bổ sung Business Understanding: lý do chọn dataset, tầm quan trọng trong ngành AI, SWOT.
 - [x] Tạo `docs/Data_Understanding.docx` để nhóm thống nhất mục tiêu/5 ý lớn/6 câu tự kiểm tra.
 - [x] Sắp xếp lại NB01 theo mạch Data Understanding, thêm ERD PNG và format gọn bảng overview.
-- [ ] Push nhánh `docs/bo-sung-ly-do-chon-home-credit`, tạo PR và merge.
-- [ ] Cân nhắc áp cách diễn giải của NB01 sang NB02–NB06 — cùng lý do Y3/Y4. Ưu tiên **sau** app/whitepaper vì các notebook kia đã có nhận xét đầy đủ hơn NB01.
-- [ ] **Phân công `app/` Streamlit + dashboard interactive — ưu tiên số 1 hiện nay** (gộp mục 7 + mục 9 đề bài vào 1 task; `streamlit` đã ghim sẵn trong requirements). **Bắt buộc nhắc người nhận:** đọc `decision_threshold` = 0,0747 từ `model_metadata.json`, KHÔNG dùng `.predict()` mặc định — nếu không app sẽ chạy êm mà gần như luôn báo "an toàn".
-- [ ] Phân công NB07 (prediction demo) — cùng bẫy ngưỡng như app.
-- [ ] 🔴 **Whitepaper + slide — rủi ro lớn nhất còn lại.** Chương 1 đã có bản thảo tốt hơn (`docs/Business_Understanding.docx`) và có thêm nền Data Understanding (`docs/Data_Understanding.docx`); còn **Chương 2–6 + slide + ghép vào file nộp `reports/`**. Chương 4 viết được đầy đủ từ NB06; Chương 2/3/5 không phụ thuộc gì thêm.
-- [ ] Chốt **3 Insights quan trọng** (tiêu chí Y1) — NB06 cho sẵn 2 ứng viên mạnh: `EXT_SOURCES_MEAN` quan trọng gấp 13 lần biến kế tiếp; 3/7 đặc trưng mạnh nhất đào từ bảng phụ (bằng chứng Phần B).
+- [x] Merge Business Understanding mới vào `main` (PR #53).
+- [x] Merge Data Understanding mới vào `main` (PR #54).
+- [ ] Push nhánh `docs/cap-nhat-context-data-understanding`, tạo PR và merge để context khớp trạng thái thật sau PR #54.
+- [ ] Lên kế hoạch **Data Cleaning/NB03**: missing, `DAYS_EMPLOYED = 365243`, `CODE_GENDER = XNA`, outlier tiền tệ, kiểm tra sau xử lý và output clean.
+- [ ] Lên lại kế hoạch SQL/PostgreSQL vì `sql/` hiện trống sau reset.
+- [ ] Lên lại kế hoạch NB02–NB07 để khớp NB01 mới, code đơn giản/dễ giải thích và đúng quy tắc markdown/nhận xét.
+- [ ] **Whitepaper + slide — rủi ro lớn.** Business/Data Understanding đã có nền trong `docs/`; còn Chương 2–6, slide và ghép vào file nộp `reports/`.
+- [ ] **App Streamlit + dashboard interactive**: vẫn bắt buộc theo đề bài, nhưng nên làm sau khi pipeline clean/features/model mới ổn định. Nếu dùng model artifact cũ, phải kiểm tra compatibility với `model_metadata.json`.
+- [ ] Chốt **3 Insights quan trọng** (tiêu chí Y1) sau khi pipeline/EDA mới ổn định.
 - [ ] Hỏi giảng viên: Google Sheet có thay được "Nhật ký Jira" + ảnh Kanban (Chương 5, slide 12) không.
-- [ ] Cân nhắc chuyển `data/processed/*.csv` sang **parquet** — `train_features.csv` đang 1,87 GB, đọc lại ở NB06 sẽ chậm và tốn RAM. `pyarrow` nay đã có sẵn (streamlit kéo theo) nên không cần cài thêm gì.
+- [ ] Cân nhắc chuyển dữ liệu processed/features sang **parquet** khi rebuild pipeline — `pyarrow` đã có sẵn do Streamlit kéo theo.
 - [ ] Nhắc nhóm về 3 bài học lỗi âm thầm (mục 3 PROJECT_CONTEXT + mục 7 README) — nhất là thói quen Restart & Run All trước khi commit notebook.
-- [ ] Phổ biến cho nhóm: **NB06 không cần cài PostgreSQL** (phát hiện khi làm T19 — pipeline có 2 nhánh độc lập, xem README mục 5).
 
 ## Ghi chú riêng
 
