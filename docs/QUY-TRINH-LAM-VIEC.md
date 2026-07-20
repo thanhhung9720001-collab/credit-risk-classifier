@@ -3,12 +3,13 @@
 > **Áp dụng bắt buộc cho mọi thành viên.** Quy trình này được hỗ trợ bởi 3 lớp bảo vệ tự động
 > (xem [phần cuối](#các-lớp-bảo-vệ-tự-động)), nhưng mỗi người vẫn cần thuộc nhịp làm việc dưới đây.
 
-## 4 quy tắc vàng
+## 5 quy tắc vàng
 
 1. **KHÔNG BAO GIỜ code trực tiếp trên nhánh `main`** — luôn làm trên nhánh riêng.
 2. **Luôn pull code mới nhất TRƯỚC KHI bắt đầu làm việc.**
 3. **Mọi thay đổi vào `main` phải đi qua Pull Request** và được 1 thành viên khác approve.
 4. **KHÔNG tự ý thay đổi cấu trúc thư mục, quy trình hay quy định của nhóm** — chỉ **nhóm trưởng** mới có quyền quyết định (xem [Phần 0](#phần-0--quyền-thay-đổi-cấu-trúc--quy-định)).
+5. **Phải chốt ý tưởng và chốt kế hoạch trước khi triển khai** — chưa chốt thì chỉ được thảo luận, không tạo/sửa file, code, notebook, SQL, commit hoặc push.
 
 ---
 
@@ -118,6 +119,42 @@ git branch --show-current
 ```
 
 Nếu kết quả **không phải** `main` → OK, bắt đầu làm việc. Nếu là `main` → quay lại Bước 4.
+
+---
+
+## PHẦN 1A — Quy trình Ý tưởng → Kế hoạch → Triển khai
+
+> Áp dụng cho cả thành viên trong nhóm và AI Agent. Mục tiêu là tránh tình trạng chưa thống nhất mà đã tạo file, viết code hoặc đẩy thay đổi lên Git.
+
+Trước khi bắt đầu bất kỳ task nào, làm theo đúng thứ tự:
+
+### Bước 1: Lên ý tưởng
+
+- Xác định mục tiêu của task.
+- Xác định phạm vi làm tới đâu, chưa làm gì.
+- Đối chiếu với checklist, hướng dẫn giảng viên và trạng thái thật của dự án.
+
+### Bước 2: Chốt ý tưởng
+
+- Chỉ khi nhóm trưởng/người phụ trách xác nhận **"chốt ý tưởng"** thì mới chuyển sang lập kế hoạch.
+- Nếu chưa chốt, không được tự tạo file, sửa file, viết code, tạo notebook, tạo SQL, commit hoặc push.
+
+### Bước 3: Lên kế hoạch
+
+- Chia task thành các bước rõ ràng.
+- Nêu file/thư mục dự kiến sẽ tạo hoặc sửa.
+- Nêu cách kiểm tra sau khi làm xong.
+
+### Bước 4: Chốt kế hoạch
+
+- Chỉ khi nhóm trưởng/người phụ trách xác nhận **"chốt kế hoạch"**, **"làm đi"**, **"triển khai đi"**, **"bắt đầu code"** hoặc câu tương đương thì mới bắt đầu chỉnh sửa file/code.
+
+### Bước 5: Triển khai
+
+- Làm đúng phạm vi đã chốt.
+- Nếu phát sinh việc ngoài kế hoạch, phải dừng lại báo trước và xin xác nhận.
+
+**Quy tắc riêng cho AI Agent:** Khi người dùng đang brainstorm, hỏi ý tưởng, hỏi kế hoạch, hỏi "bạn thấy sao", hoặc chưa xác nhận triển khai, AI Agent chỉ được phân tích/đề xuất. AI Agent không được tự ý tạo/sửa file, tạo nhánh, tạo notebook, tạo SQL, commit hoặc push.
 
 ---
 

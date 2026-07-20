@@ -25,6 +25,27 @@
    ```
 6. **Push nhánh và tạo Pull Request** trên GitHub để cả nhóm review — không merge thẳng vào main.
 
+## Quy trình Ý tưởng → Kế hoạch → Triển khai (BẮT BUỘC)
+
+Trước khi bắt đầu bất kỳ task nào, thành viên và AI Agent phải đi theo đúng thứ tự:
+
+1. **Lên ý tưởng**
+   - Xác định mục tiêu của task.
+   - Xác định phạm vi làm tới đâu, chưa làm gì.
+   - Đối chiếu với checklist, hướng dẫn giảng viên và trạng thái thật của dự án.
+2. **Chốt ý tưởng**
+   - Chỉ khi nhóm trưởng/người phụ trách xác nhận "chốt ý tưởng" thì mới chuyển sang lập kế hoạch.
+   - Nếu chưa chốt, không được tự tạo file, sửa file, viết code, tạo notebook, tạo SQL, commit hoặc push.
+3. **Lên kế hoạch**
+   - Chia task thành các bước rõ ràng.
+   - Nêu file/thư mục dự kiến sẽ tạo hoặc sửa.
+   - Nêu cách kiểm tra sau khi làm xong.
+4. **Chốt kế hoạch**
+   - Chỉ khi nhóm trưởng/người phụ trách xác nhận "chốt kế hoạch", "làm đi", "triển khai đi", "bắt đầu code" hoặc câu tương đương thì mới bắt đầu chỉnh sửa file/code.
+5. **Triển khai**
+   - Làm đúng phạm vi đã chốt.
+   - Nếu phát sinh việc ngoài kế hoạch, phải dừng lại báo trước và xin xác nhận.
+
 ## Quyền thay đổi cấu trúc & quy định (chỉ nhóm trưởng)
 
 - **Không tự ý thay đổi cấu trúc thư mục, quy trình hay quy định của nhóm.** Chỉ **nhóm trưởng (Hưng)** mới được quyết định. Chi tiết: xem `docs/QUY-TRINH-LAM-VIEC.md` — Phần 0.
@@ -41,6 +62,8 @@
 ## Hướng dẫn cho AI agent (Claude Code, Antigravity...)
 
 - Đầu phiên làm việc: đọc `PROJECT_CONTEXT.md` (mục 3 và 4) để nắm trạng thái dự án; và đọc `context/<ten>.md` của thành viên đang làm để biết họ đang dở việc gì.
+- Khi người dùng đang brainstorm, hỏi ý tưởng, hỏi kế hoạch, hỏi "bạn thấy sao", hoặc chưa xác nhận triển khai, AI Agent chỉ được phân tích/đề xuất. **Không tự ý tạo/sửa file, tạo nhánh, tạo notebook, tạo SQL, commit hoặc push.**
+- AI Agent chỉ được bắt đầu thay đổi repo khi người dùng xác nhận rõ ràng bằng các câu như: "chốt", "chốt kế hoạch", "làm đi", "triển khai đi", "bắt đầu code", hoặc yêu cầu tương đương.
 - Khi cần hiểu hướng dẫn, bài giảng và tài liệu tham chiếu của giảng viên: đọc `docs/huong-dan-giang-vien/README.md`. Đây là nguồn tham khảo để hiểu định hướng của thầy, không thay thế `AGENTS.md`, `PROJECT_CONTEXT.md` hay đề bài gốc.
 - **Khi động vào file trong `notebooks/`: đọc thêm `PROJECT_CONTEXT.md` mục 6 (Quy ước định dạng notebook) TRƯỚC KHI sửa** — mục 3/4 không chứa quy ước này.
   - ⚠️ **Không có quy định "notebook phải đủ 6 mục lớn".** Số mục lớn **không cố định, tuỳ nội dung** (NB01 có 6 mục, NB02–NB06 có 7 — đều đúng). Quy định thật là **mục Tổng kết phải đứng CUỐI**, mang số thứ tự kế tiếp của notebook đó. **Đừng nhồi/gộp mục cho khớp một con số nào cả.**
