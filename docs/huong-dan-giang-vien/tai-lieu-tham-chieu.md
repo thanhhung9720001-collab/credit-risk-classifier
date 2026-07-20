@@ -26,7 +26,7 @@
 
 | File | Vai tro tham chieu |
 |---|---|
-| `docs/Task Checklist for Each Notebook.docx` | Checklist giang vien gui cho tung notebook. Dung de ra soat mach lam notebook; voi NB01 xem them `docs/huong-dan-giang-vien/huong-dan-nb01-task-checklist-2026-07-20.md`. |
+| `docs/Task Checklist for Each Notebook.docx` | Checklist giang vien gui cho tung notebook. Dung de ra soat mach lam notebook; voi NB01 xem them `docs/huong-dan-giang-vien/huong-dan-nb01-task-checklist-2026-07-20.md`; voi NB02 xem them `docs/huong-dan-giang-vien/huong-dan-nb02-database-organization-2026-07-20.md`. |
 
 ## Ghi chu khi dung file Word/PPT
 
