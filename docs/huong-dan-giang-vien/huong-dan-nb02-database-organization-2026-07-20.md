@@ -1,133 +1,138 @@
 # Huong dan NB02 - Database Organization
 
-> Tom tat checklist NB02 theo cach Hung va nhom on lai ngay 2026-07-20, dua tren huong dan/demo cua giang vien ve PostgreSQL, import du lieu va quan he bang.
-> Day la nguon tham khao de lam NB02 sau dot reset pipeline; neu co transcript/checklist chinh thuc hon thi can doi chieu va cap nhat lai.
+> **Cap nhat 2026-07-22:** file nay da duoc VIET LAI toan bo, bam theo phan checklist NB02 chinh thuc trong `docs/Task Checklist for Each Notebook.docx` (ban thay update ngay 2026-07-22).
+>
+> Ban cu (viet ngay 2026-07-20) dua tren ghi chu/demo cua thay khi CHUA co checklist NB02 chinh thuc, nen bi lech nang: thieu 5/10 muc va co 3 cau huong dan nguoc voi checklist. Xem muc "Sai lech cua ban cu" o cuoi file de biet chi tiet va tranh lap lai.
 
-## 1. Muc tieu cua NB02
+## Nguon
 
-NB02 dung de bao cao cho hoi dong biet nhom da to chuc du lieu tho Home Credit vao database nhu the nao.
+- File checklist: `docs/Task Checklist for Each Notebook.docx`, phan `NOTEBOOK 02: DATABASE ORGANIZATION`.
+- Doi chieu thuc te: `notebooks/02_database_organization.ipynb` va `sql/01` - `sql/11` (da hoan thanh, PR #59).
 
-Notebook nay can lam ro:
+## Vai tro cua NB02
 
-- Du lieu Home Credit ban dau gom nhieu file CSV roi rac.
-- Moi file CSV duoc dua thanh mot bang raw trong PostgreSQL.
-- Nhom xac dinh duoc bang trung tam, bang phu va cac khoa noi.
-- Nhom biet dua vao dau de noi bang: mo ta dataset, ten cot trung nhau, ket qua NB01 va kiem chung bang SQL.
-- Nhom nhan ra rui ro join bang 1-n truc tiep se lam nhan dong.
+NB02 la buoc bien du lieu tho nhieu bang thanh **mot bang phang, moi doi tuong hoc dung mot dong**, san sang cho Machine Learning.
 
-NB02 chua can lam sach du lieu sau, chua can feature engineering va chua can tao dataset modeling hoan chinh.
+Diem cot loi: sau NB02, cac notebook 03 den 07 **chi doc du lieu tu PostgreSQL**, khong quay lai doc CSV. Day la yeu cau ro rang cua thay, muc dich la quy trinh nhat quan va gan voi cach trien khai trong doanh nghiep.
 
-## 2. Khoi tao database va cau truc bang
+## Muc I. Gioi thieu
 
-Phan nay can huong dan hai cach:
+Neu ro trong notebook:
 
-- Cach 1: tao database bang giao dien pgAdmin.
-- Cach 2: tao database bang cau lenh SQL/psql.
+- Muc tieu cua notebook.
+- Pipeline du lieu se xay dung: `CSV -> Import PostgreSQL -> Join / Aggregation -> Flat Table -> Notebook 03`.
 
-Sau khi co database, can tao cac bang raw tuong ung voi cac file CSV chinh:
+## Muc II. Tao Database va table
 
-- `application_train`
-- `application_test`
-- `bureau`
-- `bureau_balance`
-- `previous_application`
-- `pos_cash_balance`
-- `installments_payments`
-- `credit_card_balance`
+Thay ghi ro: thuc hien trong pgAdmin4, **ghi lenh trong notebook de bao cao**.
 
-Can giai thich ngan gon:
+- Tao database, dat ten tuy y.
+- Tao table bang `CREATE TABLE`.
+- **Ten cac cot trong table phai dung thu tu cac cot trong file CSV, chinh xac kieu du lieu.**
+- Co the dung file SQL rieng.
 
-- Moi file CSV duoc giu thanh mot bang rieng de bao toan du lieu goc.
-- `application_train` va `application_test` la bang trung tam vi chua ho so vay hien tai.
-- `application_train` co them cot `TARGET`, nen la bang chinh cho bai toan phan loai nhi phan.
+Luu y quan trong ve cau "dung thu tu cot": lenh `COPY` ghep du lieu **theo vi tri cot, khong theo ten cot**. Neu thu tu trong `CREATE TABLE` lech so voi CSV ma kieu du lieu van tuong thich thi du lieu se vao **nham cot** nhung import van bao thanh cong, khong co canh bao nao.
+
+## Muc III. Import du lieu
+
+- Thuc hien trong pgAdmin4, ghi lenh trong notebook de bao cao.
+- Lam thu cong trong pgAdmin voi tung bang, hoac dung `COPY table_name FROM 'path/file/csv'`.
+- **Kiem tra du lieu sau Import:** `COUNT(*)`...
 
 Luu y ky thuat:
 
-- `CREATE DATABASE` thuong nen chay rieng truoc khi ket noi vao database do.
-- Cac lenh `CREATE TABLE` chay sau khi da ket noi dung database cua du an.
+- `COPY` la lenh SQL, chay duoc trong Query Tool cua pgAdmin nhung server phai doc duoc file nen hay gap loi quyen truy cap tren Windows.
+- `\copy` KHONG phai lenh SQL, chi chay duoc trong `psql`, dan vao Query Tool se bao loi cu phap.
+- pgAdmin Query Tool **chi hien ket qua cua cau `SELECT` cuoi cung** khi chay nhieu cau mot luc. Vi vay moi phep kiem tra nen tach thanh file/cell rieng.
 
-## 3. Nap du lieu tho vao database
+## Muc IV. Toi uu Database
 
-Phan nay can huong dan hai cach import:
+- Tao Index: `CREATE INDEX ten_index ON ten_bang(ten_cot)`.
+- **Tao quan he neu can.**
 
-- Cach 1: chay file SQL import co san.
-- Cach 2: copy cau lenh import vao Query Tool cua pgAdmin.
+Chu "neu can" o day quan trong. Voi bo Home Credit, khoa ngoai **khong khai bao duoc** vi moi quan he deu co ban ghi mo coi (dataset Kaggle bi cat khi trich xuat). Truong hop nay phai ghi ro ly do trong notebook va dung index tren cac khoa noi de thay the.
 
-Can ghi ro:
+## Muc V. Join du lieu
 
-- Duong dan file CSV can chinh theo may cua tung thanh vien.
-- Neu dung `COPY FROM 'duong_dan_file'`, PostgreSQL server phai doc duoc file nen de gap loi quyen truy cap tren Windows.
-- Neu dung `\copy`, lenh nay chay qua `psql`, khong phai Query Tool cua pgAdmin.
-- Sau khi import, phai kiem tra so dong tung bang co khop voi ket qua NB01 khong.
+- Vi du cua thay: `Sales JOIN Store`.
+- **Kiem tra so dong.**
+- **Kiem tra mat du lieu.**
 
-Bang so dong chuan nen lay tu NB01/Data Understanding de doi chieu.
+Hai gach dau dong nay la phan validation bat buoc, khong phai tuy chon.
 
-## 4. Xac dinh khoa lien ket va quan he giua cac bang
+## Muc VI. Tao Flat Table / View
 
-NB02 can noi lai ket qua NB01 ve khoa noi va kiem chung bang SQL.
+Thay cho hai lua chon:
 
-Cac khoa chinh can giai thich:
+- `CREATE TABLE ten_bang AS SELECT ... LEFT JOIN ...`
+- hoac `CREATE VIEW vw_ten AS SELECT ...`
 
-- `SK_ID_CURR`: khoa noi bang chinh voi cac bang theo khach hang/ho so hien tai.
-- `SK_ID_PREV`: khoa noi cac bang lien quan den khoan vay truoc do.
-- `SK_ID_BUREAU`: khoa noi `bureau` voi `bureau_balance`.
+Va noi ro cho dataset phuc tap: **"tao cac bang Summary roi ghep thanh mot bang cuoi cung co moi doi tuong hoc dung mot dong"**.
 
-Can giai thich dua vao dau biet cac khoa nay:
+Day la muc quan trong nhat cua NB02. Voi dataset nhieu bang 1-n nhu Home Credit, join thang cac bang phu se lam **no so dong** theo cap so nhan, nen bat buoc phai gom tung bang phu ve mot dong moi khach hang truoc khi join.
 
-- Mo ta/tai lieu dataset Home Credit.
-- Ten cot xuat hien lap lai o nhieu bang.
-- Ket qua phan tich grain va khoa noi trong NB01.
-- Kiem chung bang SQL: cot co ton tai o bang nao, so luong gia tri duy nhat, ty le match khi join thu.
+## Muc VII. Ket noi database tu Python
 
-Quan he du lieu can trinh bay:
+- Cai thu vien: `psycopg2`, `SQLAlchemy`.
+- Import thu vien vao notebook.
+- Tao Connection, kiem tra ket noi thanh cong.
+- Vi du: `SELECT version();`, `SELECT current_database();`
 
-- `application_train` / `application_test` la bang trung tam.
-- `bureau` noi voi bang trung tam qua `SK_ID_CURR`.
-- `bureau_balance` noi voi `bureau` qua `SK_ID_BUREAU`.
-- `previous_application` noi voi bang trung tam qua `SK_ID_CURR`.
-- `installments_payments`, `POS_CASH_balance`, `credit_card_balance` lien quan den khoan vay truoc qua `SK_ID_PREV`.
+## Muc IX. Tong hop du lieu (Aggregation)
 
-Nen chen ERD hoac so do quan he bang de hoi dong nhin nhanh duoc cau truc du lieu.
+- Vi du cua thay: `GROUP BY Store`, `GROUP BY Month`, `GROUP BY Promo`.
+- Muc tieu: tao du lieu tong hop, chuan bi Feature Engineering.
+- Cac ham tong hop: `COUNT`, `SUM`, `AVG`, `MIN`, `MAX`, `STD`, moi nhat, cu nhat.
 
-## 5. Kiem tra join thu
+Luu y ve thu tu: thay danh so muc nay sau muc VII, nhung ve ky thuat phai **aggregate TRUOC khi join** thi moi tranh duoc row explosion. Chinh checklist cua thay o muc VI cung viet "tao cac bang Summary **roi** ghep". Vi vay lam aggregation som hon thu tu danh so la dung, chi can ghi ro trong notebook.
 
-Phan nay khong can join toan bo de tao bang modeling. Muc tieu chi la chung minh logic noi bang dung.
+## Muc IV. Kiem tra Performance (neu can)
 
-Nen co mot so cau SQL kiem tra:
+Muc dich xem toc do ket noi. Thay ghi "neu can" nen co the bo qua neu khong them gia tri cho bai toan.
 
-- Join `application_train` voi `bureau` qua `SK_ID_CURR`.
-- Join `bureau` voi `bureau_balance` qua `SK_ID_BUREAU`.
-- Join `previous_application` voi `installments_payments` qua `SK_ID_PREV`.
-- Join `previous_application` voi `POS_CASH_balance` qua `SK_ID_PREV`.
-- Join `previous_application` voi `credit_card_balance` qua `SK_ID_PREV`.
+## Muc X. Ket luan
 
-Sau moi join thu, can nhan xet:
+Vi du thay dua ra:
 
-- Khoa noi co match du lieu hay khong.
-- Day la quan he 1-1, 1-n hay n-1.
-- Join truc tiep co lam tang so dong bat thuong hay khong.
-- Neu la bang 1-n, cac notebook sau can aggregate truoc khi noi ve bang chinh.
+- Import thanh cong.
+- Join thanh cong.
+- Tao Flat Table.
+- Chuan bi Notebook 03.
 
-## 6. Validation cuoi notebook
+## Bon cau hoi cot loi NB02 phai tra loi
 
-Cuoi NB02 can co phan kiem tra de notebook khong chi la huong dan thao tac.
+1. **Du lieu da duoc dua vao PostgreSQL dung chua?** - Import, kieu du lieu, khoa chinh, chi muc, kiem tra so dong.
+2. **Lam the nao de tich hop du lieu tu nhieu bang?** - Join dung quan he, kiem tra mat du lieu, tranh nhan ban ban ghi.
+3. **Du lieu nao se duoc dung cho Machine Learning?** - Tao Flat Table hoac View; voi dataset phuc tap thi tao cac bang Summary roi ghep thanh mot bang cuoi cung co moi doi tuong hoc dung mot dong.
+4. **Pipeline du lieu da san sang cho Notebook 03 chua?** - Sau notebook nay, NB03 den NB07 chi nen doc du lieu tu PostgreSQL thay vi quay lai doc CSV.
 
-Can kiem tra:
+## Nhom da lam khac huong dan o dau va vi sao
 
-- Da co du 8 bang raw trong database.
-- So dong tung bang trong PostgreSQL khop voi so dong da ghi nhan o NB01.
-- Cac cot khoa `SK_ID_CURR`, `SK_ID_PREV`, `SK_ID_BUREAU` ton tai o dung bang.
-- Cac cau join thu chay duoc va cho ket qua co the giai thich.
-- Cac bang phu 1-n da duoc danh dau la can aggregate o giai doan sau.
+Theo nguyen tac trong `README.md` cua thu muc nay, lam khac thi phai ghi ro ly do:
 
-Neu dung `assert` trong notebook, loi du lieu se dung lai ngay thay vi de notebook chay het ma sai am tham.
+| Diem khac | Ly do |
+|---|---|
+| Khong khai bao khoa ngoai | Moi quan he deu co ban ghi mo coi: `bureau` -> `application_train` thieu 42.320 khach (ho thuoc `application_test`); `installments`/`pos_cash`/`credit_card` -> `previous_application` mo coi 38.847/37.422/11.372 ma. PostgreSQL se tu choi tao khoa ngoai. Da dung index tren khoa noi thay the |
+| Chi dung `psycopg2`, khong dung SQLAlchemy | `requirements.txt` cua nhom da ghi ro quyet dinh nay kem ly do: truyen connection `psycopg2` vao `pandas.read_sql` chi in canh bao, code van chay dung |
+| Chi tao 5 bang summary, bo `bureau_balance` | `bureau_balance` khong co `sk_id_curr` nen phai noi vong qua `bureau`, lam code phuc tap. Checklist cua thay cung chi liet ke 4 bang summary. Se khai thac o NB05 neu can |
+| Bo qua muc "Kiem tra Performance" | Thay ghi "neu can"; `EXPLAIN ANALYZE` khong them gia tri cho bai toan nay |
+| Aggregation lam truoc join | Bat buoc ve ky thuat de tranh row explosion, xem giai thich o muc IX ben tren |
 
-## 7. Tong ket NB02
+## Sai lech cua ban cu - ghi lai de khong lap lai
 
-Phan tong ket can chot ro:
+Ban 2026-07-20 duoc viet khi chua co checklist NB02 chinh thuc. No dan toi khung NB02 sai va phai lam lai. Ba loi nang nhat:
 
-- Database da to chuc duoc du lieu tho tu cac file CSV roi rac.
-- Nhom da xac dinh bang trung tam, bang phu va cac khoa lien ket chinh.
-- Nhom da kiem chung quan he bang bang SQL.
-- Nhom da nhan dien rui ro row explosion khi join bang 1-n truc tiep.
-- Cac buoc cleaning, aggregation sau, feature engineering va modeling se duoc thuc hien o cac notebook tiep theo.
+| Ban cu viet | Checklist thuc te |
+|---|---|
+| "chua can tao dataset modeling hoan chinh" | Muc VI: **phai tao Flat Table** |
+| "khong can join toan bo de tao bang modeling" | Muc V + VI: join de tao flat table |
+| "cac notebook **sau** can aggregate" | Muc IX: aggregation lam **ngay o NB02** |
+
+Ngoai ra ban cu co hai muc **khong thuoc NB02**: "Xac dinh khoa lien ket va quan he giua cac bang" va "Kiem tra join thu" - ca hai thuoc NB01 (muc VII. Kiem tra quan he giua cac bang).
+
+**Bai hoc:** khi ghi lai huong dan cua thay tu tri nho hoac tu demo, phai danh dau ro la ban tam va doi chieu lai ngay khi co file goc. Ban cu co ghi canh bao nay o dau file nhung khong ai doi chieu lai khi checklist duoc cap nhat.
+
+## Hai loi danh so trong file checklist goc - nen hoi lai thay
+
+- Phan NB01 co muc `VI. Khao sat du lieu cua bang phu aaa` - chu `aaa` o cuoi trong nhu go sot.
+- Danh so La Ma bi trung/nhay: NB01 ket thuc bang `IV. Ket luan` (dang le `IX`); NB02 co `IX. Tong hop du lieu` roi moi toi `IV. Kiem tra Performance` roi `X. Ket luan`.
