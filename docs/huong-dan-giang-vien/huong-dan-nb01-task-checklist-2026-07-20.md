@@ -178,5 +178,5 @@ De xuat: them mot muc rieng cho phan khao sat bang phu, dat truoc phan khoa noi/
 
 ## Hai loi danh so trong file checklist goc - nen hoi lai thay
 
-- Muc `VI. Khao sat du lieu cua bang phu **aaa**` - chu `aaa` o cuoi trong nhu go sot.
+- Muc `VI. Khao sat du lieu cua bang phu aaa`: chu `aaa` la **cho trong de dien ten bang phu**, khong phai loi go. Y thay la lam muc nay cho tung bang phu cu the.
 - NB01 ket thuc bang `IV. Ket luan`, dang le la `IX`.

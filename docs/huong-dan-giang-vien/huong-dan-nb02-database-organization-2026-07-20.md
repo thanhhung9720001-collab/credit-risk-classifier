@@ -134,5 +134,5 @@ Ngoai ra ban cu co hai muc **khong thuoc NB02**: "Xac dinh khoa lien ket va quan
 
 ## Hai loi danh so trong file checklist goc - nen hoi lai thay
 
-- Phan NB01 co muc `VI. Khao sat du lieu cua bang phu aaa` - chu `aaa` o cuoi trong nhu go sot.
+- Phan NB01 co muc `VI. Khao sat du lieu cua bang phu aaa`: chu `aaa` la cho trong de dien ten bang phu, khong phai loi go.
 - Danh so La Ma bi trung/nhay: NB01 ket thuc bang `IV. Ket luan` (dang le `IX`); NB02 co `IX. Tong hop du lieu` roi moi toi `IV. Kiem tra Performance` roi `X. Ket luan`.
