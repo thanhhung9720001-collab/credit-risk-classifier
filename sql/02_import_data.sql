@@ -1,4 +1,4 @@
--- 03_import_raw_data_query_tool.sql
+-- 02_import_data.sql
 -- Muc dich: import 8 file CSV raw vao PostgreSQL bang pgAdmin Query Tool.
 -- Luu y: COPY doc file tu may PostgreSQL server, nen duong dan ben duoi can ton tai voi server.
 -- Neu may thanh vien dat project o thu muc khac, hay sua lai duong dan truoc khi chay.

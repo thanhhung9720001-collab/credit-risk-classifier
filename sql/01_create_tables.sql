@@ -1,17 +1,17 @@
--- 02_create_raw_tables.sql
+-- 01_create_tables.sql
 -- Mục đích: tạo 8 bảng raw từ 8 file CSV chính của Home Credit.
 -- Kiểu dữ liệu được khai báo gần với dữ liệu gốc để vừa dễ import vừa dễ giải thích.
 -- Chạy file này sau khi đã kết nối vào database credit_risk_db.
 
--- Bảng raw từ file application_train.csv
+-- Bảng application_train.csv
 DROP TABLE IF EXISTS application_train CASCADE;
 CREATE TABLE application_train (
     sk_id_curr BIGINT,
     target SMALLINT,
     name_contract_type TEXT,
     code_gender TEXT,
-    flag_own_car SMALLINT,
-    flag_own_realty SMALLINT,
+    flag_own_car TEXT,
+    flag_own_realty TEXT,
     cnt_children NUMERIC,
     amt_income_total NUMERIC,
     amt_credit NUMERIC,
@@ -136,8 +136,8 @@ CREATE TABLE application_test (
     sk_id_curr BIGINT,
     name_contract_type TEXT,
     code_gender TEXT,
-    flag_own_car SMALLINT,
-    flag_own_realty SMALLINT,
+    flag_own_car TEXT,
+    flag_own_realty TEXT,
     cnt_children NUMERIC,
     amt_income_total NUMERIC,
     amt_credit NUMERIC,
@@ -264,7 +264,7 @@ CREATE TABLE bureau (
     credit_active TEXT,
     credit_currency TEXT,
     days_credit NUMERIC,
-    credit_day_overdue TEXT,
+    credit_day_overdue INTEGER,
     days_credit_enddate NUMERIC,
     days_enddate_fact NUMERIC,
     amt_credit_max_overdue NUMERIC,
@@ -299,7 +299,7 @@ CREATE TABLE previous_application (
     amt_goods_price NUMERIC,
     weekday_appr_process_start TEXT,
     hour_appr_process_start NUMERIC,
-    flag_last_appl_per_contract SMALLINT,
+    flag_last_appl_per_contract TEXT,
     nflag_last_appl_in_day SMALLINT,
     rate_down_payment NUMERIC,
     rate_interest_primary NUMERIC,
@@ -325,7 +325,7 @@ CREATE TABLE previous_application (
     days_last_due_1st_version NUMERIC,
     days_last_due NUMERIC,
     days_termination NUMERIC,
-    nflag_insured_on_approval SMALLINT
+    nflag_insured_on_approval NUMERIC
 );
 
 -- Bảng raw từ file installments_payments.csv

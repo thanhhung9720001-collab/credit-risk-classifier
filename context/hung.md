@@ -4,11 +4,27 @@
 
 ## Đang làm
 
-- **Task:** Cập nhật context sau khi hoàn thành Data Understanding.
-- **Nhánh hiện tại:** `docs/cap-nhat-context-data-understanding`.
-- **Trạng thái:** Business Understanding đã merge PR #53; Data Understanding đã merge PR #54 vào `main`. Đang cập nhật `PROJECT_CONTEXT.md` và context cá nhân để phản ánh trạng thái thật sau reset: NB01 xong, `sql/` trống, NB02–NB07 cần làm lại theo kế hoạch mới.
+- **Task:** T02 — Notebook 02 Database Organization.
+- **Nhánh hiện tại:** `feature/t02-khoa-noi-quan-he`.
+- **Trạng thái:** NB02 đã viết xong toàn bộ 9 mục và 11 file SQL; đã chạy thật trên PostgreSQL tới hết Mục 7. Còn lại: chạy thử Mục 8 (Python), tạo PR.
 
 ## Làm tới đâu (cập nhật mới nhất ở trên)
+
+- **2026-07-22 (NB02 Database Organization — nhánh `feature/t02-khoa-noi-quan-he`):** Viết xong toàn bộ NB02 (9 mục, 77 cell) và 11 file SQL, chạy thật trên PostgreSQL tới hết Mục 7.
+  - **Cấu trúc lại theo checklist thầy:** bỏ mục "Xác định khóa nối và quan hệ bảng" vì phần đó thuộc NB01 mục VII, không nằm trong checklist NB02. Khung mới: 1. Luồng làm việc → 2. Khởi tạo DB/bảng → 3. Import + kiểm tra → 4. Tối ưu (index) → 5. Bảng summary → 6. Join tạo `application_flat` → 7. Validation → 8. Kết nối Python → 9. Tổng kết.
+  - **11 file SQL đánh số liền mạch** `01_create_tables` → `11_check_flat_nulls`. Mỗi file có 1 SQL cell tương ứng trong notebook, mirror byte-for-byte (riêng `06` tách thành 5 cell theo từng bảng summary).
+  - **Phát hiện và sửa 3 lỗi kiểu dữ liệu.** Hai lỗi đầu làm import chết ngay nên dễ thấy: `FLAG_OWN_CAR`/`FLAG_OWN_REALTY` chứa `'Y'`/`'N'` mà khai `SMALLINT`; `NFLAG_INSURED_ON_APPROVAL` chứa `'0.0'` mà khai `SMALLINT`.
+    - **Lỗi thứ ba nguy hiểm nhất vì KHÔNG làm import thất bại:** `bureau.CREDIT_DAY_OVERDUE` (số ngày trễ hạn ở TCTD khác) khai `TEXT` trong khi dữ liệu 100% là số nguyên 0–2792. Để `TEXT` thì `MAX()` so sánh theo bảng chữ cái nên `'9' > '2792'` → khách từng trễ 2792 ngày bị ghi nhận thành 9 ngày, không báo lỗi gì. Đã sửa schema + `ALTER TABLE ... TYPE INTEGER USING`.
+    - **Cách phát hiện (nên lặp lại cho task sau):** quét **toàn bộ** giá trị thật của 55 cột khai `TEXT` xem cột nào chứa thuần số. Hai lượt preflight trước không bắt được vì chỉ kiểm "dữ liệu có import lọt không".
+  - **Kiểm chứng kiểu dữ liệu 2 chiều, khớp 339 cột.** `sql/04_check_column_types.sql` đối chiếu số cột và số cột kiểu chữ của từng bảng với thiết kế. Quan trọng vì `COPY` ghép **theo vị trí cột, không theo tên** — thứ tự lệch thì dữ liệu vào nhầm cột mà vẫn import thành công.
+  - **KHÔNG khai báo được khóa ngoại** — mọi quan hệ đều có bản ghi mồ côi: `bureau`→`application_train` thiếu 42.320 khách (họ thuộc `application_test`), `previous_application` thiếu 47.800; `installments`/`pos_cash`/`credit_card` → `previous_application` mồ côi 38.847/37.422/11.372 mã `sk_id_prev`; `bureau_balance`→`bureau` mồ côi 43.041. Nguyên nhân: dataset Kaggle bị cắt khi trích xuất. Đã dùng index trên khóa nối thay thế — đây là ý "tạo quan hệ **nếu cần**" trong checklist.
+  - **5 bảng summary** (`GROUP BY sk_id_curr`, mỗi bảng 5–6 cột `COUNT`/`SUM`/`AVG`/`MAX`/`MIN`). Con số 5 = số bảng phụ có sẵn `sk_id_curr` để nối thẳng về khách. **Bỏ `bureau_balance`** (27,3 triệu dòng) vì chỉ có `sk_id_bureau`, phải nối vòng qua `bureau` làm code phức tạp; checklist thầy cũng chỉ liệt kê 4 bảng summary. Nếu cần thì khai thác ở NB05.
+  - **`application_flat`: 307.511 dòng × 148 cột**, tạo bằng `LEFT JOIN` bảng chính với 5 bảng summary. File `08` được **sinh tự động từ định nghĩa trong `06`** để không sai tên cột.
+  - **Validation Mục 7 tự suy số kỳ vọng từ chính database** thay vì nhét số cứng: số dòng `NULL` phải bằng số khách `application_train` trừ số khách có mặt trong bảng summary. Đối chiếu độc lập bằng cách quét CSV cũng ra đúng (`bureau`: 44.020).
+  - **Phát hiện quan trọng cho NB03:** chỉ **86.905/307.511 khách (28,3%)** có dữ liệu thẻ tín dụng → **220.606 dòng (71,7%) NULL** ở nhóm cột `credit_card_*`. Đây là tín hiệu thật (khách không có thẻ), KHÔNG phải missing value — không được điền median/mean.
+  - **Mục 8 dùng `psycopg2` + `.env`, KHÔNG dùng SQLAlchemy** theo đúng ghi chú đã có trong `requirements.txt`. **Lệch nhẹ với checklist thầy** (thầy ghi cả SQLAlchemy) — đã ghi rõ lựa chọn này vào nhận xét 8.1; nếu muốn bám checklist thì phải thêm `sqlalchemy` vào `requirements.txt`.
+  - **Verify:** notebook load JSON được, 15 SQL cell khớp file, 2 Python cell parse AST được, 9 mục đánh số liền mạch, Tổng kết đứng cuối. **Mục 8 chưa chạy thật** — cần PostgreSQL + `.env` trên máy Hưng.
+  - **Tên nhánh không còn khớp nội dung:** `feature/t02-khoa-noi-quan-he` đặt theo mục "xác định khóa nối" — chính là phần đã bỏ. Cân nhắc đổi tên trước khi push.
 
 - **2026-07-20 (Cập nhật context sau Data Understanding — nhánh `docs/cap-nhat-context-data-understanding`):** Cập nhật lại bức tranh dự án sau khi PR #53 và PR #54 đã merge vào `main`.
   - **Business Understanding (PR #53):** `docs/Business_Understanding.docx` đã bổ sung mục tiêu nghiên cứu, giới thiệu dataset, giới thiệu công nghệ, lý do chọn Home Credit, tầm quan trọng trong ngành AI, SWOT và chỉnh heading/bullet.
@@ -145,29 +161,13 @@
 
 ## Handoff mới nhất cho phiên kế tiếp
 
-- **2026-07-21 (NB02 Database Organization - nhánh `feature/t02-database-organization`):** Đang làm lại NB02 sau reset theo quy trình mới **Ý tưởng → Chốt ý tưởng → Kế hoạch → Chốt kế hoạch → Triển khai**.
-  - **Quy tắc làm việc đã chốt với Hưng:** NB02 chủ yếu dùng **SQL**; Python chỉ dùng khi thật sự cần kiểm tra/hiển thị kết quả. Không tự làm tiếp bước mới nếu Hưng chưa chốt kế hoạch bước đó.
-  - **Khung NB02 đã chốt:** `notebooks/02_database_organization.ipynb` gồm 7 mục lớn:
-    1. Khởi tạo database và bảng raw
-    2. Import dữ liệu raw vào PostgreSQL
-    3. Xác định khóa nối và quan hệ bảng
-    4. Tạo index và aggregate bảng phụ
-    5. Join theo ERD và tạo bảng `application_join`
-    6. Validation sau khi tạo `application_join`
-    7. Tổng kết
-  - **Bước 1 đã làm:** tạo skeleton heading NB02.
-  - **Bước 2 đã làm:** tạo database và bảng raw:
-    - `sql/01_create_database.sql`: tạo database `credit_risk_db`.
-    - `sql/02_create_raw_tables.sql`: tạo 8 bảng raw từ 8 CSV chính. Kiểu dữ liệu đã chỉnh theo hướng gần đúng hơn: `SK_ID_CURR/SK_ID_PREV/SK_ID_BUREAU` là `BIGINT`, `TARGET` và các cờ là `SMALLINT`, biến tiền/ngày/tỷ lệ/số đếm là `NUMERIC`, biến phân loại là `TEXT`.
-    - Trong notebook đã ghi SQL trực tiếp bằng SQL code cell (`metadata.vscode.languageId = sql`), không để dạng markdown code fence.
-  - **Bước 3 đã làm:** import dữ liệu raw và kiểm tra số dòng:
-    - `sql/03_import_raw_data_query_tool.sql`: dùng `COPY` cho pgAdmin Query Tool, đường dẫn tuyệt đối theo máy Hưng.
-    - `sql/04_import_raw_data_psql.sql`: dùng `\copy` cho `psql`, đường dẫn tương đối từ thư mục gốc project.
-    - `sql/05_check_import_row_counts.sql`: kiểm tra số dòng 8 bảng sau import so với NB01.
-    - Notebook có thêm `### 2.3. Kiểm tra số dòng sau import`.
-  - **Validation đã chạy trong Codex:** notebook load JSON được, không lỗi encoding tiếng Việt, hiện có 37 cell, 5 SQL code cell, 0 Python code cell; SQL có đủ 8 `CREATE TABLE`, 8 `COPY`, 8 `\copy`; chưa có index/aggregate/join/application_join. `git diff --check` sạch.
-  - **Chưa chạy PostgreSQL thật:** chưa tạo DB/import trên máy trong Codex. Khi chuyển sang Claude/terminal, nếu muốn kiểm chứng thực tế thì cần chạy SQL trong PostgreSQL local.
-  - **Bước tiếp theo nên hỏi/chốt với Hưng trước:** lên kế hoạch cho mục 3 - **Xác định khóa nối và quan hệ bảng**. Phần này cần bám checklist NB02 của thầy: giải thích `SK_ID_CURR`, `SK_ID_PREV`, `SK_ID_BUREAU`, dựa vào ERD/NB01/tên cột trùng/tài liệu dataset, và viết SQL kiểm chứng cột khóa + join thử/row explosion.
+- **2026-07-22 (NB02 — nhánh `feature/t02-khoa-noi-quan-he`):** NB02 đã viết xong toàn bộ, chi tiết xem mục "Làm tới đâu" ngày 2026-07-22.
+  - **Việc còn lại ngay:** (1) chạy thử 2 cell Python Mục 8 trên máy có PostgreSQL + `.env`; (2) cân nhắc đổi tên nhánh cho khớp nội dung; (3) push và tạo PR.
+  - **Quy tắc làm việc với Hưng (vẫn giữ):** NB02 chủ yếu dùng **SQL**, Python chỉ dùng khi cần kiểm tra/hiển thị. **Không tự làm tiếp bước mới nếu Hưng chưa chốt kế hoạch bước đó.** Hưng thích giải thích **ngắn gọn**, đi thẳng vào "cái này là gì, vì sao chọn" — tránh markdown dài dòng trong notebook.
+  - **Lưu ý kỹ thuật đã học ở task này:**
+    - pgAdmin Query Tool **chỉ hiện kết quả của `SELECT` cuối cùng** khi chạy nhiều câu → mỗi phép kiểm tra phải là file/cell riêng, không gộp.
+    - `COPY` ghép dữ liệu **theo vị trí cột, không theo tên** → phải kiểm thứ tự cột, không chỉ kiểm số dòng.
+    - Kiểu `TEXT` cho cột số là lỗi **không làm import thất bại** nhưng làm `MAX()` sai âm thầm — phải quét toàn bộ giá trị để phát hiện.
 
 ## Còn dở / việc tiếp theo của tôi
 
@@ -184,7 +184,9 @@
 - [x] Merge Data Understanding mới vào `main` (PR #54).
 - [ ] Push nhánh `docs/cap-nhat-context-data-understanding`, tạo PR và merge để context khớp trạng thái thật sau PR #54.
 - [ ] Lên kế hoạch **Data Cleaning/NB03**: missing, `DAYS_EMPLOYED = 365243`, `CODE_GENDER = XNA`, outlier tiền tệ, kiểm tra sau xử lý và output clean.
-- [ ] Lên lại kế hoạch SQL/PostgreSQL vì `sql/` hiện trống sau reset.
+- [x] Lên lại kế hoạch SQL/PostgreSQL vì `sql/` hiện trống sau reset → đã có 11 file `sql/01`–`sql/11` đi cùng NB02.
+- [ ] Chạy thử 2 cell Python Mục 8 của NB02 (cần PostgreSQL + `.env`), rồi push nhánh và tạo PR cho T02.
+- [ ] Quyết định có thêm `sqlalchemy` vào `requirements.txt` để bám checklist thầy hay giữ nguyên chỉ `psycopg2`.
 - [ ] Lên lại kế hoạch NB02–NB07 để khớp NB01 mới, code đơn giản/dễ giải thích và đúng quy tắc markdown/nhận xét.
 - [ ] **Whitepaper + slide — rủi ro lớn.** Business/Data Understanding đã có nền trong `docs/`; còn Chương 2–6, slide và ghép vào file nộp `reports/`.
 - [ ] **App Streamlit + dashboard interactive**: vẫn bắt buộc theo đề bài, nhưng nên làm sau khi pipeline clean/features/model mới ổn định. Nếu dùng model artifact cũ, phải kiểm tra compatibility với `model_metadata.json`.
