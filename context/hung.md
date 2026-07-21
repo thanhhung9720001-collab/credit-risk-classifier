@@ -4,11 +4,22 @@
 
 ## Đang làm
 
-- **Task:** T02 — Notebook 02 Database Organization.
-- **Nhánh hiện tại:** `feature/t02-hoan-thien-nb02`.
-- **Trạng thái:** NB02 đã viết xong toàn bộ 9 mục và 11 file SQL; đã chạy thật trên PostgreSQL tới hết Mục 7. Còn lại: chạy thử Mục 8 (Python), tạo PR.
+- **Task:** T01 — bổ sung NB01 theo checklist mới của thầy.
+- **Nhánh hiện tại:** `feature/t01-khao-sat-bang-phu`.
+- **Trạng thái:** NB01 đã thêm mục 7 "Khảo sát dữ liệu bảng phụ", sắp lại thứ tự mục theo checklist, thêm kiểm tra khóa ngoại mồ côi, viết lại nhận xét heatmap và thống kê mô tả. Đã Restart & Run All sạch. Còn lại: push và tạo PR.
+- **Đã xong trước đó:** T02 (NB02 + 11 file SQL) merge PR #59; cập nhật tài liệu hướng dẫn giảng viên merge PR #60.
 
 ## Làm tới đâu (cập nhật mới nhất ở trên)
+
+- **2026-07-22 (Bổ sung NB01 theo checklist mới — nhánh `feature/t01-khao-sat-bang-phu`):** Thầy update `Task Checklist for Each Notebook.docx` (384 dòng khác so với bản cũ), thêm mục `VI. Khảo sát dữ liệu của bảng phụ` cho NB01. Rà lại NB01 và bổ sung.
+  - **Thêm mục 7 "Khảo sát dữ liệu bảng phụ".** Viết **một hàm dùng chung** `survey_sub_table()` đọc theo chunk, trả đủ 6 ý thầy yêu cầu cho cả 6 bảng phụ, thay vì lặp 36 cell. Kèm `describe()` và `value_counts()` cho `bureau` / `previous_application`.
+    - **Chi tiết dễ sai:** đếm dòng trùng KHÔNG được dùng `duplicated()` trên từng chunk vì sẽ bỏ sót dòng trùng nằm ở hai chunk khác nhau. Đã băm mỗi dòng thành số nguyên rồi đếm trên toàn file.
+  - **Sắp lại thứ tự mục theo checklist** (phương án B): biểu đồ/tương quan (V) lên mục 6, khảo sát bảng phụ (VI) thành mục 7, khóa nối + row explosion (VII) xuống mục 8, Tổng kết thành mục 9. Trước khi chuyển đã kiểm tra mục biểu đồ không dùng biến nào của mục khóa nối.
+  - **Thêm kiểm tra khóa ngoại mồ côi** vào mục 8, trả lời 2 câu của checklist. **Sáu con số khớp tuyệt đối với kết quả đo độc lập từ PostgreSQL ở NB02:** 42.320 / 47.800 / 38.847 / 37.422 / 11.372 / 43.041. Hai notebook dùng hai công cụ khác nhau (pandas đọc CSV vs SQL) mà ra cùng kết quả.
+  - **Viết lại nhận xét heatmap.** Bản cũ chỉ có một câu chung chung. Bật `annot=True` và **cố định thang `vmin=-1, vmax=1`** — trước đó thang màu tự co giãn theo dữ liệu nên cùng sắc đỏ ở hai biểu đồ lại mang giá trị khác nhau, chính là lý do Hưng thấy khó đọc. Nhận xét mới có 4 insight: không biến nào một mình dự đoán được vỡ nợ (mạnh nhất chỉ `-0,18`, đây là lý do dự án cần NB05); `EXT_SOURCE` âm nên điểm càng cao rủi ro càng thấp; `DAYS_BIRTH` `+0,08` nghĩa là khách trẻ rủi ro cao hơn (dấu dễ đọc ngược vì `DAYS_BIRTH` âm đếm lùi); cặp `REGION_RATING` `+0,95` gần như trùng nhau nên NB05 chỉ giữ 1.
+  - **Viết lại nhận xét thống kê mô tả bảng phụ.** Phát hiện `AMT_CREDIT_SUM_DEBT` có `min = -4.705.600` — **dư nợ âm là sai logic nghiệp vụ**, giao NB03 xử lý. `CREDIT_DAY_OVERDUE` có 25/50/75% đều bằng 0 nhưng max 2.792 ngày → **đây là bằng chứng cho quyết định dùng `MAX` thay vì `AVG` ở NB02**, vì trung bình chỉ 0,82 ngày sẽ làm biến mất nhóm khách trễ nặng.
+  - **Verify:** Restart & Run All bằng nbconvert, `execution_count` 1→25 liền mạch, 0 cell lỗi, 75 cell / 25 code cell.
+  - **Rút kinh nghiệm:** khi kiểm tra notebook đã có mục nào chưa, đừng dùng regex phân biệt hoa thường — mình đã báo nhầm "thiếu Unique Ratio" trong khi cell 22 vốn có sẵn cột `"Tỷ lệ unique (%)"`.
 
 - **2026-07-22 (NB02 Database Organization — nhánh `feature/t02-hoan-thien-nb02`):** Viết xong toàn bộ NB02 (9 mục, 77 cell) và 11 file SQL, chạy thật trên PostgreSQL tới hết Mục 7.
   - **Cấu trúc lại theo checklist thầy:** bỏ mục "Xác định khóa nối và quan hệ bảng" vì phần đó thuộc NB01 mục VII, không nằm trong checklist NB02. Khung mới: 1. Luồng làm việc → 2. Khởi tạo DB/bảng → 3. Import + kiểm tra → 4. Tối ưu (index) → 5. Bảng summary → 6. Join tạo `application_flat` → 7. Validation → 8. Kết nối Python → 9. Tổng kết.
@@ -185,7 +196,11 @@
 - [ ] Push nhánh `docs/cap-nhat-context-data-understanding`, tạo PR và merge để context khớp trạng thái thật sau PR #54.
 - [ ] Lên kế hoạch **Data Cleaning/NB03**: missing, `DAYS_EMPLOYED = 365243`, `CODE_GENDER = XNA`, outlier tiền tệ, kiểm tra sau xử lý và output clean.
 - [x] Lên lại kế hoạch SQL/PostgreSQL vì `sql/` hiện trống sau reset → đã có 11 file `sql/01`–`sql/11` đi cùng NB02.
-- [ ] Chạy thử 2 cell Python Mục 8 của NB02 (cần PostgreSQL + `.env`), rồi push nhánh và tạo PR cho T02.
+- [x] Chạy thử 2 cell Python Mục 8 của NB02 và tạo PR cho T02 → merge PR #59 (PostgreSQL 18.4, `application_flat` 307.511 x 148).
+- [x] Cập nhật tài liệu hướng dẫn giảng viên cho NB01/NB02 theo checklist mới → merge PR #60.
+- [x] Bổ sung mục `VI. Khảo sát dữ liệu của bảng phụ` cho NB01 (nhánh `feature/t01-khao-sat-bang-phu`).
+- [ ] Cập nhật `PROJECT_CONTEXT.md` mục 3 và 4 sau khi T02 xong — file vẫn đang ghi "`sql/` trống, NB02-NB07 cần làm lại", không còn đúng.
+- [ ] Hỏi thầy 2 lỗi đánh số trong checklist: chữ `aaa` ở tiêu đề mục VI của NB01, và `IV. Kết luận` đáng lẽ là `IX`.
 - [ ] Quyết định có thêm `sqlalchemy` vào `requirements.txt` để bám checklist thầy hay giữ nguyên chỉ `psycopg2`.
 - [ ] Lên lại kế hoạch NB02–NB07 để khớp NB01 mới, code đơn giản/dễ giải thích và đúng quy tắc markdown/nhận xét.
 - [ ] **Whitepaper + slide — rủi ro lớn.** Business/Data Understanding đã có nền trong `docs/`; còn Chương 2–6, slide và ghép vào file nộp `reports/`.
