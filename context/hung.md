@@ -200,7 +200,7 @@
 - [x] Cập nhật tài liệu hướng dẫn giảng viên cho NB01/NB02 theo checklist mới → merge PR #60.
 - [x] Bổ sung mục `VI. Khảo sát dữ liệu của bảng phụ` cho NB01 (nhánh `feature/t01-khao-sat-bang-phu`).
 - [ ] Cập nhật `PROJECT_CONTEXT.md` mục 3 và 4 sau khi T02 xong — file vẫn đang ghi "`sql/` trống, NB02-NB07 cần làm lại", không còn đúng.
-- [ ] Hỏi thầy 2 lỗi đánh số trong checklist: chữ `aaa` ở tiêu đề mục VI của NB01, và `IV. Kết luận` đáng lẽ là `IX`.
+- [ ] Hỏi thầy về đánh số trong checklist: NB01 kết thúc bằng `IV. Kết luận` (đáng lẽ `IX`), NB03 nhảy từ `III` sang `V`. Chữ `aaa` KHÔNG phải lỗi gõ — Hưng xác nhận đó là chỗ trống để điền tên bảng phụ.
 - [ ] Quyết định có thêm `sqlalchemy` vào `requirements.txt` để bám checklist thầy hay giữ nguyên chỉ `psycopg2`.
 - [ ] Lên lại kế hoạch NB02–NB07 để khớp NB01 mới, code đơn giản/dễ giải thích và đúng quy tắc markdown/nhận xét.
 - [ ] **Whitepaper + slide — rủi ro lớn.** Business/Data Understanding đã có nền trong `docs/`; còn Chương 2–6, slide và ghép vào file nộp `reports/`.
