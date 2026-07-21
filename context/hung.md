@@ -5,12 +5,12 @@
 ## Đang làm
 
 - **Task:** T02 — Notebook 02 Database Organization.
-- **Nhánh hiện tại:** `feature/t02-khoa-noi-quan-he`.
+- **Nhánh hiện tại:** `feature/t02-hoan-thien-nb02`.
 - **Trạng thái:** NB02 đã viết xong toàn bộ 9 mục và 11 file SQL; đã chạy thật trên PostgreSQL tới hết Mục 7. Còn lại: chạy thử Mục 8 (Python), tạo PR.
 
 ## Làm tới đâu (cập nhật mới nhất ở trên)
 
-- **2026-07-22 (NB02 Database Organization — nhánh `feature/t02-khoa-noi-quan-he`):** Viết xong toàn bộ NB02 (9 mục, 77 cell) và 11 file SQL, chạy thật trên PostgreSQL tới hết Mục 7.
+- **2026-07-22 (NB02 Database Organization — nhánh `feature/t02-hoan-thien-nb02`):** Viết xong toàn bộ NB02 (9 mục, 77 cell) và 11 file SQL, chạy thật trên PostgreSQL tới hết Mục 7.
   - **Cấu trúc lại theo checklist thầy:** bỏ mục "Xác định khóa nối và quan hệ bảng" vì phần đó thuộc NB01 mục VII, không nằm trong checklist NB02. Khung mới: 1. Luồng làm việc → 2. Khởi tạo DB/bảng → 3. Import + kiểm tra → 4. Tối ưu (index) → 5. Bảng summary → 6. Join tạo `application_flat` → 7. Validation → 8. Kết nối Python → 9. Tổng kết.
   - **11 file SQL đánh số liền mạch** `01_create_tables` → `11_check_flat_nulls`. Mỗi file có 1 SQL cell tương ứng trong notebook, mirror byte-for-byte (riêng `06` tách thành 5 cell theo từng bảng summary).
   - **Phát hiện và sửa 3 lỗi kiểu dữ liệu.** Hai lỗi đầu làm import chết ngay nên dễ thấy: `FLAG_OWN_CAR`/`FLAG_OWN_REALTY` chứa `'Y'`/`'N'` mà khai `SMALLINT`; `NFLAG_INSURED_ON_APPROVAL` chứa `'0.0'` mà khai `SMALLINT`.
@@ -24,7 +24,7 @@
   - **Phát hiện quan trọng cho NB03:** chỉ **86.905/307.511 khách (28,3%)** có dữ liệu thẻ tín dụng → **220.606 dòng (71,7%) NULL** ở nhóm cột `credit_card_*`. Đây là tín hiệu thật (khách không có thẻ), KHÔNG phải missing value — không được điền median/mean.
   - **Mục 8 dùng `psycopg2` + `.env`, KHÔNG dùng SQLAlchemy** theo đúng ghi chú đã có trong `requirements.txt`. **Lệch nhẹ với checklist thầy** (thầy ghi cả SQLAlchemy) — đã ghi rõ lựa chọn này vào nhận xét 8.1; nếu muốn bám checklist thì phải thêm `sqlalchemy` vào `requirements.txt`.
   - **Verify:** notebook load JSON được, 15 SQL cell khớp file, 2 Python cell parse AST được, 9 mục đánh số liền mạch, Tổng kết đứng cuối. **Mục 8 chưa chạy thật** — cần PostgreSQL + `.env` trên máy Hưng.
-  - **Tên nhánh không còn khớp nội dung:** `feature/t02-khoa-noi-quan-he` đặt theo mục "xác định khóa nối" — chính là phần đã bỏ. Cân nhắc đổi tên trước khi push.
+  - **Đã đổi tên nhánh:** ban đầu đặt là `feature/t02-khoa-noi-quan-he` theo mục "xác định khóa nối" — chính là phần sau đó bỏ đi. Đổi thành `feature/t02-hoan-thien-nb02` khi nhánh chưa push. Không dùng lại tên `feature/t02-database-organization` vì tên đó đã có trên `origin` (PR #58).
 
 - **2026-07-20 (Cập nhật context sau Data Understanding — nhánh `docs/cap-nhat-context-data-understanding`):** Cập nhật lại bức tranh dự án sau khi PR #53 và PR #54 đã merge vào `main`.
   - **Business Understanding (PR #53):** `docs/Business_Understanding.docx` đã bổ sung mục tiêu nghiên cứu, giới thiệu dataset, giới thiệu công nghệ, lý do chọn Home Credit, tầm quan trọng trong ngành AI, SWOT và chỉnh heading/bullet.
@@ -161,7 +161,7 @@
 
 ## Handoff mới nhất cho phiên kế tiếp
 
-- **2026-07-22 (NB02 — nhánh `feature/t02-khoa-noi-quan-he`):** NB02 đã viết xong toàn bộ, chi tiết xem mục "Làm tới đâu" ngày 2026-07-22.
+- **2026-07-22 (NB02 — nhánh `feature/t02-hoan-thien-nb02`):** NB02 đã viết xong toàn bộ, chi tiết xem mục "Làm tới đâu" ngày 2026-07-22.
   - **Việc còn lại ngay:** (1) chạy thử 2 cell Python Mục 8 trên máy có PostgreSQL + `.env`; (2) cân nhắc đổi tên nhánh cho khớp nội dung; (3) push và tạo PR.
   - **Quy tắc làm việc với Hưng (vẫn giữ):** NB02 chủ yếu dùng **SQL**, Python chỉ dùng khi cần kiểm tra/hiển thị. **Không tự làm tiếp bước mới nếu Hưng chưa chốt kế hoạch bước đó.** Hưng thích giải thích **ngắn gọn**, đi thẳng vào "cái này là gì, vì sao chọn" — tránh markdown dài dòng trong notebook.
   - **Lưu ý kỹ thuật đã học ở task này:**
