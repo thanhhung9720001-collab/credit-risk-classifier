@@ -143,6 +143,32 @@
 - **2026-07-03:** Hoàn thành notebook 01 (32 cell, đúng quy ước format nhóm): (1) chuẩn bị môi trường; (2) tổng quan 8 bảng — dòng/cột/RAM/tỷ lệ thiếu; (3) bảng trung tâm `application_train` (307.511×122): kiểu dữ liệu, `TARGET` mất cân bằng ~8%, missing (67 cột thiếu), thống kê mô tả; (4) bảng phụ & quan hệ khóa `SK_ID_CURR/BUREAU/PREV`; (5) từ điển dữ liệu; (6) tổng kết dẫn sang notebook 02. Đã `nbconvert --execute` nhúng output thật (3 biểu đồ), không lỗi. Đã cài `nbconvert` để thực thi notebook (chưa thêm vào `requirements.txt` — thuộc task README/requirements riêng).
 - **2026-07-03:** Đã merge (PR #5, #6, #7): nội quy "chỉ nhóm trưởng đổi cấu trúc/quy trình", context cá nhân theo từng thành viên, khai báo tên qua `.claude/whoami`, hook `edit-branch-guard` chặn sửa file trên main. Đã cập nhật `PROJECT_CONTEXT.md`.
 
+## Handoff mới nhất cho phiên kế tiếp
+
+- **2026-07-21 (NB02 Database Organization - nhánh `feature/t02-database-organization`):** Đang làm lại NB02 sau reset theo quy trình mới **Ý tưởng → Chốt ý tưởng → Kế hoạch → Chốt kế hoạch → Triển khai**.
+  - **Quy tắc làm việc đã chốt với Hưng:** NB02 chủ yếu dùng **SQL**; Python chỉ dùng khi thật sự cần kiểm tra/hiển thị kết quả. Không tự làm tiếp bước mới nếu Hưng chưa chốt kế hoạch bước đó.
+  - **Khung NB02 đã chốt:** `notebooks/02_database_organization.ipynb` gồm 7 mục lớn:
+    1. Khởi tạo database và bảng raw
+    2. Import dữ liệu raw vào PostgreSQL
+    3. Xác định khóa nối và quan hệ bảng
+    4. Tạo index và aggregate bảng phụ
+    5. Join theo ERD và tạo bảng `application_join`
+    6. Validation sau khi tạo `application_join`
+    7. Tổng kết
+  - **Bước 1 đã làm:** tạo skeleton heading NB02.
+  - **Bước 2 đã làm:** tạo database và bảng raw:
+    - `sql/01_create_database.sql`: tạo database `credit_risk_db`.
+    - `sql/02_create_raw_tables.sql`: tạo 8 bảng raw từ 8 CSV chính. Kiểu dữ liệu đã chỉnh theo hướng gần đúng hơn: `SK_ID_CURR/SK_ID_PREV/SK_ID_BUREAU` là `BIGINT`, `TARGET` và các cờ là `SMALLINT`, biến tiền/ngày/tỷ lệ/số đếm là `NUMERIC`, biến phân loại là `TEXT`.
+    - Trong notebook đã ghi SQL trực tiếp bằng SQL code cell (`metadata.vscode.languageId = sql`), không để dạng markdown code fence.
+  - **Bước 3 đã làm:** import dữ liệu raw và kiểm tra số dòng:
+    - `sql/03_import_raw_data_query_tool.sql`: dùng `COPY` cho pgAdmin Query Tool, đường dẫn tuyệt đối theo máy Hưng.
+    - `sql/04_import_raw_data_psql.sql`: dùng `\copy` cho `psql`, đường dẫn tương đối từ thư mục gốc project.
+    - `sql/05_check_import_row_counts.sql`: kiểm tra số dòng 8 bảng sau import so với NB01.
+    - Notebook có thêm `### 2.3. Kiểm tra số dòng sau import`.
+  - **Validation đã chạy trong Codex:** notebook load JSON được, không lỗi encoding tiếng Việt, hiện có 37 cell, 5 SQL code cell, 0 Python code cell; SQL có đủ 8 `CREATE TABLE`, 8 `COPY`, 8 `\copy`; chưa có index/aggregate/join/application_join. `git diff --check` sạch.
+  - **Chưa chạy PostgreSQL thật:** chưa tạo DB/import trên máy trong Codex. Khi chuyển sang Claude/terminal, nếu muốn kiểm chứng thực tế thì cần chạy SQL trong PostgreSQL local.
+  - **Bước tiếp theo nên hỏi/chốt với Hưng trước:** lên kế hoạch cho mục 3 - **Xác định khóa nối và quan hệ bảng**. Phần này cần bám checklist NB02 của thầy: giải thích `SK_ID_CURR`, `SK_ID_PREV`, `SK_ID_BUREAU`, dựa vào ERD/NB01/tên cột trùng/tài liệu dataset, và viết SQL kiểm chứng cột khóa + join thử/row explosion.
+
 ## Còn dở / việc tiếp theo của tôi
 
 - [x] Push nhánh `feature/t19-readme-va-requirements`, tạo PR và merge (T19 — README + requirements → PR #36).
