@@ -1,4 +1,4 @@
--- 05_check_import_row_counts.sql
+-- 03_check_import_counts.sql
 -- Muc dich: kiem tra so dong sau import co khop voi ket qua da ghi nhan o NB01 hay khong.
 
 SELECT 'application_train' AS table_name, 307511::BIGINT AS expected_rows, COUNT(*)::BIGINT AS actual_rows,
