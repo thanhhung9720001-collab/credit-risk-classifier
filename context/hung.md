@@ -172,6 +172,8 @@
 
 ## Handoff mới nhất cho phiên kế tiếp
 
+- **2026-07-23 (NB01 — nhánh `fix/update_NB01`):** Đổi cell nhận xét sau phần tổng quan dữ liệu thành bảng hai cột **Bảng chính / Bảng phụ**. Bảng nêu rõ `application_train`/`application_test` ở cấp hồ sơ vay hiện tại, còn `bureau`, `previous_application`, `installments_payments`, `POS_CASH_balance` và `credit_card_balance` cần được tổng hợp về `SK_ID_CURR` trước khi đưa vào mô hình.
+
 - **2026-07-22 (NB02 — nhánh `feature/t02-hoan-thien-nb02`):** NB02 đã viết xong toàn bộ, chi tiết xem mục "Làm tới đâu" ngày 2026-07-22.
   - **Việc còn lại ngay:** (1) chạy thử 2 cell Python Mục 8 trên máy có PostgreSQL + `.env`; (2) cân nhắc đổi tên nhánh cho khớp nội dung; (3) push và tạo PR.
   - **Quy tắc làm việc với Hưng (vẫn giữ):** NB02 chủ yếu dùng **SQL**, Python chỉ dùng khi cần kiểm tra/hiển thị. **Không tự làm tiếp bước mới nếu Hưng chưa chốt kế hoạch bước đó.** Hưng thích giải thích **ngắn gọn**, đi thẳng vào "cái này là gì, vì sao chọn" — tránh markdown dài dòng trong notebook.
