@@ -172,6 +172,8 @@
 
 ## Handoff mới nhất cho phiên kế tiếp
 
+- **2026-07-23 (NB01 — nhánh `fix/update_NB01`):** Chuẩn hóa phần trình bày NB01: thay nhận xét bảng chính/bảng phụ bằng bảng hai cột; làm rõ nhãn trục biểu đồ và cách đọc tương quan; làm tròn số liệu thống kê khi hiển thị; đổi các mục lớn sang số La Mã `I`–`X`, tách `IX. Đánh giá sơ bộ` và `X. Kết luận`; rút bảng bàn giao cuối còn hai cột. Notebook cần Restart & Run All để cập nhật output của các cell đã đổi code.
+
 - **2026-07-23 (NB01 — nhánh `fix/update_NB01`):** Đổi cell nhận xét sau phần tổng quan dữ liệu thành bảng hai cột **Bảng chính / Bảng phụ**. Bảng nêu rõ `application_train`/`application_test` ở cấp hồ sơ vay hiện tại, còn `bureau`, `previous_application`, `installments_payments`, `POS_CASH_balance` và `credit_card_balance` cần được tổng hợp về `SK_ID_CURR` trước khi đưa vào mô hình.
 
 - **2026-07-22 (NB02 — nhánh `feature/t02-hoan-thien-nb02`):** NB02 đã viết xong toàn bộ, chi tiết xem mục "Làm tới đâu" ngày 2026-07-22.
