@@ -1,3 +1,0 @@
-total cells: 191
-last executed cell: None
-error cell index: None
