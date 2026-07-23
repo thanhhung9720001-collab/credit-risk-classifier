@@ -1,0 +1,50 @@
+=== cell 0 markdown ===
+# Xây dựng Mô hình Phân loại và Dự báo Rủi ro Khách hàng Vay vốn
+
+**Notebook 02/07 - Database Organization (Tổ chức database)**
+
+---
+
+**Mục tiêu:** Tổ chức dữ liệu raw vào PostgreSQL, tạo index, tổng hợp các bảng phụ về mức khách hàng và tạo bảng phẳng phục vụ các notebook sau.
+
+**Input:** `data/raw/*.csv`, ERD và kết quả Data Understanding từ NB01
+
+**Output:** Database raw, 5 bảng summary và bảng `application_flat` trong PostgreSQL
+
+**Pipeline:** Data Understanding -> **Database Organization** -> Data Cleaning / EDA / Feature Engineering
+
+
+=== cell 70 code ===
+from pathlib import Path
+import os
+
+import pandas as pd
+import psycopg2
+from dotenv import load_dotenv
+from IPython.display import display
+
+# Nếu chạy notebook từ thư mục notebooks/, quay về thư mục gốc dự án.
+PROJECT_ROOT = Path.cwd()
+if PROJECT_ROOT.name == "notebooks":
+    PROJECT_ROOT = PROJECT_ROOT.parent
+
+# Thông tin kết nối đọc từ .env ở thư mục gốc, file này không được commit lên GitHub.
+load_dotenv(PROJECT_ROOT / ".env")
+
+conn = psycopg2.connect(
+    host=os.getenv("DB_HOST", "localhost"),
+    port=os.getenv("DB_PORT", "5432"),
+    dbname=os.getenv("DB_NAME", "credit_risk_db"),
+    user=os.getenv("DB_USER", "postgres"),
+    password=os.getenv("DB_PASSWORD"),
+)
+
+with conn.cursor() as cur:
+    cur.execute("SELECT version();")
+    print("PostgreSQL:", cur.fetchone()[0].split(",")[0])
+    cur.execute("SELECT current_database();")
+    print("Database  :", cur.fetchone()[0])
+
+=== cell 73 markdown ===
+Đoạn code bên dưới đọc `application_flat` từ PostgreSQL bằng `pandas.read_sql` để xác nhận Notebook 03 lấy được dữ liệu.
+

@@ -1,0 +1,5 @@
+amt_annuity               12
+cnt_fam_members            2
+days_last_phone_change     1
+dtype: int64
+total=15

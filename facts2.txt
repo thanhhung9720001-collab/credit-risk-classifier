@@ -1,0 +1,8 @@
+application_train: total=307511 distinct=307511 dup_rows=0 time=0.4s
+application_test: total=48744 distinct=48744 dup_rows=0 time=0.1s
+bureau: total=1716428 distinct=1716428 dup_rows=0 time=2.1s
+bureau_balance: total=27299925 distinct=27299925 dup_rows=0 time=8.3s
+previous_application: total=1670214 distinct=1670214 dup_rows=0 time=9.8s
+installments_payments: total=13605401 distinct=13605401 dup_rows=0 time=46.1s
+pos_cash_balance: total=10001358 distinct=10001358 dup_rows=0 time=45.0s
+credit_card_balance: total=3840312 distinct=3840312 dup_rows=0 time=21.3s
