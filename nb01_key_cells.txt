@@ -1,0 +1,288 @@
+=== cell 27 code ===
+days_employed_special = (app_train["DAYS_EMPLOYED"] == 365243).sum()
+code_gender_xna = (app_train["CODE_GENDER"] == "XNA").sum()
+
+money_columns = ["AMT_INCOME_TOTAL", "AMT_CREDIT", "AMT_ANNUITY"]
+money_summary = app_train[money_columns].agg(["min", "median", "max"]).T
+money_summary = money_summary.rename(columns={
+    "min": "Giá trị nhỏ nhất",
+    "median": "Trung vị",
+    "max": "Giá trị lớn nhất",
+})
+
+print("Số dòng DAYS_EMPLOYED = 365243:", int(days_employed_special))
+print("Số dòng CODE_GENDER = XNA:", int(code_gender_xna))
+
+money_summary
+
+
+=== cell 28 markdown ===
+**Nhận xét:** Kết hợp bảng thống kê mô tả và kết quả kiểm chứng ở trên, có thể ghi nhận các điểm sau:
+
+- `AMT_INCOME_TOTAL` có giá trị `max` rất lớn so với trung vị, cho thấy có outlier thu nhập.
+- `AMT_CREDIT` và `AMT_ANNUITY` cũng có giá trị lớn hơn mặt bằng chung, cần xem thêm phân phối trước khi quyết định xử lý.
+- `DAYS_BIRTH` là số âm do dataset mã hóa số ngày tính lùi từ thời điểm nộp hồ sơ, nên không xem là lỗi.
+- `DAYS_EMPLOYED = 365243` là giá trị numeric bất thường, không hợp lý về nghiệp vụ vì tương đương khoảng 1000 năm làm việc.
+- `CODE_GENDER = XNA` là giá trị phân loại đặc biệt, không thuộc nhóm `M/F`.
+- `EXT_SOURCE_1`, `EXT_SOURCE_2`, `EXT_SOURCE_3` nằm trong khoảng 0-1, nhưng cần kiểm tra thêm missing và tương quan với `TARGET`.
+
+Các điểm này chỉ được ghi nhận ở NB01. Việc xử lý cụ thể sẽ chuyển sang giai đoạn Data Cleaning/NB03.
+
+
+=== cell 57 code ===
+SUB_TABLES = [
+    "bureau.csv",
+    "bureau_balance.csv",
+    "previous_application.csv",
+    "installments_payments.csv",
+    "POS_CASH_balance.csv",
+    "credit_card_balance.csv",
+]
+
+
+def survey_sub_table(file_name, chunksize=200_000):
+    """Gom thông tin khảo sát cơ bản của một bảng phụ, đọc theo chunk để nhẹ RAM."""
+    file_path = DATA_RAW / file_name
+    encoding = detect_csv_encoding(file_path)
+
+    total_rows = 0
+    total_missing = 0
+    total_cells = 0
+    memory_mb = 0.0
+    columns = None
+    dtype_counts = None
+    row_hashes = []
+
+    for chunk in pd.read_csv(file_path, chunksize=chunksize, encoding=encoding):
+        if columns is None:
+            columns = list(chunk.columns)
+            dtype_counts = chunk.dtypes.astype(str).value_counts()
+
+        total_rows += len(chunk)
+        total_missing += int(chunk.isna().sum().sum())
+        total_cells += int(chunk.size)
+        memory_mb += chunk.memory_usage(deep=True).sum() / 1024 ** 2
+
+        # Băm mỗi dòng thành một số nguyên để đếm trùng trên TOÀN file.
+        # Nếu chỉ gọi duplicated() trên từng chunk sẽ bỏ sót các dòng trùng nằm ở hai chunk khác nhau.
+        row_hashes.append(pd.util.hash_pandas_object(chunk, index=False).to_numpy())
+
+    row_hashes = np.concatenate(row_hashes)
+    duplicate_rows = int(len(row_hashes) - len(np.unique(row_hashes)))
+
+    return {
+        "Bảng": file_name.replace(".csv", ""),
+        "Số dòng": total_rows,
+        "Số cột": len(columns),
+        "Kiểu dữ liệu": ", ".join(f"{k}: {v}" for k, v in dtype_counts.items()),
+        "Ô thiếu (%)": round(total_missing / total_cells * 100, 2),
+        "Dòng trùng": duplicate_rows,
+        "RAM (MB)": round(memory_mb, 1),
+    }
+
+
+sub_table_survey = pd.DataFrame([survey_sub_table(name) for name in SUB_TABLES])
+sub_table_survey
+
+=== cell 58 markdown ===
+**Nhận xét:** Các bảng phụ đều lớn hơn bảng chính rất nhiều lần, xác nhận quan hệ 1-n với khách hàng. Tỉ lệ ô thiếu và số dòng trùng của từng bảng là căn cứ để Notebook 03 quyết định cách xử lý cho từng nhóm cột.
+
+
+=== cell 59 markdown ===
+Đoạn code bên dưới xem thống kê mô tả các cột số quan trọng của `bureau` và `previous_application`. Cách đọc nhanh: `count` là số dòng có giá trị nên thấp hơn tổng số dòng nghĩa là cột đó thiếu dữ liệu; `50%` là trung vị, so với `mean` để biết dữ liệu có bị vài giá trị cực lớn kéo méo hay không.
+
+
+=== cell 60 code ===
+# Thống kê mô tả cho các cột số quan trọng của hai bảng phụ có ý nghĩa nghiệp vụ lớn nhất.
+# Chỉ đọc đúng các cột cần xem để không nạp cả bảng vào RAM.
+bureau_numeric_cols = [
+    "DAYS_CREDIT",
+    "CREDIT_DAY_OVERDUE",
+    "AMT_CREDIT_SUM",
+    "AMT_CREDIT_SUM_DEBT",
+]
+bureau_describe = pd.read_csv(
+    DATA_RAW / "bureau.csv", usecols=bureau_numeric_cols
+).describe().T
+
+previous_numeric_cols = [
+    "AMT_APPLICATION",
+    "AMT_CREDIT",
+    "DAYS_DECISION",
+    "CNT_PAYMENT",
+]
+previous_describe = pd.read_csv(
+    DATA_RAW / "previous_application.csv", usecols=previous_numeric_cols
+).describe().T
+
+print("bureau — thống kê mô tả")
+display(bureau_describe)
+print("previous_application — thống kê mô tả")
+display(previous_describe)
+
+=== cell 61 markdown ===
+**Nhận xét:** Bốn điều rút ra từ bảng trên.
+
+**1. `AMT_CREDIT_SUM_DEBT` có giá trị âm, `min = -4.705.600`.** Dư nợ không thể âm nên đây là giá trị sai logic nghiệp vụ, cần đưa vào danh sách xử lý ở Notebook 03.
+
+**2. `CREDIT_DAY_OVERDUE` lệch rất mạnh.** Các mốc `25%`, `50%` và `75%` đều bằng `0`, tức là hơn ba phần tư khoản vay không trễ hạn ngày nào, nhưng giá trị lớn nhất lên tới `2.792` ngày, khoảng 7,6 năm. Trung bình chỉ `0,82` ngày nên nếu chỉ nhìn trung bình sẽ tưởng như không ai trễ hạn.
+
+Đây là căn cứ cho cách tổng hợp ở Notebook 02: khi gom bảng phụ về mức khách hàng phải lấy `MAX` của cột này chứ không lấy `AVG`, vì trung bình sẽ làm biến mất nhóm khách từng trễ nặng, mà đó lại đúng là nhóm rủi ro cần phát hiện.
+
+**3. Các biến tiền lệch phải rất nặng.** `AMT_CREDIT_SUM` có trung vị `125.518` nhưng giá trị lớn nhất `585.000.000`, gấp khoảng 4.661 lần; trung bình `354.994` cao gấp 2,8 lần trung vị vì bị một nhóm nhỏ khoản vay rất lớn kéo lên. Notebook 03 và Notebook 05 nên cân nhắc biến đổi log cho nhóm cột tiền trước khi đưa vào mô hình.
+
+**4. Hai cột thiếu dữ liệu đáng kể.** `AMT_CREDIT_SUM_DEBT` chỉ có `1.458.759` trên `1.716.428` dòng, thiếu 15,0%; `CNT_PAYMENT` chỉ có `1.297.984` trên `1.670.214` dòng, thiếu 22,3%. Cột `count` thấp hơn tổng số dòng chính là cách phát hiện thiếu dữ liệu ngay trên bảng thống kê mô tả.
+
+Ngoài ra `DAYS_CREDIT` và `DAYS_DECISION` đều mang dấu âm, đúng quy ước đếm lùi từ ngày nộp hồ sơ.
+
+
+=== cell 66 code ===
+key_columns = ["SK_ID_CURR", "SK_ID_PREV", "SK_ID_BUREAU"]
+related_files = [
+    "bureau.csv",
+    "bureau_balance.csv",
+    "previous_application.csv",
+    "installments_payments.csv",
+    "POS_CASH_balance.csv",
+    "credit_card_balance.csv",
+]
+
+key_summary_rows = []
+
+for file_name in related_files:
+    file_path = DATA_RAW / file_name
+
+    # Đọc dòng đầu để biết bảng có những cột khóa nào.
+    encoding = detect_csv_encoding(file_path)
+    header = pd.read_csv(file_path, nrows=0, encoding=encoding)
+    available_keys = []
+    for key in key_columns:
+        if key in header.columns:
+            available_keys.append(key)
+
+    # Chỉ đọc các cột khóa để giảm bộ nhớ.
+    key_data = pd.read_csv(file_path, usecols=available_keys, encoding=encoding)
+
+    row = {
+        "Bảng": file_name,
+        "Số dòng": len(key_data),
+        "Khóa có trong bảng": ", ".join(available_keys),
+    }
+
+    for key in key_columns:
+        if key in key_data.columns:
+            row[f"Số {key} unique"] = key_data[key].nunique()
+        else:
+            row[f"Số {key} unique"] = np.nan
+
+    key_summary_rows.append(row)
+
+key_summary = pd.DataFrame(key_summary_rows)
+key_summary
+
+
+=== cell 67 markdown ===
+**Nhận xét:** Các bảng phụ có số dòng lớn hơn số khách hàng unique, chứng tỏ quan hệ thường là 1-n. Nếu join trực tiếp vào `application_train`, số dòng có thể bị phình lên và làm sai cấp dữ liệu của mô hình.
+
+
+=== cell 68 markdown ===
+Bảng dưới đây tóm tắt grain và khóa nối chính của từng bảng phụ.
+
+
+=== cell 69 code ===
+relationship_rows = [
+    {
+        "Bảng": "bureau",
+        "Grain": "Một khoản tín dụng bên ngoài",
+        "Khóa nối chính": "SK_ID_CURR, SK_ID_BUREAU",
+        "Ghi chú": "Nối với application qua SK_ID_CURR",
+    },
+    {
+        "Bảng": "bureau_balance",
+        "Grain": "Một tháng trạng thái của khoản tín dụng bên ngoài",
+        "Khóa nối chính": "SK_ID_BUREAU",
+        "Ghi chú": "Không có SK_ID_CURR, phải đi qua bureau",
+    },
+    {
+        "Bảng": "previous_application",
+        "Grain": "Một khoản vay trước tại Home Credit",
+        "Khóa nối chính": "SK_ID_CURR, SK_ID_PREV",
+        "Ghi chú": "Nối với application qua SK_ID_CURR",
+    },
+    {
+        "Bảng": "installments_payments",
+        "Grain": "Một kỳ thanh toán hoặc lần thanh toán",
+        "Khóa nối chính": "SK_ID_PREV, SK_ID_CURR",
+        "Ghi chú": "Tổng hợp hành vi trả góp",
+    },
+    {
+        "Bảng": "POS_CASH_balance",
+        "Grain": "Một tháng theo dõi khoản POS/cash",
+        "Khóa nối chính": "SK_ID_PREV, SK_ID_CURR",
+        "Ghi chú": "Tổng hợp dư nợ POS/cash",
+    },
+    {
+        "Bảng": "credit_card_balance",
+        "Grain": "Một tháng theo dõi thẻ tín dụng",
+        "Khóa nối chính": "SK_ID_PREV, SK_ID_CURR",
+        "Ghi chú": "Tổng hợp hành vi dùng thẻ",
+    },
+]
+
+pd.DataFrame(relationship_rows)
+
+
+=== cell 70 markdown ===
+**Nhận xét:** Hiểu grain của từng bảng giúp tránh lỗi row explosion. Các bảng lịch sử cần được tổng hợp về cấp `SK_ID_CURR` trước khi join vào bảng chính để mỗi hồ sơ vẫn chỉ còn một dòng.
+
+
+=== cell 71 markdown ===
+Đoạn code bên dưới trả lời hai câu hỏi của checklist: có khóa ngoại bị thiếu không, và join có làm mất dữ liệu không.
+
+
+=== cell 72 code ===
+# Khoa ngoai: ma o bang phu co ton tai o bang cha khong.
+# Chi doc dung cot khoa nen quet duoc ca file 27 trieu dong ma khong het RAM.
+parent_keys = {}
+for parent_file, key in [
+    ("application_train.csv", "SK_ID_CURR"),
+    ("previous_application.csv", "SK_ID_PREV"),
+    ("bureau.csv", "SK_ID_BUREAU"),
+]:
+    parent_keys[(parent_file, key)] = set(
+        pd.read_csv(DATA_RAW / parent_file, usecols=[key])[key]
+    )
+
+fk_checks = [
+    ("bureau.csv", "SK_ID_CURR", "application_train.csv"),
+    ("previous_application.csv", "SK_ID_CURR", "application_train.csv"),
+    ("installments_payments.csv", "SK_ID_PREV", "previous_application.csv"),
+    ("POS_CASH_balance.csv", "SK_ID_PREV", "previous_application.csv"),
+    ("credit_card_balance.csv", "SK_ID_PREV", "previous_application.csv"),
+    ("bureau_balance.csv", "SK_ID_BUREAU", "bureau.csv"),
+]
+
+fk_rows = []
+for child_file, key, parent_file in fk_checks:
+    child_ids = set(pd.read_csv(DATA_RAW / child_file, usecols=[key])[key])
+    orphan_ids = child_ids - parent_keys[(parent_file, key)]
+
+    fk_rows.append({
+        "Bảng con": child_file.replace(".csv", ""),
+        "Khóa": key,
+        "Bảng cha": parent_file.replace(".csv", ""),
+        "Số mã ở bảng con": len(child_ids),
+        "Mã không có ở bảng cha": len(orphan_ids),
+        "Khai báo được FOREIGN KEY": "Được" if not orphan_ids else "Không",
+    })
+
+foreign_key_check = pd.DataFrame(fk_rows)
+foreign_key_check
+
+=== cell 73 markdown ===
+**Nhận xét:** Không quan hệ nào sạch hoàn toàn — bảng con nào cũng chứa mã không tồn tại ở bảng cha, nên PostgreSQL sẽ từ chối nếu khai báo `FOREIGN KEY`.
+
+Nguyên nhân khác nhau theo từng nhóm. Với `bureau` và `previous_application`, các mã thiếu chính là khách hàng thuộc `application_test` — hai bảng này là hai phần của cùng một tập khách hàng bị tách đôi, nên xét riêng `application_train` thì luôn thiếu. Với các mã `SK_ID_PREV` và `SK_ID_BUREAU` mồ côi thì nguyên nhân là bộ dữ liệu Kaggle bị cắt bớt khi trích xuất từ hệ thống thật.
+
+Hệ quả cho Notebook 02: không khai báo khóa ngoại mà dùng index trên các cột khóa để phép join vẫn nhanh. Đồng thời phải dùng `LEFT JOIN` chứ không phải `INNER JOIN`, nếu không sẽ mất chính những khách hàng không có lịch sử tín dụng — vốn là một nhóm rủi ro riêng.
+

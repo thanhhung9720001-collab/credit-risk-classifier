@@ -1,0 +1,79 @@
+notebooks/02_database_organization.ipynb
+cells: 77
+0 markdown | # Xây dựng Mô hình Phân loại và Dự báo Rủi ro Khách hàng Vay vốn
+1 markdown | ## 1. Luồng làm việc của notebook
+2 markdown | Notebook 02 thực hiện lần lượt các bước sau để tổ chức dữ liệu:
+3 markdown | ## 2. Khởi tạo database và bảng
+4 markdown | ### 2.1. Tạo database
+5 markdown | Database được tạo trực tiếp trong pgAdmin 4 bằng thao tác trên giao diện, không cần viết câu lệnh:
+6 markdown | `credit_risk_db` là nơi lưu toàn bộ bảng raw, bảng summary và bảng `application_flat` của dự án.
+7 markdown | ### 2.2. Tạo các bảng
+8 code | -- 01_create_tables.sql
+9 markdown | **Nhận xét:** Các khóa `SK_ID_CURR`, `SK_ID_PREV`, `SK_ID_BUREAU` được khai báo `BIGINT`; `TARGET` và các cờ nhị phân khai báo `SMALLINT`; c
+10 markdown | ## 3. Import dữ liệu raw vào PostgreSQL
+11 markdown | ### 3.1. Import dữ liệu bằng lệnh COPY
+12 markdown | Đoạn code bên dưới dùng lệnh `COPY` trong pgAdmin Query Tool để nạp 8 file CSV vào các bảng raw. Đường dẫn CSV là đường dẫn tuyệt đối trên m
+13 code | -- 02_import_data.sql
+14 markdown | **Nhận xét:** `COPY` chạy trực tiếp trong pgAdmin Query Tool nên thống nhất với các bước tạo database và bảng raw ở Mục 2. Điểm cần chú ý là
+15 markdown | ### 3.2. Kiểm tra số dòng sau import
+16 markdown | Sau khi import, cần đối chiếu số dòng từng bảng trong PostgreSQL với số dòng đã ghi nhận ở NB01.
+17 code | -- 03_check_import_counts.sql
+18 markdown | **Nhận xét:** Nếu tất cả bảng trả về `OK`, dữ liệu raw đã được nạp đủ số dòng vào PostgreSQL. Bước tiếp theo là kiểm tra dữ liệu có nằm đúng
+19 markdown | ### 3.3. Kiểm tra kiểu dữ liệu sau import
+20 markdown | Số dòng đủ chưa đủ để kết luận import thành công. Lệnh `COPY` ghép dữ liệu **theo vị trí cột**, không theo tên cột, nên nếu thứ tự cột trong
+21 code | -- 04_check_column_types.sql
+22 markdown | **Nhận xét:** Tất cả bảng trả về `OK` — tổng cộng 339 cột, khớp cả về số lượng lẫn số cột kiểu chữ so với thiết kế. Quá trình kiểm tra đã ph
+23 markdown | ## 4. Tối ưu database
+24 markdown | Đoạn code bên dưới tạo index trên các khóa nối của bảng trung tâm và các bảng phụ.
+25 code | -- 05_create_indexes.sql
+26 markdown | **Nhận xét:** Index giúp PostgreSQL tìm nhanh các dòng theo khóa thay vì quét toàn bộ bảng. Trong notebook này index có tác dụng rõ nhất ở h
+27 markdown | ## 5. Tạo bảng summary
+28 markdown | ### 5.1. Vì sao phải tạo bảng summary
+29 markdown | Mỗi khách hàng có nhiều dòng ở các bảng phụ. Ví dụ 1 khách hàng có 11 khoản vay trong `bureau`, trong khi ở `application_train` chỉ có 1 dòn
+30 markdown | ### 5.2. Tạo 5 bảng summary
+31 markdown | `GROUP BY sk_id_curr` dồn mọi dòng của cùng một khách vào một nhóm, và mỗi nhóm chỉ được xuất ra một dòng. Vì vậy phải chọn giữ lại con số n
+32 markdown | Đoạn code bên dưới gom bảng `bureau` — các khoản vay của khách tại tổ chức tín dụng khác.
+33 code | -- 1. bureau
+34 markdown | Đoạn code bên dưới gom bảng `previous_application` — các hồ sơ vay trước đây tại Home Credit.
+35 code | -- 2. previous_application
+36 markdown | Đoạn code bên dưới gom bảng `installments_payments` — lịch sử trả góp từng kỳ.
+37 code | -- 3. installments_payments
+38 markdown | Đoạn code bên dưới gom bảng `pos_cash_balance` — số dư hàng tháng của khoản vay trả góp và vay tiền mặt.
+39 code | -- 4. pos_cash_balance
+40 markdown | Đoạn code bên dưới gom bảng `credit_card_balance` — số dư hàng tháng của thẻ tín dụng.
+41 code | -- 5. credit_card_balance
+42 markdown | **Nhận xét:** Năm bảng summary đã được tạo, mỗi bảng gom một bảng phụ về mức một dòng cho mỗi khách hàng. Riêng `bureau_balance` không có cộ
+43 markdown | ### 5.3. Kiểm tra mỗi khách hàng chỉ còn một dòng
+44 markdown | Bảng summary chỉ dùng được nếu thật sự đạt mức một dòng cho mỗi khách hàng. Đoạn code bên dưới đối chiếu tổng số dòng với số khách hàng riên
+45 code | -- 07_check_summary_grain.sql
+46 markdown | **Nhận xét:** Cả năm bảng trả về `OK`, tổng số dòng bằng đúng số khách hàng riêng biệt. Các bảng summary đã đạt mức dữ liệu một dòng cho mỗi
+47 markdown | ## 6. Join tạo bảng application_flat
+48 markdown | ### 6.1. Xác định các bảng summary cần join
+49 markdown | ```
+50 markdown | ### 6.2. Tạo bảng application_flat trong PostgreSQL
+51 markdown | Đoạn code bên dưới tạo bảng `application_flat` từ `application_train` và 5 bảng summary.
+52 code | -- 08_create_application_flat.sql
+53 markdown | **Nhận xét:** Bảng `application_flat` đã được tạo với 148 cột, giữ nguyên 307.511 dòng của `application_train`. Đây là bảng đầu vào cho Note
+54 markdown | ## 7. Validation sau khi tạo application_flat
+55 markdown | ### 7.1. Kiểm tra số dòng và khóa chính
+56 markdown | Đoạn code bên dưới kiểm tra `application_flat` giữ đúng số dòng, không nhân bản khách hàng và không thiếu cột.
+57 code | -- 09_check_flat_rows.sql
+58 markdown | **Nhận xét:** Cả ba dòng trả về `OK`. Số dòng bằng đúng 307.511 của `application_train` nên `LEFT JOIN` không loại mất khách hàng nào; số kh
+59 markdown | ### 7.2. Kiểm tra TARGET sau join
+60 markdown | Đoạn code bên dưới đối chiếu phân bố `TARGET` giữa bảng gốc và bảng phẳng.
+61 code | -- 10_check_flat_target.sql
+62 markdown | **Nhận xét:** Hai dòng kết quả giống hệt nhau về cả số dòng, số khách `TARGET = 1`, số khách `TARGET = 0` lẫn tỉ lệ. Nhãn cần dự đoán được g
+63 markdown | ### 7.3. Kiểm tra dữ liệu thiếu sau join
+64 markdown | Sau `LEFT JOIN`, khách hàng chưa từng vay ở đâu sẽ có các cột summary mang giá trị `NULL`. Đây là kết quả đúng chứ không phải lỗi, nhưng cần
+65 code | -- 11_check_flat_nulls.sql
+66 markdown | **Nhận xét:** Cả năm nhóm cột trả về `OK`, số dòng `NULL` khớp chính xác với số kỳ vọng, chứng tỏ `LEFT JOIN` không đánh rơi khách hàng nào.
+67 markdown | ## 8. Kết nối PostgreSQL từ Python
+68 markdown | ### 8.1. Kết nối và kiểm tra bằng psycopg2
+69 markdown | Thông tin kết nối được đọc từ file `.env` ở thư mục gốc dự án. File này chứa mật khẩu nên đã được gitignore, không đẩy lên GitHub. Máy nào c
+70 code | from pathlib import Path
+71 markdown | **Nhận xét:** Kết nối thành công, notebook đọc được phiên bản PostgreSQL và tên database đang dùng. Từ đây Python có thể truy vấn trực tiếp 
+72 markdown | ### 8.2. Bàn giao dữ liệu cho Notebook 03
+73 markdown | Đoạn code bên dưới đọc `application_flat` từ PostgreSQL bằng `pandas.read_sql` để xác nhận Notebook 03 lấy được dữ liệu.
+74 code | # Kich thuoc bang ban giao cho Notebook 03.
+75 markdown | **Nhận xét:** Bảng `application_flat` đọc được từ Python với đúng 307.511 dòng và 148 cột. Các cột `bureau_count`, `previous_count`, `credit
+76 markdown | ## 9. Tổng kết

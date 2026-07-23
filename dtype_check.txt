@@ -1,0 +1,11 @@
+sk_id_bureau        int64
+months_balance    float64
+status                str
+dtype: object
+   sk_id_bureau  months_balance status
+0       5715448             0.0      C
+1       5715448            -1.0      C
+2       5715448            -2.0      C
+3       5715448            -3.0      C
+4       5715448            -4.0      C
+<class 'numpy.float64'>
