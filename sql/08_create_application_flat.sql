@@ -13,6 +13,12 @@ SELECT
     b.bureau_max_overdue,
     b.bureau_avg_days_credit,
     b.bureau_latest_days_credit,
+    b.bureau_balance_delinquent_loan_count,
+    b.bureau_balance_dpd_month_count,
+    b.bureau_balance_max_dpd_status,
+    b.bureau_balance_closed_month_count,
+    b.bureau_balance_unknown_month_count,
+    b.bureau_balance_month_count,
 
     p.previous_count,
     p.previous_sum_credit,
@@ -39,9 +45,9 @@ SELECT
     cc.credit_card_max_dpd
 FROM application_train a
 LEFT JOIN bureau_summary         b   ON b.sk_id_curr = a.sk_id_curr
-LEFT JOIN previous_summary       p   ON p.sk_id_curr = a.sk_id_curr
-LEFT JOIN installments_summary   i   ON i.sk_id_curr = a.sk_id_curr
-LEFT JOIN pos_cash_summary       pc  ON pc.sk_id_curr = a.sk_id_curr
-LEFT JOIN credit_card_summary    cc  ON cc.sk_id_curr = a.sk_id_curr;
+LEFT JOIN previous_application_summary   p   ON p.sk_id_curr = a.sk_id_curr
+LEFT JOIN installments_payments_summary   i   ON i.sk_id_curr = a.sk_id_curr
+LEFT JOIN pos_cash_balance_summary        pc  ON pc.sk_id_curr = a.sk_id_curr
+LEFT JOIN credit_card_balance_summary     cc  ON cc.sk_id_curr = a.sk_id_curr;
 
 CREATE UNIQUE INDEX idx_application_flat_curr ON application_flat (sk_id_curr);

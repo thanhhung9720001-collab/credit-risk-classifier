@@ -23,28 +23,28 @@ FROM (
         'previous_application',
         (SELECT COUNT(*) FROM application_flat WHERE previous_count IS NULL)::BIGINT,
         ((SELECT COUNT(*) FROM application_train)
-         - (SELECT COUNT(*) FROM previous_summary s
+         - (SELECT COUNT(*) FROM previous_application_summary s
             JOIN application_train a ON a.sk_id_curr = s.sk_id_curr))::BIGINT
     UNION ALL
     SELECT
         'installments_payments',
         (SELECT COUNT(*) FROM application_flat WHERE installments_count IS NULL)::BIGINT,
         ((SELECT COUNT(*) FROM application_train)
-         - (SELECT COUNT(*) FROM installments_summary s
+         - (SELECT COUNT(*) FROM installments_payments_summary s
             JOIN application_train a ON a.sk_id_curr = s.sk_id_curr))::BIGINT
     UNION ALL
     SELECT
         'pos_cash_balance',
         (SELECT COUNT(*) FROM application_flat WHERE pos_cash_count IS NULL)::BIGINT,
         ((SELECT COUNT(*) FROM application_train)
-         - (SELECT COUNT(*) FROM pos_cash_summary s
+         - (SELECT COUNT(*) FROM pos_cash_balance_summary s
             JOIN application_train a ON a.sk_id_curr = s.sk_id_curr))::BIGINT
     UNION ALL
     SELECT
         'credit_card_balance',
         (SELECT COUNT(*) FROM application_flat WHERE credit_card_count IS NULL)::BIGINT,
         ((SELECT COUNT(*) FROM application_train)
-         - (SELECT COUNT(*) FROM credit_card_summary s
+         - (SELECT COUNT(*) FROM credit_card_balance_summary s
             JOIN application_train a ON a.sk_id_curr = s.sk_id_curr))::BIGINT
 ) AS ket_qua
 ORDER BY nhom_cot;

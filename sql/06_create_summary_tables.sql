@@ -2,27 +2,51 @@
 -- Muc dich: gom moi bang phu ve dung 1 dong cho moi khach hang truoc khi join.
 -- Giai thich chi tiet tung khoi: xem Muc 5.2 trong notebook 02.
 
--- 1. bureau
+-- 1. bureau_balance: gom lich su theo khoan vay truoc khi noi vao bureau.
+-- STATUS '0' khong qua han; '1' den '5' la cac muc qua han; 'C' da dong; 'X' chua co trang thai.
+DROP TABLE IF EXISTS bureau_balance_summary CASCADE;
+
+CREATE TABLE bureau_balance_summary AS
+SELECT
+    sk_id_bureau,
+    COUNT(*) AS bureau_balance_month_count,
+    COUNT(*) FILTER (WHERE status IN ('1', '2', '3', '4', '5')) AS bureau_balance_dpd_month_count,
+    MAX(CASE WHEN status IN ('1', '2', '3', '4', '5') THEN status::SMALLINT END) AS bureau_balance_max_dpd_status,
+    COUNT(*) FILTER (WHERE status = 'C') AS bureau_balance_closed_month_count,
+    COUNT(*) FILTER (WHERE status = 'X') AS bureau_balance_unknown_month_count
+FROM bureau_balance
+GROUP BY sk_id_bureau;
+
+CREATE UNIQUE INDEX idx_bureau_balance_summary_bureau ON bureau_balance_summary (sk_id_bureau);
+
+-- 2. bureau: noi summary theo khoan vay, sau do gom ve dung 1 dong cho moi khach hang.
 DROP TABLE IF EXISTS bureau_summary CASCADE;
 
 CREATE TABLE bureau_summary AS
 SELECT
-    sk_id_curr,
-    COUNT(*)                 AS bureau_count,
-    SUM(amt_credit_sum)      AS bureau_sum_credit,
-    SUM(amt_credit_sum_debt) AS bureau_sum_debt,
-    MAX(credit_day_overdue)  AS bureau_max_overdue,
-    AVG(days_credit)         AS bureau_avg_days_credit,
-    MAX(days_credit)         AS bureau_latest_days_credit
-FROM bureau
-GROUP BY sk_id_curr;
+    b.sk_id_curr,
+    COUNT(*)                   AS bureau_count,
+    SUM(b.amt_credit_sum)      AS bureau_sum_credit,
+    SUM(b.amt_credit_sum_debt) AS bureau_sum_debt,
+    MAX(b.credit_day_overdue)  AS bureau_max_overdue,
+    AVG(b.days_credit)         AS bureau_avg_days_credit,
+    MAX(b.days_credit)         AS bureau_latest_days_credit,
+    COUNT(*) FILTER (WHERE COALESCE(bb.bureau_balance_dpd_month_count, 0) > 0) AS bureau_balance_delinquent_loan_count,
+    SUM(COALESCE(bb.bureau_balance_dpd_month_count, 0)) AS bureau_balance_dpd_month_count,
+    MAX(COALESCE(bb.bureau_balance_max_dpd_status, 0)) AS bureau_balance_max_dpd_status,
+    SUM(COALESCE(bb.bureau_balance_closed_month_count, 0)) AS bureau_balance_closed_month_count,
+    SUM(COALESCE(bb.bureau_balance_unknown_month_count, 0)) AS bureau_balance_unknown_month_count,
+    SUM(COALESCE(bb.bureau_balance_month_count, 0)) AS bureau_balance_month_count
+FROM bureau b
+LEFT JOIN bureau_balance_summary bb ON bb.sk_id_bureau = b.sk_id_bureau
+GROUP BY b.sk_id_curr;
 
 CREATE UNIQUE INDEX idx_bureau_summary_curr ON bureau_summary (sk_id_curr);
 
--- 2. previous_application
-DROP TABLE IF EXISTS previous_summary CASCADE;
+-- 3. previous_application
+DROP TABLE IF EXISTS previous_application_summary CASCADE;
 
-CREATE TABLE previous_summary AS
+CREATE TABLE previous_application_summary AS
 SELECT
     sk_id_curr,
     COUNT(*)           AS previous_count,
@@ -33,12 +57,12 @@ SELECT
 FROM previous_application
 GROUP BY sk_id_curr;
 
-CREATE UNIQUE INDEX idx_previous_summary_curr ON previous_summary (sk_id_curr);
+CREATE UNIQUE INDEX idx_previous_application_summary_curr ON previous_application_summary (sk_id_curr);
 
--- 3. installments_payments
-DROP TABLE IF EXISTS installments_summary CASCADE;
+-- 4. installments_payments
+DROP TABLE IF EXISTS installments_payments_summary CASCADE;
 
-CREATE TABLE installments_summary AS
+CREATE TABLE installments_payments_summary AS
 SELECT
     sk_id_curr,
     COUNT(*)                                  AS installments_count,
@@ -49,12 +73,12 @@ SELECT
 FROM installments_payments
 GROUP BY sk_id_curr;
 
-CREATE UNIQUE INDEX idx_installments_summary_curr ON installments_summary (sk_id_curr);
+CREATE UNIQUE INDEX idx_installments_payments_summary_curr ON installments_payments_summary (sk_id_curr);
 
--- 4. pos_cash_balance
-DROP TABLE IF EXISTS pos_cash_summary CASCADE;
+-- 5. pos_cash_balance
+DROP TABLE IF EXISTS pos_cash_balance_summary CASCADE;
 
-CREATE TABLE pos_cash_summary AS
+CREATE TABLE pos_cash_balance_summary AS
 SELECT
     sk_id_curr,
     COUNT(*)            AS pos_cash_count,
@@ -65,12 +89,12 @@ SELECT
 FROM pos_cash_balance
 GROUP BY sk_id_curr;
 
-CREATE UNIQUE INDEX idx_pos_cash_summary_curr ON pos_cash_summary (sk_id_curr);
+CREATE UNIQUE INDEX idx_pos_cash_balance_summary_curr ON pos_cash_balance_summary (sk_id_curr);
 
--- 5. credit_card_balance
-DROP TABLE IF EXISTS credit_card_summary CASCADE;
+-- 6. credit_card_balance
+DROP TABLE IF EXISTS credit_card_balance_summary CASCADE;
 
-CREATE TABLE credit_card_summary AS
+CREATE TABLE credit_card_balance_summary AS
 SELECT
     sk_id_curr,
     COUNT(*)                     AS credit_card_count,
@@ -81,4 +105,4 @@ SELECT
 FROM credit_card_balance
 GROUP BY sk_id_curr;
 
-CREATE UNIQUE INDEX idx_credit_card_summary_curr ON credit_card_summary (sk_id_curr);
+CREATE UNIQUE INDEX idx_credit_card_balance_summary_curr ON credit_card_balance_summary (sk_id_curr);
