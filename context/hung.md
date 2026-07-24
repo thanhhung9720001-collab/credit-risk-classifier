@@ -228,3 +228,4 @@
 
 - NB03 đã hoàn thành và merge qua PR #67 ngày 2026-07-23. Notebook `notebooks/03_data_cleaning.ipynb` có 26 code cell, execution count 1–26 và không có error output.
 - Ngày 2026-07-25 đã cập nhật rồi rút gọn `Task_Tracker.xlsx` cục bộ: chỉ giữ các task đã hoàn thành, xóa các task chưa làm hoặc đang làm dở. File TaskTracker đang bị gitignore nên không nằm trong commit/PR.
+- Đã thêm biên bản feedback ngày 2026-07-23 và 2026-07-24 vào sheet `Weekly Log`; không tạo task mới.
