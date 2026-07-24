@@ -4,9 +4,9 @@
 
 ## Đang làm
 
-- **Task:** T01 — bổ sung NB01 theo checklist mới của thầy.
-- **Nhánh hiện tại:** `feature/t01-khao-sat-bang-phu`.
-- **Trạng thái:** NB01 đã thêm mục 7 "Khảo sát dữ liệu bảng phụ", sắp lại thứ tự mục theo checklist, thêm kiểm tra khóa ngoại mồ côi, viết lại nhận xét heatmap và thống kê mô tả. Đã Restart & Run All sạch. Còn lại: push và tạo PR.
+- **Task:** Cập nhật context dự án sau các PR chuẩn hóa NB01 và NB02.
+- **Nhánh hiện tại:** `docs/Hung-update-context`.
+- **Trạng thái:** Đã ghi nhận NB02 được chuẩn hóa summary và khai thác thêm `bureau_balance` (PR #69–70); NB01 được chuẩn hóa cách trình bày và có nhắc đọc Business Understanding trước khi bắt đầu (PR #71). Việc tiếp theo vẫn là chốt kế hoạch và triển khai NB03.
 - **Đã xong trước đó:** T02 (NB02 + 11 file SQL) merge PR #59; cập nhật tài liệu hướng dẫn giảng viên merge PR #60.
 
 ## Làm tới đâu (cập nhật mới nhất ở trên)
@@ -172,6 +172,8 @@
 
 ## Handoff mới nhất cho phiên kế tiếp
 
+- **2026-07-25 (cập nhật context — nhánh `docs/Hung-update-context`):** Cập nhật `PROJECT_CONTEXT.md` và context cá nhân theo trạng thái đã merge trên `main`. NB02 hiện có `application_flat` 307.511 × 154 cột sau khi đưa thêm 6 đặc trưng từ `bureau_balance` qua hai tầng summary (PR #69); PR #70 bổ sung output cho các câu kiểm tra. NB01 đã được chuẩn hóa trình bày theo số La Mã I–X (PR #71) và phần mở đầu nhắc người đọc xem `docs/Business_Understanding.docx` trước khi đọc notebook.
+
 - **2026-07-24 (NB02 — nhánh `fix/hung-update-NB02`):** Chuẩn hóa tên 4 bảng summary theo đúng tên bảng nguồn: `previous_application_summary`, `installments_payments_summary`, `pos_cash_balance_summary`, `credit_card_balance_summary`; giữ `bureau_summary`. Khai thác thêm `bureau_balance` theo hai tầng: `bureau_balance_summary` (1 dòng / `sk_id_bureau`) → `bureau_summary` (1 dòng / `sk_id_curr`), thêm 6 đặc trưng lịch sử trạng thái vào `application_flat` (154 cột). Mục 5.2 của NB02 đã tách thành 6 heading, mỗi summary có phần mô tả/bảng cột và SQL cell riêng. Đã cập nhật `sql/06`–`sql/09`, `sql/11` và các SQL cell/sơ đồ/nhận xét tương ứng trong NB02. Chưa chạy lại pipeline trên PostgreSQL vì môi trường hiện tại không có `psql` hoặc Python.
 
 - **2026-07-23 (NB01 — nhánh `fix/update_NB01`):** Chuẩn hóa phần trình bày NB01: thay nhận xét bảng chính/bảng phụ bằng bảng hai cột; làm rõ nhãn trục biểu đồ và cách đọc tương quan; làm tròn số liệu thống kê khi hiển thị; đổi các mục lớn sang số La Mã `I`–`X`, tách `IX. Đánh giá sơ bộ` và `X. Kết luận`; rút bảng bàn giao cuối còn hai cột. Notebook cần Restart & Run All để cập nhật output của các cell đã đổi code.
@@ -205,7 +207,7 @@
 - [x] Chạy thử 2 cell Python Mục 8 của NB02 và tạo PR cho T02 → merge PR #59 (PostgreSQL 18.4, `application_flat` 307.511 x 148).
 - [x] Cập nhật tài liệu hướng dẫn giảng viên cho NB01/NB02 theo checklist mới → merge PR #60.
 - [x] Bổ sung mục `VI. Khảo sát dữ liệu của bảng phụ` cho NB01 (nhánh `feature/t01-khao-sat-bang-phu`).
-- [ ] Cập nhật `PROJECT_CONTEXT.md` mục 3 và 4 sau khi T02 xong — file vẫn đang ghi "`sql/` trống, NB02-NB07 cần làm lại", không còn đúng.
+- [x] Cập nhật `PROJECT_CONTEXT.md` mục 3 và 4 sau khi T02 xong; đồng bộ thêm các thay đổi NB01/NB02 đã merge tới 2026-07-25.
 - [ ] Hỏi thầy về đánh số trong checklist: NB01 kết thúc bằng `IV. Kết luận` (đáng lẽ `IX`), NB03 nhảy từ `III` sang `V`. Chữ `aaa` KHÔNG phải lỗi gõ — Hưng xác nhận đó là chỗ trống để điền tên bảng phụ.
 - [ ] Quyết định có thêm `sqlalchemy` vào `requirements.txt` để bám checklist thầy hay giữ nguyên chỉ `psycopg2`.
 - [ ] Lên lại kế hoạch NB02–NB07 để khớp NB01 mới, code đơn giản/dễ giải thích và đúng quy tắc markdown/nhận xét.
