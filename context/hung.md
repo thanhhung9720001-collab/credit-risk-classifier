@@ -172,6 +172,8 @@
 
 ## Handoff mới nhất cho phiên kế tiếp
 
+- **2026-07-24 (NB02 — nhánh `fix/hung-update-NB02`):** Chuẩn hóa tên 4 bảng summary theo đúng tên bảng nguồn: `previous_application_summary`, `installments_payments_summary`, `pos_cash_balance_summary`, `credit_card_balance_summary`; giữ `bureau_summary`. Khai thác thêm `bureau_balance` theo hai tầng: `bureau_balance_summary` (1 dòng / `sk_id_bureau`) → `bureau_summary` (1 dòng / `sk_id_curr`), thêm 6 đặc trưng lịch sử trạng thái vào `application_flat` (154 cột). Mục 5.2 của NB02 đã tách thành 6 heading, mỗi summary có phần mô tả/bảng cột và SQL cell riêng. Đã cập nhật `sql/06`–`sql/09`, `sql/11` và các SQL cell/sơ đồ/nhận xét tương ứng trong NB02. Chưa chạy lại pipeline trên PostgreSQL vì môi trường hiện tại không có `psql` hoặc Python.
+
 - **2026-07-23 (NB01 — nhánh `fix/update_NB01`):** Chuẩn hóa phần trình bày NB01: thay nhận xét bảng chính/bảng phụ bằng bảng hai cột; làm rõ nhãn trục biểu đồ và cách đọc tương quan; làm tròn số liệu thống kê khi hiển thị; đổi các mục lớn sang số La Mã `I`–`X`, tách `IX. Đánh giá sơ bộ` và `X. Kết luận`; rút bảng bàn giao cuối còn hai cột. Notebook cần Restart & Run All để cập nhật output của các cell đã đổi code.
 
 - **2026-07-23 (NB01 — nhánh `fix/update_NB01`):** Đổi cell nhận xét sau phần tổng quan dữ liệu thành bảng hai cột **Bảng chính / Bảng phụ**. Bảng nêu rõ `application_train`/`application_test` ở cấp hồ sơ vay hiện tại, còn `bureau`, `previous_application`, `installments_payments`, `POS_CASH_balance` và `credit_card_balance` cần được tổng hợp về `SK_ID_CURR` trước khi đưa vào mô hình.
