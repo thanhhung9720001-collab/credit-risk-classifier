@@ -3,7 +3,7 @@
 # Cài đặt:  pip install -r requirements.txt
 # Python:   3.11 (bản cả nhóm đang dùng — xem README mục 3)
 #
-# ⚠️ CÁC PHIÊN BẢN ĐƯỢC GHIM CỨNG (==) CÓ LÝ DO:
+# CÁC PHIÊN BẢN ĐƯỢC GHIM CỨNG (==) CÓ LÝ DO:
 # Nhóm đã nhiều lần dính lỗi "chạy được máy tác giả, hỏng máy khác" do lệch
 # phiên bản (rõ nhất: pandas 3.0 đổi cách đọc cột chữ khiến NB05 lỗi
 # UFuncTypeError, và pandas 3.0 bật Copy-on-Write làm NB03 sai âm thầm).
@@ -30,7 +30,7 @@ joblib==1.5.3
 
 # ----- Chạy notebook -----
 # Đủ để chạy notebook trong VS Code. Muốn mở bằng trình duyệt thì tự cài thêm:
-#   pip install jupyterlab      ->  rồi chạy: jupyter lab
+#  pip install jupyterlab      -> rồi chạy: jupyter lab
 ipykernel==7.2.0
 
 # ----- App demo Streamlit (app/) -----

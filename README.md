@@ -24,20 +24,20 @@ Xây dựng mô hình machine learning dự đoán khả năng **vỡ nợ (defa
 ```
 credit-risk-classifier/
 ├── notebooks/           # Pipeline chính (xem thứ tự chạy ở mục 5)
-│   ├── 01_data_understanding.ipynb      ✅ Tìm hiểu dữ liệu
-│   ├── 02_posgrespl_pipline.ipynb       ✅ Pipeline PostgreSQL
-│   ├── 03_data_cleaning.ipynb           ✅ Làm sạch dữ liệu
-│   ├── 04_eda_visualization.ipynb       ✅ EDA & trực quan hóa
-│   ├── 05_feature_engineering.ipynb     ✅ Feature engineering
-│   ├── 06_machine_learnig.ipynb         ❌ Huấn luyện mô hình (CHƯA LÀM)
-│   └── 07_prediction_demo.ipynb         ❌ Demo dự đoán (CHƯA LÀM)
-├── sql/                 # ✅ Script PostgreSQL, chạy theo thứ tự 01 → 05
+│   ├── 01_data_understanding.ipynb       Tìm hiểu dữ liệu
+│   ├── 02_posgrespl_pipline.ipynb        Pipeline PostgreSQL
+│   ├── 03_data_cleaning.ipynb            Làm sạch dữ liệu
+│   ├── 04_eda_visualization.ipynb        EDA & trực quan hóa
+│   ├── 05_feature_engineering.ipynb      Feature engineering
+│   ├── 06_machine_learnig.ipynb          Huấn luyện mô hình (CHƯA LÀM)
+│   └── 07_prediction_demo.ipynb          Demo dự đoán (CHƯA LÀM)
+├── sql/                 # Script PostgreSQL, chạy theo thứ tự 01 → 05
 │   ├── 01_create_tables.sql             Tạo 8 bảng
 │   ├── 02_import_data.sql               Import CSV bằng lệnh COPY
 │   ├── 03_views.sql                     7 view làm sạch + chỉ số nghiệp vụ
 │   ├── 04_aggregation.sql               3 materialized view tổng hợp
 │   └── 05_indexes.sql                   Index khóa ngoại + composite/partial
-├── app/                 # ❌ Demo Streamlit (các file còn RỖNG)
+├── app/                 # Demo Streamlit (các file còn RỖNG)
 ├── data/
 │   ├── raw/             # CSV tải từ Kaggle — KHÔNG commit (xem mục 4.3)
 │   ├── processed/       # Dữ liệu đã xử lý — KHÔNG commit (notebook tự sinh)
@@ -51,7 +51,7 @@ credit-risk-classifier/
 └── requirements.txt     # Thư viện Python (đã ghim phiên bản)
 ```
 
-> ⚠️ **`data/`, `models/` và `.env` đều được `.gitignore`** — chúng KHÔNG đi theo git. Máy mới clone về phải tự tải dữ liệu và tự chạy notebook để sinh lại. Xem mục 4.
+> **`data/`, `models/` và `.env` đều được `.gitignore`** — chúng KHÔNG đi theo git. Máy mới clone về phải tự tải dữ liệu và tự chạy notebook để sinh lại. Xem mục 4.
 
 ---
 
@@ -164,7 +164,7 @@ Pipeline **không phải một đường thẳng 01→07**. Thực tế có **2 
 | **NB06** | **Đã chạy NB05** | `models/model.pkl` |
 | **NB07** | **Đã chạy NB06** | *(demo dự đoán)* |
 
-> 💡 **Chỉ cần ĐỌC kết quả thì KHÔNG phải chạy lại gì cả.** Notebook 01–05 đã được chạy sẵn trên toàn bộ dữ liệu và kết quả lưu ngay trong file — cứ mở lên đọc. Chỉ chạy lại khi bạn sửa code, hoặc cần sinh `train_features.csv` trên máy mình để làm NB06.
+> **Chỉ cần ĐỌC kết quả thì KHÔNG phải chạy lại gì cả.** Notebook 01–05 đã được chạy sẵn trên toàn bộ dữ liệu và kết quả lưu ngay trong file — cứ mở lên đọc. Chỉ chạy lại khi bạn sửa code, hoặc cần sinh `train_features.csv` trên máy mình để làm NB06.
 
 ---
 
@@ -172,13 +172,13 @@ Pipeline **không phải một đường thẳng 01→07**. Thực tế có **2 
 
 | Hạng mục | Trạng thái |
 |---|---|
-| SQL `01` → `05` | ✅ Hoàn thành |
-| Notebook `01` → `05` | ✅ Hoàn thành, đã chạy trên **toàn bộ** dữ liệu |
-| `data/processed/train_features.csv` | ✅ Sẵn sàng cho NB06 (307.511 × 299) |
-| `models/scaler.pkl` | ✅ Đã fit trên dữ liệu đầy đủ |
-| Notebook `06` (huấn luyện ML) | ❌ **Chưa làm — ưu tiên số 1** |
-| Notebook `07` + `app/` (Streamlit) | ❌ Chưa làm (file còn rỗng) |
-| `models/model.pkl` | ❌ Hiện là **file rỗng 0 byte** (placeholder — chưa train mô hình nào) |
+| SQL `01` → `05` | Hoàn thành |
+| Notebook `01` → `05` | Hoàn thành, đã chạy trên **toàn bộ** dữ liệu |
+| `data/processed/train_features.csv` | Sẵn sàng cho NB06 (307.511 × 299) |
+| `models/scaler.pkl` | Đã fit trên dữ liệu đầy đủ |
+| Notebook `06` (huấn luyện ML) | **Chưa làm — ưu tiên số 1** |
+| Notebook `07` + `app/` (Streamlit) | Chưa làm (file còn rỗng) |
+| `models/model.pkl` | Hiện là **file rỗng 0 byte** (placeholder — chưa train mô hình nào) |
 
 ---
 
@@ -186,7 +186,7 @@ Pipeline **không phải một đường thẳng 01→07**. Thực tế có **2 
 
 Nhóm đã mất nhiều thời gian vì các lỗi dưới đây. Đọc kỹ để khỏi vấp lại.
 
-### 🚩 Cờ `DEBUG` của NB03 và NB05 phải KHỚP nhau
+### Cờ `DEBUG` của NB03 và NB05 phải KHỚP nhau
 
 Cả hai notebook có cờ `DEBUG` ở ô cấu hình đầu:
 
@@ -195,11 +195,11 @@ Cả hai notebook có cờ `DEBUG` ở ô cấu hình đầu:
 
 **NB05 đọc lại file mà NB03 xuất ra.** Nếu NB03 chạy `DEBUG = True` thì `application_train_clean.csv` chỉ có 15.000 dòng → dù NB05 để `DEBUG = False` cũng **không thể** có đủ dữ liệu. Muốn bộ đầy đủ: chạy **NB03 với `DEBUG = False` trước**, rồi mới tới NB05.
 
-### 🚩 Máy yếu RAM
+### Máy yếu RAM
 
 Bước tốn RAM nhất là NB05 gom các bảng phụ (`bureau_balance` 27 triệu dòng, `installments_payments` 13,6 triệu dòng) — hàm `read_by_chunks` khi `DEBUG = False` **nạp nguyên file, không lọc**. Đỉnh RAM đo được thực tế **~3,3 GB**. Máy không đủ thì đặt `DEBUG = True` để chạy thử, và nhờ người có máy khỏe chạy bản đầy đủ.
 
-### 🚩 KHÔNG dùng `warnings.filterwarnings("ignore")` toàn cục
+### KHÔNG dùng `warnings.filterwarnings("ignore")` toàn cục
 
 Chính dòng này đã nuốt mất `ChainedAssignmentError` của pandas 3, khiến một bước làm sạch ở NB03 **thất bại âm thầm suốt thời gian dài mà không ai biết**. Chỉ tắt riêng loại cảnh báo ồn ào:
 
@@ -209,15 +209,15 @@ warnings.filterwarnings("ignore", category=DeprecationWarning)
 warnings.filterwarnings("ignore", category=pd.errors.PerformanceWarning)
 ```
 
-### 🚩 Restart & Run All trước khi commit notebook
+### Restart & Run All trước khi commit notebook
 
 NB05 từng có ô cấu hình **chưa hề chạy** (`execution_count = None`) trong khi các ô sau chạy bằng giá trị cũ còn sót trong kernel → code ghi `DEBUG = False` nhưng output nhúng lại là dữ liệu mẫu. Kiểm tra nhanh: **`execution_count` phải liền mạch 1, 2, 3...**
 
-### 🚩 Đừng gỡ dấu ghim phiên bản trong `requirements.txt`
+### Đừng gỡ dấu ghim phiên bản trong `requirements.txt`
 
 Nhóm đã dính lỗi "chạy được máy tác giả, hỏng máy khác" nhiều lần do lệch phiên bản (pandas 3.0 đổi cách đọc cột chữ → NB05 lỗi `UFuncTypeError`; pandas 3.0 bật Copy-on-Write → NB03 sai âm thầm). Muốn đổi phiên bản thì bàn với cả nhóm.
 
-### 🚩 Chạy lại NB02 nhiều lần vẫn an toàn
+### Chạy lại NB02 nhiều lần vẫn an toàn
 
 NB02 có `TRUNCATE TABLE` trước khi `COPY` nên **idempotent** — chạy lại không bị nạp trùng dữ liệu.
 
