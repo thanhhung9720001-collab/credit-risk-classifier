@@ -224,10 +224,7 @@
 
 - Nhóm trưởng: Hưng — người duy nhất được merge PR vào `main` và đổi cấu trúc/quy trình.
 
-## Handoff NB03 — 2026-07-23
+## Handoff NB03 — 2026-07-25
 
-- Notebook `notebooks/03_data_cleaning.ipynb` đang tạm dừng triển khai sau khi đã xử lý Missing cho hai bảng application, `bureau` và `previous_application`.
-- Đã tạo đầy đủ scaffold heading chi tiết cho toàn bộ phần còn lại của NB03, bám checklist giảng viên và hướng làm sạch 8 bảng trước khi aggregate/Join.
-- Code/output hiện có được giữ nguyên: 26 code cell, execution count liền mạch 1–26, không có error output.
-- Khi tiếp tục: bắt đầu tại `3.1.d.6. Xử lý bảng installments_payments`, sau đó `pos_cash_balance`, `credit_card_balance` và phần kiểm tra Missing sau xử lý.
-- Không đưa thay đổi đang có ở NB02 hoặc các file ZIP vào commit NB03.
+- NB03 đã hoàn thành và merge qua PR #67 ngày 2026-07-23. Notebook `notebooks/03_data_cleaning.ipynb` có 26 code cell, execution count 1–26 và không có error output.
+- Ngày 2026-07-25 đã cập nhật `Task_Tracker.xlsx` cục bộ: T34 chuyển sang hoàn thành; T30–T32 và T17 được đồng bộ theo các PR thực tế. File TaskTracker đang bị gitignore nên không nằm trong commit/PR.
