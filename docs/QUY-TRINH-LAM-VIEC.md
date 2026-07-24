@@ -63,14 +63,14 @@ git pull
 **Trường hợp A — Tiếp tục task đang làm dở:**
 
 ```bash
-git switch feature/<tên-task>       # chuyển về nhánh cũ
+git switch feature/<tên-task>      # chuyển về nhánh cũ
 git pull --rebase origin main       # cập nhật code mới nhất từ main vào nhánh
 ```
 
 **Trường hợp B — Bắt đầu task mới:**
 
 ```bash
-git switch -c feature/<tên-task>    # tạo nhánh mới từ main (vừa pull ở bước 2)
+git switch -c feature/<tên-task>   # tạo nhánh mới từ main (vừa pull ở bước 2)
 ```
 
 **Quy ước đặt tên nhánh:**
@@ -105,7 +105,7 @@ Công thức chung:
 
 **Các lỗi đặt tên cần tránh:**
 
-| ❌ Tên sai | Vì sao sai | ✅ Sửa thành |
+| Tên sai | Vì sao sai | Sửa thành |
 |---|---|---|
 | `feature/Xử lý dữ liệu` | Có dấu + khoảng trắng → gõ lệnh git sẽ lỗi | `feature/xu-ly-du-lieu` |
 | `feature/update`, `feature/lam-tiep` | Chung chung, không ai biết nhánh làm gì | `feature/notebook-03-data-cleaning` |
@@ -228,7 +228,7 @@ Người review làm 4 bước:
 1. Mở link PR → bấm tab **Files changed** — xem các dòng thay đổi (xanh = thêm, đỏ = xóa).
 2. Đọc lướt qua: code có chạy đúng ý mô tả không, có xóa nhầm gì của người khác không. Thắc mắc chỗ nào thì rê chuột vào dòng đó, bấm dấu **+** để viết bình luận.
 3. Bấm nút **Review changes** (góc trên bên phải).
-4. Chọn **✅ Approve** → **Submit review**.
+4. Chọn ** Approve** → **Submit review**.
    (Nếu thấy có vấn đề cần sửa thì chọn **Request changes** thay vì Approve — người tạo PR sửa xong, push tiếp lên cùng nhánh, PR tự cập nhật, rồi review lại.)
 
 ### Bước 6: Nhóm trưởng merge và dọn dẹp
@@ -255,7 +255,7 @@ cả nhóm pull main ◄── nhóm trưởng merge ◄── review/approve �
 
 ## PHẦN 5 — Xử lý tình huống thường gặp
 
-### ❗ Lỡ code trên `main` rồi (chưa commit)
+### Lỡ code trên `main` rồi (chưa commit)
 
 Bình tĩnh, không mất gì cả. Chỉ cần tạo nhánh mới — mọi thay đổi đi theo bạn:
 
@@ -265,16 +265,16 @@ git switch -c feature/<tên-task>
 
 Rồi commit như bình thường trên nhánh mới.
 
-### ❗ Lỡ commit trên `main` rồi (nhưng chưa push)
+### Lỡ commit trên `main` rồi (nhưng chưa push)
 
 ```bash
-git branch feature/<tên-task>        # tạo nhánh giữ lại commit
+git branch feature/<tên-task>       # tạo nhánh giữ lại commit
 git switch main
 git reset --hard origin/main         # đưa main về đúng trạng thái trên GitHub
-git switch feature/<tên-task>        # tiếp tục làm trên nhánh
+git switch feature/<tên-task>       # tiếp tục làm trên nhánh
 ```
 
-### ❗ Gặp conflict khi `git pull --rebase origin main`
+### Gặp conflict khi `git pull --rebase origin main`
 
 1. Git sẽ liệt kê file bị xung đột. Mở từng file, tìm đoạn:
    ```
@@ -292,19 +292,19 @@ git switch feature/<tên-task>        # tiếp tục làm trên nhánh
    ```
 4. Rối quá muốn làm lại từ đầu: `git rebase --abort` — mọi thứ quay về như trước khi pull. Nhờ Claude hoặc thành viên khác hỗ trợ.
 
-> 💡 Conflict với file notebook (`.ipynb`) rất khó sửa tay. Cách phòng tốt nhất: **phân công mỗi người một notebook riêng**, hạn chế 2 người cùng sửa 1 notebook.
+> Conflict với file notebook (`.ipynb`) rất khó sửa tay. Cách phòng tốt nhất: **phân công mỗi người một notebook riêng**, hạn chế 2 người cùng sửa 1 notebook.
 
-### ❗ Push bị từ chối với lỗi `GH013: Changes must be made through a pull request`
+### Push bị từ chối với lỗi `GH013: Changes must be made through a pull request`
 
 Bạn đang push thẳng lên `main` — GitHub chặn đúng quy định. Quay lại Phần 3: push lên nhánh riêng rồi tạo PR.
 
-### ❗ Đang nhờ Claude làm mà mình lỡ tự đổi nhánh (vd đổi về `main`)
+### Đang nhờ Claude làm mà mình lỡ tự đổi nhánh (vd đổi về `main`)
 
 Nếu bạn tự chạy `git switch` (hoặc merge PR rồi về `main`) **trong lúc Claude đang làm việc**, Claude có thể vẫn tưởng đang ở nhánh cũ và lỡ sửa file trên `main`. Giờ đã có hook `edit-branch-guard.sh` **chặn ngay** mọi thao tác sửa file commit được khi ở `main`, nên tình huống này được đỡ tự động. Dù vậy, khi bạn tự đổi nhánh giữa chừng, **nên nói cho Claude biết** ("mình vừa đổi về main / sang nhánh X") để Claude không thao tác nhầm.
 
 Nếu lỡ sửa vài file trên `main` rồi (chưa commit): xem [Lỡ code trên `main` rồi](#-lỡ-code-trên-main-rồi-chưa-commit) — chỉ cần tạo/chuyển sang nhánh, thay đổi đi theo bạn.
 
-### ❗ Không nhớ mình đang ở nhánh nào / đang dở việc gì
+### Không nhớ mình đang ở nhánh nào / đang dở việc gì
 
 ```bash
 git branch --show-current    # đang ở nhánh nào
