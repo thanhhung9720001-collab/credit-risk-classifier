@@ -227,4 +227,4 @@
 ## Handoff NB03 — 2026-07-25
 
 - NB03 đã hoàn thành và merge qua PR #67 ngày 2026-07-23. Notebook `notebooks/03_data_cleaning.ipynb` có 26 code cell, execution count 1–26 và không có error output.
-- Ngày 2026-07-25 đã cập nhật `Task_Tracker.xlsx` cục bộ: T34 chuyển sang hoàn thành; T30–T32 và T17 được đồng bộ theo các PR thực tế. File TaskTracker đang bị gitignore nên không nằm trong commit/PR.
+- Ngày 2026-07-25 đã cập nhật rồi rút gọn `Task_Tracker.xlsx` cục bộ: chỉ giữ các task đã hoàn thành, xóa các task chưa làm hoặc đang làm dở. File TaskTracker đang bị gitignore nên không nằm trong commit/PR.
