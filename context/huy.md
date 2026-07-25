@@ -5,11 +5,16 @@
 
 ## Đang làm
 
-- **Task:** T09 Notebook 04 - EDA & trực quan hóa
-- **Nhánh:** `feature/t09-eda-visualization`
-- **Trạng thái:** Xong (Đã hoàn thành phân tích và vẽ biểu đồ, thực thi notebook thành công)
+- **Task:** Sửa lỗi hiển thị số khoa học (scientific notation) trong Notebook 01 & T09 Notebook 04
+- **Nhánh:** `fix/nb01-scientific-notation`
+- **Trạng thái:** Đang triển khai sửa lỗi hiển thị và chạy lại Notebook 01
 
 ## Làm tới đâu (cập nhật mới nhất ở trên)
+
+- **2026-07-25 (Sửa hiển thị số khoa học trong NB01):**
+  - Tạo nhánh `fix/nb01-scientific-notation` từ `main` sau khi pull code mới nhất.
+  - Sửa file `notebooks/01_data_understanding.ipynb` để thêm cấu hình `pd.options.display.float_format = '{:.2f}'.format` trong Cell 1.
+  - Đang chạy lại notebook bằng `nbconvert` để cập nhật hiển thị các số lớn/nhỏ trong thống kê mô tả (describe) thành số cụ thể thay vì dạng mũ khoa học (như `1.17e+08` -> `117000000.00`).
 
 - **2026-07-13:**
   - Khai báo danh tính `huy`, chuyển hướng sang thực hiện task T09.
