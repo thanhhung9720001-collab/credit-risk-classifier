@@ -172,6 +172,8 @@
 
 ## Handoff mới nhất cho phiên kế tiếp
 
+- **2026-07-25 (NB01 — nhánh `fix/hung-update-NB01`):** Tạo checkpoint cho phần mở đầu NB01: tiêu đề dự án màu xanh, tên Notebook 01 màu đỏ; mục III tách heading import thư viện và hướng dẫn ngắn về dữ liệu. Mục III.2 dùng code đơn giản liệt kê CSV, dung lượng và `Shape` mà không nạp toàn bộ file lớn vào RAM. Cần `Restart & Run All` trên môi trường dự án trước khi tạo PR vì Python bundled của Codex thiếu `matplotlib`.
+
 - **2026-07-25 (loại icon toàn dự án):** Đã bỏ toàn bộ emoji/ký hiệu icon khỏi các file văn bản, kế hoạch và tài liệu Word. Đã quét lại nội dung văn bản, DOCX và PPTX; không còn icon. Giữ nguyên biểu đồ, ERD và ảnh minh họa dữ liệu.
 
 - **2026-07-25 (cập nhật context — nhánh `docs/Hung-update-context`):** Cập nhật `PROJECT_CONTEXT.md` và context cá nhân theo trạng thái đã merge trên `main`. NB02 hiện có `application_flat` 307.511 × 154 cột sau khi đưa thêm 6 đặc trưng từ `bureau_balance` qua hai tầng summary (PR #69); PR #70 bổ sung output cho các câu kiểm tra. NB01 đã được chuẩn hóa trình bày theo số La Mã I–X (PR #71) và phần mở đầu nhắc người đọc xem `docs/Business_Understanding.docx` trước khi đọc notebook.
