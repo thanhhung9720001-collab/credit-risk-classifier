@@ -5,11 +5,21 @@
 
 ## Đang làm
 
+- **Cập nhật lần cuối:** 2026-07-26
 - **Task:** T03 Notebook 03 - Làm sạch dữ liệu (data cleaning), theo `plans/nb03-data-cleaning-plan.md`
-- **Nhánh:** `feature/t03-data-cleaning`
-- **Trạng thái:** đã hoàn thành, chờ commit/PR
+- **Nhánh:** `fix/thai-nb03-dtype-grouping` (nhánh mới, khác nhánh `feature/t03-data-cleaning` ghi ở các dòng cũ bên dưới — bản `feature/t03-data-cleaning` coi như lịch sử, không dùng lại)
+- **Trạng thái:** đã hoàn thành lại toàn bộ NB03 trên nhánh này — **đã commit + push** (`dd50a22 "Update Notebook 03 data cleaning"`, khớp `origin/fix/thai-nb03-dtype-grouping`). Còn thiếu: tạo Pull Request.
 
 ## Làm tới đâu (cập nhật mới nhất ở trên)
+
+- **2026-07-26:** Dựng lại toàn bộ `notebooks/03_data_cleaning.ipynb` từ đầu trên nhánh `fix/thai-nb03-dtype-grouping` (khác hẳn bản 2026-07-22/23 bên dưới — làm mới hoàn toàn qua nhiều lượt confirm với người dùng, viết nháp ở `03_data_cleaning2.ipynb` rồi người dùng tự đổi tên đè lên `03_data_cleaning.ipynb`).
+  - Cấu trúc thật (126 cell: 89 markdown + 37 code): I. Giới thiệu → II. Đọc dữ liệu → III. Làm sạch dữ liệu (1. Missing Values, 2. Duplicate, 3. Outlier, 4. Xử lý dữ liệu sai logic, 5. Loại cột trùng lặp) → V. Đánh giá sau Data Cleaning → VI. Lưu dữ liệu → VII. Kết luận. **Lưu ý: đang thiếu số "IV"** (nhảy từ III sang V) — sinh ra từ lúc làm từng phần theo yêu cầu người dùng, chưa ai yêu cầu sửa lại số thứ tự nên vẫn để nguyên, nhóm trưởng xem có cần đổi không.
+  - Input thật: `application_flat` qua `pd.read_sql` (307.511 dòng × 154 cột — khác 148 cột ghi ở bản cũ bên dưới, có thể do schema DB đã đổi giữa các lần). Missing Values xử lý theo nhóm (business-null flag `has_bureau/has_previous/has_installments/has_pos_cash/has_credit_card`, `own_car_age` giữ NaN, median-fill 46 cột số, `'Unknown'`-fill 5 cột chữ, drop dòng cho 9 cột missing rất ít). Outlier: IQR để phát hiện, capping **P99 chỉ chặn trên** (không chặn dưới, để không che lấp giá trị âm sai logic) cho 13 cột tiền tệ. Logic Validation: `bureau_sum_debt`/`credit_card_avg_balance` âm → clip 0; `days_employed=365243` (sentinel, trùng 100% với `organization_type='XNA'`) → NaN; `code_gender='XNA'` (4 dòng) → xoá dòng.
+  - Loại cột trùng lặp (Mục III.5): 14 nhóm cột nhà/căn hộ có 3 biến thể `_avg`/`_mode`/`_medi` (tương quan 0,968–0,998) → giữ `_avg`, loại 28 cột `_mode`/`_medi` tương ứng; giữ nguyên 5 cột `_mode` không có cặp (`fondkapremont/housetype/totalarea/wallsmaterial/emergencystate_mode`).
+  - Kết quả cuối: **305.181 dòng × 131 cột**, lưu vào PostgreSQL bảng `application_flat_cleaned` bằng `psycopg2` thuần (`execute_values`, không dùng SQLAlchemy/copy_expert) — đã đọc lại xác nhận khớp 100% shape và tổng Missing với `df` trong notebook. Toàn bộ notebook chạy `Run All` thật (không dùng nbconvert) qua script headless riêng, xác nhận 0 lỗi.
+  - **Sự cố đáng nhớ khi lưu dữ liệu:** các script kiểm tra headless của tôi (Claude) không đóng kết nối `psycopg2` sau khi chạy xong, để lại session Postgres ở trạng thái "idle in transaction" — session này giữ lock trên bảng `application_flat_cleaned`, khiến lần lưu dữ liệu sau bị treo hơn 1 giờ ở lệnh `DROP TABLE`. Đã phát hiện qua `pg_stat_activity` và xử lý bằng `pg_terminate_backend()` (luôn xin xác nhận người dùng trước khi ngắt). Nếu gặp lại tình trạng lưu/đọc PostgreSQL bị treo bất thường trong notebook này, kiểm tra `pg_stat_activity` trước khi nghi code sai.
+  - **Phạm vi commit đã chốt với người dùng:** `notebooks/01_data_understanding.ipynb` và `02_database_organization.ipynb` đang có thay đổi cục bộ không liên quan tới task này (NB02 còn dính lỗi gõ `'git5'` thay vì `'5'` trong 1 câu SQL) — đã xác nhận **không đưa 2 file này vào commit/PR**, chỉ push `03_data_cleaning.ipynb`. Có file khoá tạm `docs/~$sk Checklist for Each Notebook.docx` (Word tạo khi mở file) — không commit.
+  - Còn thiếu so với bản 2026-07-22/23 bên dưới: chưa có mục "Đánh giá chất lượng ban đầu" riêng trước Missing Values (bản này gộp khảo sát vào Mục II).
 
 - **2026-07-23:** Phát hiện bản "hoàn thành" ghi ngày 2026-07-22 bên dưới **không còn tồn tại** trong git lẫn working tree — 2 commit gần nhất (`0a6ac38`, `af707d6`) hoá ra chứa một khung sườn khác (làm sạch 8 bảng raw riêng rồi join lại trong NB03), trái với chính quyết định trong `plans/nb03-data-cleaning-plan.md` (chỉ làm sạch `application_flat`), và working tree còn bị rút gọn tiếp xuống còn 1 cell. Đã hỏi lại người dùng và được xác nhận dựng lại theo đúng `plans/nb03-data-cleaning-plan.md`.
   - Dựng lại toàn bộ `notebooks/03_data_cleaning.ipynb` từ `plans/nb03-data-cleaning-plan.md`: 45 cell (23 markdown + 22 code), 11 mục lớn (Giới thiệu → Đọc dữ liệu → Đánh giá chất lượng ban đầu → Missing → Duplicate → Outlier → Logic Validation → Loại cột trùng lặp → Đánh giá sau Cleaning → Lưu dữ liệu → Tổng kết), đúng thứ tự Outlier trước Logic Validation như file kế hoạch (không theo cách bản cũ đã mô tả là đảo ngược thứ tự).
@@ -31,10 +41,13 @@
 
 ## Còn dở / việc tiếp theo của tôi
 
-- [x] Đọc `01_data_understanding.ipynb` và `02_database_organization.ipynb` để lấy coding style, không sửa nội dung hai file này
-- [x] Dựng và chạy thật `notebooks/03_data_cleaning.ipynb` trên PostgreSQL
-- [ ] Commit trong nhánh `feature/t03-data-cleaning` (chưa commit — đang chờ xác nhận)
-- [ ] Đẩy code lên GitHub và tạo Pull Request (chờ nhóm trưởng Hưng review và merge)
+- [x] Dựng và chạy thật `notebooks/03_data_cleaning.ipynb` trên PostgreSQL (bản 2026-07-26, nhánh `fix/thai-nb03-dtype-grouping`)
+- [x] Lưu `application_flat_cleaned` (305.181 dòng × 131 cột) vào PostgreSQL, đã xác nhận khớp
+- [x] Commit + push `notebooks/03_data_cleaning.ipynb` lên nhánh `fix/thai-nb03-dtype-grouping` (commit `dd50a22`, không kèm NB01/NB02)
+- [ ] Commit + push file context này (`context/thai.md`)
+- [ ] Tạo Pull Request, xin nhóm trưởng Hưng review — nhớ nhắc PR chỉ động vào NB03
+- [ ] Hỏi nhóm trưởng: có cần đánh lại số mục (đang thiếu "IV", nhảy từ III sang V) không
+- [ ] Xử lý riêng NB01/NB02 (lỗi `'git5'` ở NB02) ở task/nhánh khác, không gộp vào PR này
 
 ## Ghi chú riêng
 
