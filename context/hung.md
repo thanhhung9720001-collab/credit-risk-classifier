@@ -244,4 +244,4 @@
 
 - Đã chuẩn hóa hệ thống heading của `notebooks/02_database_organization.ipynb` theo số La Mã I–IX: Giới thiệu, tạo database/bảng, import, tối ưu, aggregation, join/Flat Table, validation, kết nối Python và tổng kết.
 - Heading con đã đổi đồng bộ theo dạng `II.1`, `III.1`…; các tham chiếu mục trong nhận xét và tổng kết cũng đã chuyển sang số La Mã. Chỉ thay đổi trình bày, không động tới SQL, code hoặc output.
-- Đã tách phần tạo bảng thành 8 heading `II.2`–`II.9`; mỗi heading có một SQL cell riêng cho đúng một bảng raw. File `sql/01_create_tables.sql` vẫn giữ nguyên để chạy toàn bộ lệnh tạo bảng theo pipeline.
+- Đã tách phần tạo bảng thành 8 nhãn con `a`–`h` bên dưới `### II.2. Tạo các bảng`; mỗi nhãn có một SQL cell riêng cho đúng một bảng raw. File `sql/01_create_tables.sql` vẫn giữ nguyên để chạy toàn bộ lệnh tạo bảng theo pipeline.
