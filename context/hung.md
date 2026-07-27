@@ -245,3 +245,13 @@
 - Đã chuẩn hóa hệ thống heading của `notebooks/02_database_organization.ipynb` theo số La Mã I–IX: Giới thiệu, tạo database/bảng, import, tối ưu, aggregation, join/Flat Table, validation, kết nối Python và tổng kết.
 - Heading con đã đổi đồng bộ theo dạng `II.1`, `III.1`…; các tham chiếu mục trong nhận xét và tổng kết cũng đã chuyển sang số La Mã. Chỉ thay đổi trình bày, không động tới SQL, code hoặc output.
 - Đã tách phần tạo bảng thành 8 nhãn con `a`–`h` bên dưới `### II.2. Tạo các bảng`; mỗi nhãn có một SQL cell riêng cho đúng một bảng raw. File `sql/01_create_tables.sql` vẫn giữ nguyên để chạy toàn bộ lệnh tạo bảng theo pipeline.
+
+## Cập nhật NB03 — 2026-07-27
+
+- Viết lại Notebook 03 theo mạch dễ theo dõi: phần mở đầu đồng bộ NB01/NB02, khảo sát missing trước khi xử lý, rồi kiểm tra lại sau từng nhóm xử lý.
+- Missing được trình bày theo bốn hướng: giữ các `NaN` mang ý nghĩa nghiệp vụ, điền median cho cột số phù hợp, điền nhãn `Missing` cho cột phân loại và xóa các dòng thiếu ít. Phần tạo biến cờ cho các feature được để NB05 xem xét; riêng `days_employed = 365243` tạo cờ `is_days_employed_special`, đổi sang `NaN` rồi điền median.
+- Tổ chức lại phần dữ liệu sai logic thành `4.1 Rà soát` (tiền tệ/biến đếm trước, sau đó là các cột có quy tắc nghiệp vụ riêng) và `4.2 Xử lý`.
+- Rà soát nhóm `_avg`/`_mode`/`_medi` bằng giá trị mẫu và tương quan; chỉ loại `_mode`/`_medi` của nhóm đạt điều kiện tương quan cao, không gọi là cột trùng lặp tuyệt đối.
+- Làm lại Mục V: bảng Before/After lấy chỉ số động, bảng chi tiết từng giá trị sai logic, biểu đồ chỉ so sánh tỷ lệ missing; không ghi cứng số cột cờ/cột loại/missing.
+- Gộp phần kết luận thành một Mục VII, khớp với quy trình hiện tại và không ghi cứng shape cuối.
+- Đã kiểm tra JSON notebook và cú pháp toàn bộ code cell bằng `ast.parse`; **cần Restart & Run All từ đầu NB03 trước khi tạo PR** để cập nhật/đồng bộ toàn bộ output với code mới.
