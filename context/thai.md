@@ -5,13 +5,14 @@
 
 ## Đang làm
 
-- **Cập nhật lần cuối:** 2026-07-26
-- **Task:** T03 Notebook 03 - Làm sạch dữ liệu (data cleaning), theo `plans/nb03-data-cleaning-plan.md`
-- **Nhánh:** `fix/thai-nb03-dtype-grouping` (nhánh mới, khác nhánh `feature/t03-data-cleaning` ghi ở các dòng cũ bên dưới — bản `feature/t03-data-cleaning` coi như lịch sử, không dùng lại)
-- **Trạng thái:** đã hoàn thành lại toàn bộ NB03 trên nhánh này — **đã commit + push** (`dd50a22 "Update Notebook 03 data cleaning"`, khớp `origin/fix/thai-nb03-dtype-grouping`). Còn thiếu: tạo Pull Request.
+- **Cập nhật lần cuối:** 2026-07-28
+- **Task:** Viết nội dung Chương 2 "Xây dựng pipeline và tiền xử lý dữ liệu" trong `docs/2. Mau tai lieu.docx`
+- **Nhánh:** `docs/thai-chuong2-pipeline-tienxuly-28072026`
+- **Trạng thái:** Đã viết đầy đủ 2.1–2.4, đã commit + push (`8553202`), người dùng đã tự tạo Pull Request trên GitHub. Việc T03 NB03 ghi ở các dòng bên dưới (nhánh `fix/thai-nb03-dtype-grouping`) **đã merge xong** qua PR #76 — không còn dở.
 
 ## Làm tới đâu (cập nhật mới nhất ở trên)
 
+- **2026-07-28:** Viết Chương 2 báo cáo (`docs/2. Mau tai lieu.docx`) trên nhánh `docs/thai-chuong2-pipeline-tienxuly-28072026`, dựa trên nội dung thật của NB02 (tích hợp/join, tối ưu bằng SQL trong PostgreSQL, tạo index, gom bảng summary tránh row explosion) và NB03 (capping P99 bất đối xứng, điền khuyết theo nhóm cột, sửa giá trị sai logic) — không bịa số liệu, lấy đúng theo nội dung 2 notebook. Cấu trúc và định dạng (Heading 2 cho mục con, bullet "•", font Times New Roman 13pt) làm giống hệt Chương 1 đã có sẵn trong file mẫu. Nội dung gồm: 2.1 Quy trình tích hợp dữ liệu, 2.2 Làm sạch dữ liệu chuyên sâu, 2.3 Kịch bản kiểm thử dữ liệu (unit test sau join), 2.4 Kết luận chương (bản tóm tắt, theo yêu cầu rút gọn của người dùng). Đã commit (`8553202`) + push; PR do người dùng tự tạo trên GitHub, không phải qua Claude Code.
 - **2026-07-26:** Dựng lại toàn bộ `notebooks/03_data_cleaning.ipynb` từ đầu trên nhánh `fix/thai-nb03-dtype-grouping` (khác hẳn bản 2026-07-22/23 bên dưới — làm mới hoàn toàn qua nhiều lượt confirm với người dùng, viết nháp ở `03_data_cleaning2.ipynb` rồi người dùng tự đổi tên đè lên `03_data_cleaning.ipynb`).
   - Cấu trúc thật (126 cell: 89 markdown + 37 code): I. Giới thiệu → II. Đọc dữ liệu → III. Làm sạch dữ liệu (1. Missing Values, 2. Duplicate, 3. Outlier, 4. Xử lý dữ liệu sai logic, 5. Loại cột trùng lặp) → V. Đánh giá sau Data Cleaning → VI. Lưu dữ liệu → VII. Kết luận. **Lưu ý: đang thiếu số "IV"** (nhảy từ III sang V) — sinh ra từ lúc làm từng phần theo yêu cầu người dùng, chưa ai yêu cầu sửa lại số thứ tự nên vẫn để nguyên, nhóm trưởng xem có cần đổi không.
   - Input thật: `application_flat` qua `pd.read_sql` (307.511 dòng × 154 cột — khác 148 cột ghi ở bản cũ bên dưới, có thể do schema DB đã đổi giữa các lần). Missing Values xử lý theo nhóm (business-null flag `has_bureau/has_previous/has_installments/has_pos_cash/has_credit_card`, `own_car_age` giữ NaN, median-fill 46 cột số, `'Unknown'`-fill 5 cột chữ, drop dòng cho 9 cột missing rất ít). Outlier: IQR để phát hiện, capping **P99 chỉ chặn trên** (không chặn dưới, để không che lấp giá trị âm sai logic) cho 13 cột tiền tệ. Logic Validation: `bureau_sum_debt`/`credit_card_avg_balance` âm → clip 0; `days_employed=365243` (sentinel, trùng 100% với `organization_type='XNA'`) → NaN; `code_gender='XNA'` (4 dòng) → xoá dòng.
@@ -44,9 +45,11 @@
 - [x] Dựng và chạy thật `notebooks/03_data_cleaning.ipynb` trên PostgreSQL (bản 2026-07-26, nhánh `fix/thai-nb03-dtype-grouping`)
 - [x] Lưu `application_flat_cleaned` (305.181 dòng × 131 cột) vào PostgreSQL, đã xác nhận khớp
 - [x] Commit + push `notebooks/03_data_cleaning.ipynb` lên nhánh `fix/thai-nb03-dtype-grouping` (commit `dd50a22`, không kèm NB01/NB02)
-- [ ] Commit + push file context này (`context/thai.md`)
-- [ ] Tạo Pull Request, xin nhóm trưởng Hưng review — nhớ nhắc PR chỉ động vào NB03
-- [ ] Hỏi nhóm trưởng: có cần đánh lại số mục (đang thiếu "IV", nhảy từ III sang V) không
+- [x] Tạo Pull Request cho NB03 — đã merge qua PR #76 (xác nhận qua `git log`)
+- [x] Viết Chương 2 (`docs/2. Mau tai lieu.docx`), commit + push nhánh `docs/thai-chuong2-pipeline-tienxuly-28072026` (commit `8553202`)
+- [x] Tạo Pull Request cho Chương 2 (người dùng tự tạo trên GitHub)
+- [ ] Commit + push bản cập nhật `context/thai.md` này lên nhánh `docs/thai-chuong2-pipeline-tienxuly-28072026`
+- [ ] Hỏi nhóm trưởng: có cần đánh lại số mục ở NB03 (đang thiếu "IV", nhảy từ III sang V) không — vẫn còn treo từ lần trước, chưa ai xác nhận
 - [ ] Xử lý riêng NB01/NB02 (lỗi `'git5'` ở NB02) ở task/nhánh khác, không gộp vào PR này
 
 ## Ghi chú riêng
