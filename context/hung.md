@@ -4,9 +4,9 @@
 
 ## Đang làm
 
-- **Task:** Cập nhật context dự án sau các PR chuẩn hóa NB01 và NB02.
-- **Nhánh hiện tại:** `docs/Hung-update-context`.
-- **Trạng thái:** Đã ghi nhận NB02 được chuẩn hóa summary và khai thác thêm `bureau_balance` (PR #69–70); NB01 được chuẩn hóa cách trình bày và có nhắc đọc Business Understanding trước khi bắt đầu (PR #71). Việc tiếp theo vẫn là chốt kế hoạch và triển khai NB03.
+- **Task:** Cập nhật context dự án sau các PR NB00–NB04 và chuẩn hóa quy ước heading notebook.
+- **Nhánh hiện tại:** `docs/hung-update-context-28072026`.
+- **Trạng thái:** Đã tổng hợp trạng thái tới PR #82: NB00 đã thêm, NB01/NB02 đã chuẩn hóa, NB03 đã cập nhật nhưng cần Restart & Run All lại, NB04 mới có khung heading. Đã cập nhật `PROJECT_CONTEXT.md` mục 2.6, 3, 4 và 6 để phản ánh hiện trạng cùng quy ước heading đầy đủ `#`–`######`.
 - **Đã xong trước đó:** T02 (NB02 + 11 file SQL) merge PR #59; cập nhật tài liệu hướng dẫn giảng viên merge PR #60.
 
 ## Làm tới đâu (cập nhật mới nhất ở trên)

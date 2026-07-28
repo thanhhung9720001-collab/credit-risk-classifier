@@ -72,15 +72,15 @@
 
 ### 2.6. Bản đồ mã nguồn hiện tại
 
-> Cập nhật 2026-07-22: sau khi Hưng reset để làm lại gọn hơn, trạng thái thật của repo đã khác pipeline cũ. Không dùng các notebook/SQL cũ làm nguồn sự thật nếu file không còn trong repo.
+> Cập nhật 2026-07-28: sau khi Hưng reset để làm lại gọn hơn, trạng thái thật của repo đã khác pipeline cũ. Không dùng các notebook/SQL cũ làm nguồn sự thật nếu file không còn trong repo.
 
-1. **Notebooks** (`notebooks/`): hiện có `01_data_understanding.ipynb` và `02_database_organization.ipynb`, cả hai đã hoàn thành và chạy lại sạch. NB03–NB07 cần được xây dựng lại theo kế hoạch mới.
+1. **Notebooks** (`notebooks/`): có `00_business_understanding.ipynb` (Markdown), NB01, NB02, NB03 và khung NB04. NB01/NB02 đã hoàn thành; NB03 đã được cập nhật lại sau các PR #80–81 nhưng cần `Restart & Run All` để đồng bộ toàn bộ output; NB04 mới có khung heading. NB05–NB07 chưa được xây dựng lại theo pipeline mới.
 2. **SQL** (`sql/`, PostgreSQL): có 11 file đánh số liền mạch `01_create_tables.sql` → `11_check_flat_nulls.sql`, đi kèm NB02. Mạch chạy: tạo bảng → import → kiểm tra số dòng và kiểu dữ liệu → index → 5 bảng summary → `application_flat` → validation. Mỗi file có một SQL cell tương ứng trong NB02.
 3. **App** (`app/`): demo bằng **Streamlit** (`stream_app.py`, `pages/`, `prediction.py`) + có thể thêm API (`api.py`), hiện các file chính vẫn rỗng.
 4. **Models** (`models/`): còn `model.pkl`, `scaler.pkl`, `model_metadata.json` từ pipeline cũ. Trước khi dùng cho app/NB07 cần kiểm tra tương thích với pipeline làm lại.
 5. **Báo cáo** (`reports/`): Word + PowerPoint theo mẫu trường; theo dõi tiến độ nhóm bằng **Google Sheet** (nhóm trưởng quản lý, link ở nhóm chat — không nằm trong repo).  Đề bài nhắc tới **Jira/Trello + ảnh bảng Kanban** (Chương 5 + slide 12) — cần hỏi giảng viên xem Google Sheet có được chấp nhận thay thế không.
 
-## 3. Trạng thái hiện tại (cập nhật 2026-07-22)
+## 3. Trạng thái hiện tại (cập nhật 2026-07-28)
 
 -  Đã dựng xong cấu trúc thư mục hoàn chỉnh
 -  Đã tải đầy đủ dữ liệu Home Credit vào `data/raw/`
@@ -93,8 +93,14 @@
   - **Tài liệu**: `docs/QUY-TRINH-LAM-VIEC.md` (quy trình chi tiết + Phần 0 quyền đổi cấu trúc + Phần 6 context cá nhân) + `CLAUDE.md` (quy tắc cho Claude)
 - **Nội quy (2026-07-03)**: chỉ **nhóm trưởng (Hưng)** được thay đổi cấu trúc thư mục / quy trình / quy định (Phần 0 quy trình)
 - **Context cá nhân (2026-07-03)**: mỗi thành viên có 1 file `context/<tên>.md` (chỉ chủ nhân sửa → hết conflict); khai báo tên đầu phiên qua `.claude/whoami` (không commit). `PROJECT_CONTEXT.md` từ nay do **nhóm trưởng làm chủ** (bức tranh tổng)
+- **Cập nhật pipeline notebook (PR #77–#82, 2026-07-26 đến 2026-07-28):**
+  - **NB00 — Business Understanding:** đã thêm `notebooks/00_business_understanding.ipynb`, tóm tắt bối cảnh nghiệp vụ, bài toán, mục tiêu, SWOT, dataset/công nghệ và bàn giao sang NB01. File Word `docs/Business_Understanding.docx` vẫn là nguồn nội dung đầy đủ cho Chương 1 báo cáo.
+  - **NB01:** đã chuẩn hóa lại phần khảo sát bảng phụ, mục khóa nối và phần mở đầu; cần giữ nguyên phạm vi Data Understanding.
+  - **NB02:** đã chuẩn hóa hệ heading I–IX, tách rõ 8 bảng raw trong phần tạo bảng và giữ nguyên SQL/pipeline. `application_flat` hiện có 307.511 dòng × 154 cột sau khi bổ sung đặc trưng từ `bureau_balance`.
+  - **NB03:** đã tổ chức lại theo mạch đọc PostgreSQL → khảo sát missing → xử lý missing/duplicate/outlier/logic → đánh giá Before/After → lưu `application_flat_cleaned`. Các cập nhật gần nhất gồm nhóm hóa xử lý missing, rà soát các cột tương tự và chuẩn hóa heading/comment. **Chưa được xác nhận lại bằng một lượt Restart & Run All sạch sau các cập nhật mới nhất.**
+  - **NB04:** đã tạo lại file `04_eda_visualization.ipynb` và khung heading; chưa có nội dung EDA hoặc output chạy thực tế.
 - **Triển khai nội dung code** (cập nhật 2026-07-25):
-  - **Mốc reset làm lại gọn hơn (PR #52, 2026-07-20):** Hưng đã quyết định reset notebook/SQL để tránh tiếp tục vá trên nền cũ quá dài/khó giải thích. Sau reset, `notebooks/` chỉ còn NB01 và `sql/` trống. **Tính tới 2026-07-22 đã dựng lại xong NB02 và toàn bộ `sql/`** — xem hai mục PR #59 và PR #61 phía dưới. Các notebook NB03–NB07 vẫn cần làm lại theo kế hoạch mới.
+  - **Mốc reset làm lại gọn hơn (PR #52, 2026-07-20):** Hưng đã quyết định reset notebook/SQL để tránh tiếp tục vá trên nền cũ quá dài/khó giải thích. Sau reset, `notebooks/` chỉ còn NB01 và `sql/` trống. **Tính tới 2026-07-22 đã dựng lại xong NB02 và toàn bộ `sql/`** — xem hai mục PR #59 và PR #61 phía dưới. Đây là trạng thái tại thời điểm đó; tiến độ hiện tại của NB03–NB07 xem phần cập nhật 2026-07-28 phía trên.
   - **Business Understanding — hoàn thành bản docs mới (PR #53, 2026-07-20):** `docs/Business_Understanding.docx` đã được bổ sung mục tiêu nghiên cứu, giới thiệu dataset, giới thiệu công nghệ, lý do chọn Home Credit, tầm quan trọng trong ngành AI, SWOT và chỉnh lại heading/bullet. Đây là nền để viết Chương 1 trong whitepaper, nhưng vẫn cần ghép vào file nộp trong `reports/`.
   - **Data Understanding — hoàn thành giai đoạn hiện tại (PR #54, 2026-07-20):**
     - `docs/Data_Understanding.docx`: viết lại theo 7 mục rõ ràng, có mục tiêu, bản đồ dataset, khóa nối, kiểm tra cần làm, biểu đồ/tương quan, câu hỏi tự kiểm tra và kết luận.
@@ -146,7 +152,7 @@
        - **Cách bắt:** quét **toàn bộ** giá trị thật của mọi cột khai `TEXT` xem cột nào chứa thuần số. Hai lượt kiểm tra trước đó không phát hiện được vì chỉ kiểm "dữ liệu có import lọt hay không".
        - **Cách phòng:** `sql/04_check_column_types.sql` đối chiếu số cột và số cột kiểu chữ của từng bảng với thiết kế, chạy sau mỗi lần import. Cũng cần vì `COPY` ghép dữ liệu **theo vị trí cột chứ không theo tên cột** — thứ tự lệch thì dữ liệu vào nhầm cột mà vẫn báo import thành công.
 
-## 4. Việc tiếp theo (cập nhật 2026-07-25 — sau các PR chuẩn hóa NB01/NB02)
+## 4. Việc tiếp theo (cập nhật 2026-07-28)
 
 **Với mọi thành viên trước khi bắt đầu:** đọc `docs/QUY-TRINH-LAM-VIEC.md` và làm theo checklist đầu phiên (pull code mới → **khai báo tên** `echo <tên> > .claude/whoami` + tạo `context/<tên>.md` → tạo/chuyển nhánh, KHÔNG code trên main). Ai đã kéo quy trình mới về nhớ **khởi động lại Claude Code** để nạp hook.
 
@@ -158,8 +164,8 @@ Sau đợt reset, nền tảng Business Understanding và Data Understanding đ�
 
 | Sản phẩm phải nộp | Mức hoàn thành |
 |---|---|
-| Mã nguồn `.ipynb` | **NB01 + NB02 xong; NB03–NB07 cần làm lại theo kế hoạch mới** |
-| SQL/PostgreSQL | **Xong — 11 file `sql/01`–`sql/11`, bảng `application_flat` 307.511 × 148 sẵn sàng trong PostgreSQL** |
+| Mã nguồn `.ipynb` | **NB00–NB02 xong; NB03 cần Restart & Run All; NB04 mới có khung; NB05–NB07 chưa xây dựng lại** |
+| SQL/PostgreSQL | **Xong — 11 file `sql/01`–`sql/11`, bảng `application_flat` 307.511 × 154 sẵn sàng trong PostgreSQL** |
 | **Whitepaper `.docx` 6 chương** | **Có bản thảo Business/Data Understanding trong `docs/`; file nộp `reports/` vẫn cần ghép/viết tiếp** |
 | **Slide `.pptx`** | **0% — md5 trùng khít file mẫu** |
 | **Ứng dụng web** | **0% — `app/` gồm 4 file 0 byte** |
@@ -168,22 +174,19 @@ Cộng thêm **dashboard interactive** (Phần A mục 7) vẫn chưa có và c�
 
 ### Thứ tự đề xuất
 
-1. **Lên kế hoạch Data Cleaning/NB03** — bước kế tiếp tự nhiên. Ba lưu ý bắt buộc đọc trước khi làm:
-   - **Đọc dữ liệu từ PostgreSQL bằng `pd.read_sql`, KHÔNG đọc lại CSV.** Bảng đầu vào là `application_flat`. Đây là yêu cầu rõ ràng của thầy: sau NB02, toàn bộ NB03–NB07 chỉ đọc từ database.
-   - **Nhóm cột `credit_card_*` có 220.606 dòng `NULL` (71,7%)** vì chỉ 86.905 trên 307.511 khách từng có dữ liệu thẻ tín dụng. Đây là **tín hiệu thật** (khách không có thẻ), KHÔNG phải missing value — không được điền median/mean như cột thiếu thông thường. Các nhóm cột summary khác cũng có `NULL` với lý do tương tự.
-   - **`AMT_CREDIT_SUM_DEBT` có giá trị âm tới `-4.705.600`** — dư nợ không thể âm, cần quy tắc xử lý riêng cho giá trị sai logic. Ngoài ra các cột tiền lệch phải rất nặng nên cân nhắc biến đổi log.
-   - Phạm vi còn lại giữ như cũ: missing values, `DAYS_EMPLOYED = 365243`, `CODE_GENDER = XNA`, outlier tiền tệ, kiểm tra sau xử lý.
-2. **Lên lại kế hoạch các notebook còn lại** — NB04–NB07 cần khớp với NB01/NB02 mới, code đơn giản/dễ giải thích, có comment ngắn ở đoạn kỹ thuật, markdown trước code ngắn và nhận xét sau output.
-3. **Whitepaper `.docx` + slide `.pptx`** — Business/Data Understanding đã có nền trong `docs/`, nhưng file nộp trong `reports/` vẫn cần ghép và viết tiếp Chương 2–6 + 16 slide.
-4. **`app/` Streamlit + dashboard interactive** — vẫn là yêu cầu bắt buộc của đề bài, nhưng nên làm sau khi pipeline clean/features/model mới ổn định. Khi dùng lại model cũ, bắt buộc kiểm tra compatibility với `model_metadata.json`.
-5. **Hỏi giảng viên về Jira/Trello** — đề bài đòi "Nhật ký Jira" (Chương 5) + ảnh bảng Kanban (slide 12); nhóm đang dùng Google Sheet. Hỏi sớm, đừng để tới lúc nộp mới biết.
+1. **Xác minh lại NB03:** chạy `Restart & Run All` với PostgreSQL và `.env`, kiểm tra execution count liền mạch, output/nhận xét khớp code, rồi xác nhận bảng `application_flat_cleaned` được lưu và đọc lại đúng.
+2. **Triển khai NB04 — EDA & Visualization:** đọc trực tiếp `application_flat_cleaned` từ PostgreSQL, xây dựng EDA và insight để bàn giao sang NB05. Không dùng lại EDA của pipeline cũ làm nguồn sự thật.
+3. **Lên kế hoạch NB05–NB07:** chỉ chốt Feature Engineering, Modeling và Prediction Demo sau khi NB03/NB04 ổn định; các artifact cũ trong `models/` cần kiểm tra tương thích trước khi sử dụng.
+4. **Whitepaper `.docx` + slide `.pptx`:** Business/Data Understanding đã có nền trong `docs/`, nhưng file nộp trong `reports/` vẫn cần ghép và viết tiếp Chương 2–6 + 16 slide.
+5. **`app/` Streamlit + dashboard interactive:** đây vẫn là yêu cầu bắt buộc; chỉ triển khai sau khi pipeline/model mới ổn định. Dashboard phải cho phép tương tác, không chỉ dùng biểu đồ tĩnh.
+6. **Hỏi giảng viên về Jira/Trello:** đề bài đòi "Nhật ký Jira" (Chương 5) + ảnh bảng Kanban (slide 12); nhóm đang dùng Google Sheet. Hỏi sớm, đừng để tới lúc nộp mới biết.
 
 ### Hai việc nhỏ đang treo, cần Hưng quyết
 
 - **Có thêm `sqlalchemy` vào `requirements.txt` không?** Checklist của thầy ghi cả `psycopg2` lẫn `SQLAlchemy`, nhưng nhóm đã chốt chỉ dùng `psycopg2` (ghi rõ lý do trong `requirements.txt`: truyền connection `psycopg2` vào `pandas.read_sql` chỉ in cảnh báo, code vẫn chạy đúng). NB02 đã ghi rõ lựa chọn này trong nhận xét mục 8.1 để không bị hiểu là bỏ sót.
 - **Hỏi thầy về đánh số trong `docs/Task Checklist for Each Notebook.docx`:** phần NB01 kết thúc bằng `IV. Kết luận` trong khi đáng lẽ là `IX`; phần NB03 nhảy từ `III` sang `V`. Riêng chữ `aaa` trong tiêu đề `VI. Khảo sát dữ liệu của bảng phụ aaa` **không phải lỗi gõ** — đó là chỗ trống để điền tên bảng phụ, tức thầy muốn làm mục này cho từng bảng cụ thể.
 
-> Trạng thái thật: NB01 (PR #54, bổ sung PR #61) và NB02 + toàn bộ `sql/` (PR #59) đã xong và merge vào `main`; tài liệu hướng dẫn giảng viên cập nhật theo checklist mới (PR #60); Business Understanding docs merge PR #53; `README.md` + `requirements.txt` vẫn có sẵn. Cần làm lại NB03–NB07 theo kế hoạch mới.
+> Trạng thái thật: NB00, NB01 và NB02 đã có trên `main`; NB03 đã cập nhật tới PR #81 nhưng cần chạy xác minh lại; NB04 mới có khung từ PR #82; NB05–NB07 chưa xây dựng lại theo pipeline mới. Tài liệu hướng dẫn giảng viên, `README.md` và `requirements.txt` vẫn có sẵn.
 
 ## 5. Ghi chú làm việc
 
@@ -196,8 +199,8 @@ Cộng thêm **dashboard interactive** (Phần A mục 7) vẫn chưa có và c�
 
 Áp dụng thống nhất cho cả 7 notebook — **mọi phiên làm việc phải tuân theo**:
 
-1. **Cell đầu tiên (Markdown):** tiêu đề dự án (H1 `#`) → dòng `**Notebook XX/07 — Tên EN (Tên tiếng Việt)**` → gạch ngang `---` → các trường: **Mục tiêu**, **Input**, **Output**, **Pipeline** (notebook trước → **hiện tại** → notebook sau). Cả 7 notebook đã có sẵn cell này làm mẫu.
-2. **Đề mục thân notebook:** mục lớn `## 1.`, `## 2.`, ...; mục con `### 1.1.`, `### 1.2.`, ...; cấp 3 `#### 1.1.1.`, ...; cấp 4 KHÔNG dùng heading mà dùng chữ đậm `**a. ...**`, `**b. ...**`. H1 (`#`) chỉ dành riêng cho tiêu đề notebook ở cell đầu.
+1. **Cell đầu tiên (Markdown) — template bắt buộc:** trình bày theo đúng thứ tự: tên dự án trong khối `<div>` màu xanh → tiêu đề notebook ở H1 `#` màu đỏ theo mẫu `Notebook XX. Tên EN` → một dòng mô tả tiếng Việt in nghiêng → gạch ngang `---` → các trường **Mục tiêu** (nếu cần nêu riêng), **Input**, **Output**, **Pipeline** (notebook trước → **hiện tại** → notebook sau). H1 (`#`) chỉ dùng một lần ở cell đầu, không dùng lại trong thân notebook.
+2. **Đề mục thân notebook — dùng đầy đủ hệ cấp heading:** giữ đúng thứ bậc `##` → `###` → `####` → `#####` → `######`, không bỏ cấp khi một ý là con trực tiếp của ý ngay trước nó. Quy ước trình bày: H2 (`##`) cho mục lớn, thường đánh số La Mã; H3 (`###`) cho mục con, thường đánh số 1, 2, 3; H4 (`####`) cho tiểu mục, ví dụ 1.1 hoặc a, b, c; H5 (`#####`) cho ý chi tiết hơn; H6 (`######`) cho đối tượng/trường hợp nhỏ nhất cần tách riêng. Không bôi đậm lặp lại trong heading (ví dụ dùng `##### a. ...`, không dùng `##### **a. ...**`).
    - **SỐ MỤC LỚN KHÔNG CỐ ĐỊNH — KHÔNG có quy định "phải đủ 6 mục".** Chia bao nhiêu mục là **tuỳ nội dung** notebook đó cần. **Đừng nhồi thêm mục cho đủ số, cũng đừng gộp mục lại cho gọn số.** Thực tế trong repo: NB01 có 6 mục, NB02–NB06 có 7 mục — **không notebook nào sai quy ước**.
 3. **Nhận xét sau kết quả:** cell code có output mang ý nghĩa phân tích (bảng thống kê, biểu đồ, kết quả đánh giá mô hình...) phải có cell Markdown ngay bên dưới, mở đầu bằng `**Nhận xét:**`. Markdown trước code chỉ viết ngắn gọn để dẫn vào bước chạy, ưu tiên dạng "Đoạn code bên dưới..."; không viết dài kiểu "cell này làm gì/vì sao/output mong đợi". Nếu cần giải thích kỹ thuật, viết comment ngắn ngay trong cell code. Cell kỹ thuật thuần túy (import, config, định nghĩa hàm) không bắt buộc có nhận xét.
 4. **Cuối notebook:** mục **Tổng kết** luôn là **mục lớn cuối cùng**, mang **số thứ tự kế tiếp của chính notebook đó** — notebook có 5 mục nội dung thì Tổng kết là `## 6.`, có 6 mục nội dung thì Tổng kết là `## 7.`. Nội dung: chốt các phát hiện chính và nêu bước tiếp theo (dẫn sang notebook kế tiếp).
