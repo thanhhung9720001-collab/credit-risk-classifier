@@ -11,10 +11,11 @@
 
 ## Làm tới đâu (cập nhật mới nhất ở trên)
 
-- **2026-07-30 (Hop nhat va day code Notebook 04):**
+- **2026-07-30 (Hop nhat, them bieu do va day code Notebook 04):**
   - Tao nhanh moi `feature/t09-eda-visualization-30-07-2026` tu `main` moi nhat.
   - Hop nhat file notebook 04 hoan chinh tu thu muc `D:\hoc` vao repository.
-  - Chuan bi commit va push len GitHub de tao PR.
+  - Bo sung bieu do cot bieu dien he so tuong quan Pearson ngang voi TARGET sap xep giam dan theo tri tuyet doi.
+  - Chay nbconvert thuc thi thanh cong 100% va cap nhat file.
 
 - **2026-07-28 (Hoàn thành Notebook 04 & Pipeline dữ liệu):**
   - Chạy thành công các SQL script (`sql/05`, `sql/06`, `sql/08`) để tạo index, các bảng summary và bảng phẳng `application_flat` (gồm 307.511 dòng).
