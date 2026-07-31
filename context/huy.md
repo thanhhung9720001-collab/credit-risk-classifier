@@ -6,7 +6,7 @@
 ## Đang làm
 
 - **Task:** T09 Notebook 04 - EDA & trực quan hóa
-- **Nhánh:** `feature/t09-eda-visualization-31-07-2026`
+- **Nhánh:** `feature/huy-eda-visualization-final`
 - **Trạng thái:** Xong (Đã hoàn thành phân tích và vẽ biểu đồ, thực thi notebook thành công)
 
 ## Làm tới đâu (cập nhật mới nhất ở trên)
