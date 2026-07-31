@@ -15,6 +15,7 @@
   - Cau hinh notebook 04 (`USE_FULL_DATA = True`) de thuc hien EDA tren toan bo 307.511 dong du lieu.
   - Chuyển 3 biểu đồ phân phối tài chính ở Cell [19] sang chiều dọc giúp phóng to biểu đồ theo chiều ngang, tránh đè nhãn số.
   - Viết code Python tự động tính toán các phân vị thực tế của thu nhập/khoản vay, quy đổi sang triệu VND và chèn trực tiếp dưới nhãn 'Rất thấp', 'Thấp'... ở Cell [23].
+  - Định dạng lại các nhãn Q1-Q5 ở biểu đồ DTI và LTV (Cell [26]) để hiển thị khoảng giá trị tỷ lệ phần trăm % thực tế cụ thể.
   - Chay nbconvert thuc thi thanh cong, cap nhat toan bo bieu do voi full dataset va nhan song ngu, dinh dang so.
 
 - **2026-07-30 (Hop nhat, them bieu do va day code Notebook 04):**
