@@ -257,3 +257,6 @@
 - Làm lại Mục V: bảng Before/After lấy chỉ số động, bảng chi tiết từng giá trị sai logic, biểu đồ chỉ so sánh tỷ lệ missing; không ghi cứng số cột cờ/cột loại/missing.
 - Gộp phần kết luận thành một Mục VII, khớp với quy trình hiện tại và không ghi cứng shape cuối.
 - Đã kiểm tra JSON notebook và cú pháp toàn bộ code cell bằng `ast.parse`; **cần Restart & Run All từ đầu NB03 trước khi tạo PR** để cập nhật/đồng bộ toàn bộ output với code mới.
+
+## Cập nhật NB04 - 2026-07-31
+- Chỉ sửa lại vài chỗ Huy làm cho rõ ràng, không ảnh hưởng nhiều đến kết quả 
