@@ -4,6 +4,8 @@
 
 ## Đang làm
 
+- **Task mới (2026-07-30):** Đã bổ sung tài liệu cho clip Classification và Feature Engineering vào `docs/huong-dan-giang-vien/video-bai-giang.md`; README đã cập nhật từ 3 thành 4 clip bổ sung. Nội dung gồm các dạng classification, 6 nhóm feature engineering, sai lầm thường gặp và liên hệ với Home Credit.
+
 - **Task:** Cập nhật context dự án sau các PR NB00–NB04 và chuẩn hóa quy ước heading notebook.
 - **Nhánh hiện tại:** `docs/hung-update-context-28072026`.
 - **Trạng thái:** Đã tổng hợp trạng thái tới PR #82: NB00 đã thêm, NB01/NB02 đã chuẩn hóa, NB03 đã cập nhật nhưng cần Restart & Run All lại, NB04 mới có khung heading. Đã cập nhật `PROJECT_CONTEXT.md` mục 2.6, 3, 4 và 6 để phản ánh hiện trạng cùng quy ước heading đầy đủ `#`–`######`.

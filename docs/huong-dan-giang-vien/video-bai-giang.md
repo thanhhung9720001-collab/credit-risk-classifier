@@ -233,3 +233,50 @@
 - Khi tong hop tu bang phu, can canh giac voi cac thong tin sau thoi diem vay hien tai neu co nguy co leakage.
 - Khong nen tao feature chi de du so luong; moi feature quan trong can co ly do nghiep vu va/hoac bang chung dong gop tu model.
 
+## Clip bo sung - Classification va cac ky thuat Feature Engineering
+
+- Link: [Classification va Feature Engineering](https://youtu.be/ehr1nqyvbuc?si=xVbGb2EuvljvZfGw)
+- Ghi chu: Tom tat duoc lap tu noi dung va timestamp do Hung cung cap; can doi chieu neu co transcript chinh thuc.
+
+### Khai niem va cac dang Classification
+
+- Classification (phan loai) la bai toan gan mot nhan/lop da biet truoc cho tung dong du lieu.
+- Khac voi Regression (hoi quy), Classification xac dinh doi tuong thuoc nhom nao; Regression du doan mot gia tri so lien tuc, nhu gia nha, doanh so hoac nhiet do.
+- Binary Classification co hai lop, vi du spam/khong spam, giao dich gian lan/hop le, benh/khong benh.
+- Multi-class Classification co tu ba lop doc lap tro len, vi du nhan dang chu so 0-9 hoac phan loai cam xuc tich cuc/trung tinh/tieu cuc.
+- Multi-label Classification cho phep mot doi tuong thuoc nhieu nhan dong thoi, vi du mot bo phim vua hanh dong vua vien tuong, hoac mot anh co nguoi, xe hoi va cho.
+
+### Vi du ung dung
+
+- Du doan khach hang vo no hay tra no.
+- Phat hien email spam hay khong spam.
+- Phat hien giao dich ngan hang gian lan hay hop le.
+- Du doan khach hang roi bo dich vu (churn).
+- Chan doan benh nhan co benh hay khong.
+
+### Cac nhom Feature Engineering chinh
+
+1. **Interaction features:** ket hop cac cot san co de mo ta mot tinh huong cu the. Vi du: nhom tuoi tu tuoi, co "da ket hon va co con", hoac co giao dich lon vao ban dem.
+2. **Ratio features:** dung phep chia de phan anh moi quan he giua cac gia tri. Vi du: thu nhap/khoan vay, no/thu nhap, ty le thanh toan, ty le chuyen doi hay ty le hoan tra.
+3. **Statistical/context features:** so sanh gia tri hien tai voi ngu canh lich su, nhu giao dich hien tai so voi giao dich trung binh, lon nhat, hoac tong gia tri trong 30 ngay.
+4. **Count features:** dem so lan xuat hien hay so su kien, nhu so lan dang nhap that bai, so thiet bi/IP da dung, so don hang, so lan huy/doi tra, luot thich va binh luan.
+5. **Historical/lag features:** dung thong tin qua khu de du bao tuong lai, nhu so lan tra cham, lich su no xau va khoang cach giua hai lan mua gan nhat.
+6. **Domain-specific features:** feature dua tren kien thuc chuyen mon cua linh vuc, nhu ngan hang, y te, chung khoan hoac giao duc.
+
+### Sai lam can tranh
+
+- Bo qua ratio feature, trong khi ty le thuong dien ta ban chat quan he giua cac cot tot hon gia tri tuyet doi.
+- Khong khai thac du lieu lich su, dan den thieu tin hieu ve hanh vi cua doi tuong.
+- Tao qua it feature lam mo hinh thieu thong tin; tao qua nhieu feature co the gay nhieu, tang chi phi xu ly va lam kho danh gia.
+- Data Leakage: dua thong tin cua tuong lai, hoac thong tin chi co sau thoi diem du bao, vao tap huan luyen.
+
+### Ghi chu ap dung cho du an Home Credit
+
+- Bai toan cua nhom la **binary classification**: du doan `TARGET = 1` (khach hang gap kho khan trong thanh toan/no xau) hay `TARGET = 0`.
+- Ratio feature phu hop gom `AMT_CREDIT / AMT_INCOME_TOTAL`, `AMT_ANNUITY / AMT_INCOME_TOTAL` va ty le da thanh toan/qua han tu cac bang lich su khi dung thong tin hop le tai thoi diem du bao.
+- Interaction feature co the ket hop thong tin ho so, vi du thu nhap voi so thanh vien gia dinh, loai hop dong voi tinh trang nghe nghiep, hoac so nguoi phu thuoc voi thu nhap.
+- Count va historical feature nen duoc tong hop tu `bureau`, `previous_application`, `installments_payments`, `POS_CASH_balance` va `credit_card_balance`: so khoan vay truoc, so lan tra cham, so don dang hoat dong, so lan bi tu choi va tan suat su dung tin dung.
+- Statistical/context feature nen dua gia tri hien tai vao tuong quan voi lich su cua cung khach hang, vi du khoan vay hien tai so voi trung binh cac khoan vay truoc.
+- Truoc khi dua mot feature vao model, can ghi ro nguon du lieu, cong thuc, y nghia nghiep vu, thoi diem co san cua thong tin va kiem tra dong gop bang ket qua danh gia/feature importance.
+- Khong dung bat ky thong tin nao phat sinh sau thoi diem nop ho so vay hien tai; day la diem can kiem tra dac biet de tranh leakage.
+
