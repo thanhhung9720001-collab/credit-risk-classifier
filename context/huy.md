@@ -11,6 +11,10 @@
 
 ## Làm tới đâu (cập nhật mới nhất ở trên)
 
+- **2026-07-31 (Su dung 100% du lieu cho EDA):**
+  - Cau hinh notebook 04 (`USE_FULL_DATA = True`) de thuc hien EDA tren toan bo 307.511 dong du lieu sach thay vi lay mau.
+  - Chay nbconvert thuc thi thanh cong, cap nhat toan bo bieu do va output voi full dataset.
+
 - **2026-07-30 (Hop nhat, them bieu do va day code Notebook 04):**
   - Tao nhanh moi `feature/t09-eda-visualization-30-07-2026` tu `main` moi nhat.
   - Hop nhat file notebook 04 hoan chinh tu thu muc `D:\hoc` vao repository.
