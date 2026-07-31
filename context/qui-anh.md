@@ -7,7 +7,7 @@
 
 - **Task:** T36 Notebook 05 - Feature Engineering (làm lại sau đợt reset PR #52; mã cũ T10 đã vô hiệu)
 - **Nhánh:** `feature/t36-feature-engineering`
-- **Trạng thái:** Notebook đã hoàn thành và chạy `Restart & Run All` sạch. Chờ review và merge PR.
+- **Trạng thái:** Xong. Đã commit `000587d`, push nhánh và tạo Pull Request. Chờ Huy review chéo và anh Hưng merge.
 
 ## Làm tới đâu (cập nhật mới nhất ở trên)
 
@@ -34,8 +34,9 @@
 - [x] Viết đủ các cell code mục II, IV, V, VI, VII.
 - [x] Viết mục VIII.1 "Kết quả Feature Engineering" bằng con số thật sau khi chạy.
 - [x] Chạy `Restart & Run All` một lượt sạch, `execution_count` liền mạch 1 đến 17.
-- [ ] Push nhánh và tạo PR, nhờ Hưng review & merge.
-- [ ] **Báo Huy và Hưng** hai lỗi trong NB03 và hai nhận xét sai trong NB04 ghi ở mục Ghi chú riêng bên dưới. Con số 22% của NB04 rất dễ bị đưa thẳng vào whitepaper và slide nên cần báo sớm.
+- [x] Push nhánh và tạo PR.
+- [ ] **Nhắn nhóm kèm link PR**: nhờ Huy review chéo, nhờ anh Hưng merge, và báo hai nhận xét sai trong NB04 cùng hai vấn đề của NB03 (ghi ở mục Ghi chú riêng bên dưới). Con số 22% của NB04 rất dễ bị đưa thẳng vào whitepaper và slide nên cần báo sớm.
+- [ ] Sau khi PR được merge: xóa nhánh trên GitHub, cập nhật trạng thái task trong Google Sheet.
 - [ ] Nhắc người làm NB06: đọc bảng `application_features`, dữ liệu **chưa chuẩn hóa** nên nếu dùng Logistic Regression thì phải `fit` scaler sau khi chia train/test; đánh giá bằng AUC-ROC chứ không dùng accuracy.
 
 ## Ghi chú riêng
