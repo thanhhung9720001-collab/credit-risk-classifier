@@ -14,7 +14,8 @@
 - **2026-07-31 (Su dung 100% du lieu & song ngu hoa bieu do):**
   - Cau hinh notebook 04 (`USE_FULL_DATA = True`) de thuc hien EDA tren toan bo 307.511 dong du lieu.
   - Map nhãn song ngữ Anh - Việt trong ngoặc cho các biểu đồ phân loại nhân khẩu học (Giới tính, Trình độ học vấn, Trạng thái gia đình) ở Cell [16] giúp người đọc dễ hiểu hơn.
-  - Chay nbconvert thuc thi thanh cong, cap nhat toan bo bieu do voi full dataset va nhan song ngu.
+  - Dùng `StrMethodFormatter` định dạng lại các trục X của các biểu đồ phân phối tài chính (Thu nhập, Khoản vay, Giá trị tài sản) ở Cell [19] hiển thị số đầy đủ có dấu phẩy ngăn cách hàng nghìn (ví dụ: 1,000,000 thay vì 1.00e6).
+  - Chay nbconvert thuc thi thanh cong, cap nhat toan bo bieu do voi full dataset va nhan song ngu, dinh dang so.
 
 - **2026-07-30 (Hop nhat, them bieu do va day code Notebook 04):**
   - Tao nhanh moi `feature/t09-eda-visualization-30-07-2026` tu `main` moi nhat.
