@@ -11,6 +11,16 @@
 
 ## Làm tới đâu (cập nhật mới nhất ở trên)
 
+- **2026-08-02 (Don dep warning, bo sung 9 phan tich moi, chuan hoa dinh dang):**
+  - Chay lai Notebook 04 voi Claude Code, don sach toan bo warning khi chay (seaborn `palette` thieu `hue`, `ci` deprecated, `set_xticklabels` thieu `set_xticks`).
+  - Gop 2 bieu do phan bo thu nhap (du lieu goc co outlier / da loc <=500tr) thanh 1 cell so sanh TRUOC/SAU, bo sung bieu do quy mo gia dinh (`cnt_fam_members`) con thieu o muc 1.
+  - Phat hien va sua nhieu nhan xet cu KHONG khop so lieu chay tren full data (vi du: ty le vo no theo thu nhap/khoan vay khong giam/tang don dieu nhu mo ta cu; `has_cc_dpd` gan nhu khong co tin hieu khi loc dung nhom co the).
+  - Bo sung 9 phan tich EDA moi theo de xuat rieng: `INCOME_PER_PERSON`, heatmap ket hop DTI x LTV, so huu xe/BDS, loai hop dong vay, `region_rating_client`, `years_employed` (phat hien artifact tu buoc impute median o NB03 cho ma loi `DAYS_EMPLOYED=365243`), `bureau_count`, lich su bi tu choi don vay truoc (`previous_application`, query truc tiep SQL), ty le su dung han muc the tin dung.
+  - Mo rong bieu do tuong quan Pearson len Top 30 bien (thay vi 11 bien chon thu cong), heatmap rieng con Top 10 bien cho de doc.
+  - Tai cau truc toan bo notebook theo yeu cau moi: gach dau dong het cac nhan xet nhieu y, tach cac cell dai (co cell 55 dong gop 4 bieu do) thanh cell nho moi cell 1 viec, bo sung trich dan nguon (NB nao) cho cac insight quan trong. Notebook tu 80 cell len 102 cell.
+  - Xu ly 1 xung dot rebase voi commit "fix: hung fix NB04" cua Hung tren main (ca 2 doc lap sua cung vung gom import/bieu do thu nhap) - da doi chieu tung cell va gop giu ca 2 phan cai tien.
+  - Da chay `nbconvert --execute` xac nhan 0 loi sau moi buoc, commit va push (`--force-with-lease` do nhanh da rebase).
+
 - **2026-07-31 (Su dung 100% du lieu, doc hoa & chi tiet hoa nhan):**
   - Cau hinh notebook 04 (`USE_FULL_DATA = True`) de thuc hien EDA tren toan bo 307.511 dong du lieu.
   - Chuyển 3 biểu đồ phân phối tài chính ở Cell [19] sang chiều dọc giúp phóng to biểu đồ theo chiều ngang, tránh đè nhãn số.
