@@ -260,3 +260,9 @@
 
 ## Cập nhật NB04 - 2026-07-31
 - Chỉ sửa lại vài chỗ Huy làm cho rõ ràng, không ảnh hưởng nhiều đến kết quả 
+
+## Cập nhật NB04 - 2026-08-03
+
+- Tổ chức lại Mục II và III theo 9 nhóm biến; thêm bảng nhóm biến, cột dữ liệu và câu hỏi EDA tương ứng.
+- Hoàn thành EDA Nhóm 1: nhân khẩu học, gia đình, học vấn/nguồn thu nhập, nghề nghiệp/tổ chức làm việc và thời gian làm việc; mỗi phần có biểu đồ và nhận xét dựa trên output.
+- Đã bắt đầu EDA Nhóm 2: tổng thu nhập, khoản vay/giá trị tài sản mua, khoản trả góp, DTI và LTV; cần tiếp tục chạy/hoàn thiện nhận xét và các nhóm biến còn lại.
