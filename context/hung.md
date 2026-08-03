@@ -265,4 +265,6 @@
 
 - Tổ chức lại Mục II và III theo 9 nhóm biến; thêm bảng nhóm biến, cột dữ liệu và câu hỏi EDA tương ứng.
 - Hoàn thành EDA Nhóm 1: nhân khẩu học, gia đình, học vấn/nguồn thu nhập, nghề nghiệp/tổ chức làm việc và thời gian làm việc; mỗi phần có biểu đồ và nhận xét dựa trên output.
-- Đã bắt đầu EDA Nhóm 2: tổng thu nhập, khoản vay/giá trị tài sản mua, khoản trả góp, DTI và LTV; cần tiếp tục chạy/hoàn thiện nhận xét và các nhóm biến còn lại.
+- Hoàn thành EDA Nhóm 2: tổng thu nhập, khoản vay/giá trị tài sản mua, khoản trả góp, DTI và LTV.
+- Hoàn thành EDA Nhóm 3: lịch sử tín dụng từ bảng phụ, gồm sự hiện diện lịch sử vay, số khoản vay/tổng tiền vay/dư nợ, hành vi chậm thanh toán và thời điểm hoạt động gần nhất. Nhận xét đã bám output; biến chậm thanh toán, dư nợ và độ gần đây là ứng viên cho NB05.
+- Việc tiếp theo: hoàn thiện Nhóm 4–9, rà soát insight/bàn giao NB05 rồi Restart & Run All NB04 trước PR.
