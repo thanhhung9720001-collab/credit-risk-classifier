@@ -4,6 +4,8 @@
 
 ## Đang làm
 
+- **Task NB04 (2026-08-05 — nhánh `fix/hung-fix-NB04-05082026`):** Hoàn thành EDA cho toàn bộ **9 nhóm biến** trong `notebooks/04_eda_visualization.ipynb`. Mỗi cụm có bảng/biểu đồ và nhận xét; đã bổ sung mục Tổng kết gồm bảng **35 insight theo mã cụm 1a–9b** và bảng **23 cụm biến bàn giao sang NB05** (quyết định giữ/loại, lý do và cách xử lý). Cần chạy Restart & Run All để đồng bộ toàn bộ output trước khi commit/PR; sau đó bắt đầu lập kế hoạch NB05.
+
 - **Task mới (2026-07-30):** Đã bổ sung tài liệu cho clip Classification và Feature Engineering vào `docs/huong-dan-giang-vien/video-bai-giang.md`; README đã cập nhật từ 3 thành 4 clip bổ sung. Nội dung gồm các dạng classification, 6 nhóm feature engineering, sai lầm thường gặp và liên hệ với Home Credit.
 
 - **Task:** Cập nhật context dự án sau các PR NB00–NB04 và chuẩn hóa quy ước heading notebook.
