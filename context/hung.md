@@ -272,3 +272,17 @@
 - Hoàn thành EDA Nhóm 2: tổng thu nhập, khoản vay/giá trị tài sản mua, khoản trả góp, DTI và LTV.
 - Hoàn thành EDA Nhóm 3: lịch sử tín dụng từ bảng phụ, gồm sự hiện diện lịch sử vay, số khoản vay/tổng tiền vay/dư nợ, hành vi chậm thanh toán và thời điểm hoạt động gần nhất. Nhận xét đã bám output; biến chậm thanh toán, dư nợ và độ gần đây là ứng viên cho NB05.
 - Việc tiếp theo: hoàn thiện Nhóm 4–9, rà soát insight/bàn giao NB05 rồi Restart & Run All NB04 trước PR.
+
+## Cập nhật NB05 — 2026-08-06
+
+- Đã hoàn thiện nội dung `notebooks/05_feature_engineering.ipynb` dựa trên bảng `application_flat_cleaned` và insight bàn giao từ NB03, NB04.
+- Đã tạo 30 feature mới: dữ liệu tăng từ 127 lên 157 cột; gồm tỷ số tài chính, đặc điểm khách hàng/hồ sơ, điểm đánh giá ngoài, lịch sử tín dụng và Interaction Features.
+- Đã hoàn thành các phần đánh giá: danh sách feature, kiểu dữ liệu/missing, kiểm tra `inf`, phân bố, tương quan với `target`, tỷ lệ vỡ nợ theo flag và feature phân loại, cùng bảng đánh giá đóng góp ban đầu.
+- Quy ước bàn giao NB06: giữ `NaN` có ý nghĩa ở NB05; sau khi chia train/test, NB06 điền median tính từ train cho cột số, gán `"Không có dữ liệu"` cho cột phân loại thiếu rồi encoding. Không encoding ở NB05.
+- `ext_ltv_interaction = (1 - ext_sources_mean) * ltv`, nhằm phản ánh trường hợp điểm đánh giá ngoài thấp đồng thời LTV cao.
+- Đã thêm phần lưu/kiểm tra PostgreSQL: chỉ tạo bảng `application_features` khi bảng chưa tồn tại; phần kiểm tra đối chiếu số dòng, danh sách cột theo thứ tự và 5 dòng mẫu.
+- Đã khắc phục rà soát NB05: `age_income_interaction` và `late_debt_interaction` chỉ dùng để EDA; NB06 phải tạo lại từ ngưỡng phân vị của train để tránh leakage. `sk_id_curr` và `target` được loại khỏi `model_feature_candidates`.
+- Đã làm rõ các cờ quá hạn: giá trị `0` là không ghi nhận quá hạn/trễ hạn và cần đọc cùng cờ có lịch sử tương ứng. Bổ sung kiểm tra cặp feature tương quan cao, cỡ mẫu cho các biểu đồ tỷ lệ vỡ nợ và số quan sát có dữ liệu cho tương quan với `target`.
+- Đã tăng kiểm tra PostgreSQL: dùng schema `public` nhất quán, thông báo khi không ghi đè bảng có sẵn và đối chiếu giá trị feature của 1.000 khách cố định ngoài số dòng/cột.
+- Đã xác minh tĩnh JSON, cú pháp tất cả code cell và logic ba cờ lịch sử bằng dữ liệu mẫu. Cần Restart Kernel → Run All NB05 trên kernel có PostgreSQL để xác minh runtime thực tế trước PR.
+- Cần làm tiếp: chạy lại NB05 từ đầu với PostgreSQL; bảng `application_features` hiện đã tồn tại nên code sẽ không ghi đè. Nếu bảng không khớp DataFrame sau khi chạy, cần quyết định cập nhật/tạo lại bảng trước khi Restart & Run All và tạo PR.
