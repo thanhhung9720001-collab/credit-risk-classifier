@@ -280,3 +280,84 @@
 - Truoc khi dua mot feature vao model, can ghi ro nguon du lieu, cong thuc, y nghia nghiep vu, thoi diem co san cua thong tin va kiem tra dong gop bang ket qua danh gia/feature importance.
 - Khong dung bat ky thong tin nao phat sinh sau thoi diem nop ho so vay hien tai; day la diem can kiem tra dac biet de tranh leakage.
 
+### Khung ap dung de chuan bi NB05 (cap nhat 2026-08-06)
+
+| Nhom ky thuat | Y tuong dua tren NB04 | Nguyen tac khi trien khai |
+|---|---|---|
+| **Interaction** | `LTV x DTI`, nhom tuoi x nguon thu nhap, diem danh gia ngoai x LTV | Chi tao khi hai bien co ly do nghiep vu va co bang chung EDA; khong tao hang loat cap bien. |
+| **Ratio** | `amt_credit / amt_income_total`, `amt_annuity / amt_income_total`, du no / tong tien da vay, thu nhap / so nguoi gia dinh | Kiem tra mau so bang 0, gia tri vo cuc va outlier truoc khi dung. |
+| **Aggregation / context** | Tong, trung binh, min, max tu Bureau, previous application, installments, POS/Cash va credit card | Gom ve muc `SK_ID_CURR`; chi dung lich su co san truoc thoi diem nop ho so. |
+| **Count** | So khoan vay truoc, so lan tra cham, so lan tra cuu, so nguoi quen tung vo no | Nhom hoa khi phan bo lech va kiem tra quy mo mau cua nhom hiem. |
+| **History / recency** | Thoi diem vay gan nhat, muc tre han toi da, thoi gian doi so dien thoai, lich su vo no | Home Credit khong dung lag/rolling theo ngay mot cach may moc; uu tien khoang cach thoi gian va tong hop lich su theo khach hang. |
+| **Domain-specific** | `ltv`, `dti`, co khong con du no, `ext_sources_mean`, co ma thoi gian lam viec dac biet | Ghi ro cong thuc va y nghia rui ro tin dung trong NB05. |
+
+**Checklist cho tung feature moi:** (1) cot nguon va cong thuc, (2) y nghia nghiep vu, (3) thoi diem thong tin co san, (4) cach xu ly missing/outlier, (5) kiem tra leakage, va (6) danh gia dong gop bang metric/feature importance o NB06. Feature khong dat cac dieu kien nay khong nen dua vao bo bien chinh.
+
+## Clip bo sung - Quy trinh Notebook 5 va 6
+
+- Link: [Notebook5 & 6 - Thay Long Web](https://www.youtube.com/watch?v=_eIYTk6xGUk)
+- Ghi chu: Tom tat tu noi dung va timestamp do Hung cung cap; can doi chieu neu co transcript chinh thuc.
+
+### Mach notebook trong mot du an Data/AI
+
+- **Notebook 1:** Kham pha va hieu du lieu tho.
+- **Notebook 2:** Ghe bang, tao master/flat table va luu tru database.
+- **Notebook 3:** Lam sach du lieu: duplicate, missing, loi logic va luu du lieu sach.
+- **Notebook 4:** EDA va truc quan hoa de tim quy luat, outlier, tuong quan va y tuong feature.
+- **Notebook 5:** Feature Engineering - tao dac trung moi co y nghia nghiep vu.
+- **Notebook 6:** Machine Learning - chuan bi dau vao da ma hoa, chia tap du lieu, huan luyen va danh gia mo hinh.
+
+### Vai tro cua Notebook 4
+
+- EDA khong chi dung de mo ta tung cot; can dung bieu do, bang tong hop, correlation/heatmap va phan tich ket hop bien khi can de tim quy luat lien quan den `TARGET`.
+- Ket qua NB04 la bang chung de de xuat feature cho NB05, khong phai noi tao hang loat feature cho model.
+- Khi mot bien co tuong quan cao hoac co chenh lech ro theo `TARGET`, can ghi lai y nghia nghiep vu va y tuong bien doi/ket hop sang NB05.
+
+### Notebook 5 - Feature Engineering
+
+- Cac nhom ky thuat chinh: time feature, lag/rolling, aggregation, interaction feature va xu ly `NaN` phat sinh sau bien doi.
+- Home Credit khong phai bai toan chuoi thoi gian theo ngay nhu vi du trong video; vi vay khong ap dung may moc lag/rolling. Thay vao do, dung **aggregation lich su**, ty so, count, khoang cach thoi gian va interaction co y nghia rui ro tin dung.
+- Vi du phu hop: `LTV`, `DTI`, thu nhap tren nguoi phu thuoc, co tung tre han, ty le du no/tong tien da vay, so khoan vay truoc va tuong tac `LTV × DTI`.
+- Moi feature moi phai ghi ro: cot nguon, cong thuc, y nghia nghiep vu, thoi diem thong tin co san va cach xu ly missing; khong tao feature chi de tang so luong cot.
+
+### Notebook 6 - Machine Learning
+
+- Theo cau truc du an Home Credit, NB06 la **Machine Learning**. Buoc chuan bi du lieu trong video (ma hoa va chuyen tat ca bien ve dang so) la phan dau cua quy trinh nay, khong tach thanh mot notebook khac.
+- Bien co thu bac dung mapping/ordinal encoding; bien danh muc khong thu bac dung one-hot encoding hoac cach ma hoa phu hop voi mo hinh.
+- Sau ma hoa can kiem tra lai danh sach feature, xu ly cot phat sinh/NaN, chia train-test, huan luyen baseline va danh gia bang chi so phu hop voi bai toan classification mat can bang.
+- Khong dung `.predict()` voi nguong mac dinh ma bo qua muc tieu nghiep vu; can danh gia nguong du doan dua tren cac chi so va trade-off phu hop.
+
+### Ghi chu ap dung cho du an Home Credit
+
+- Mach ap dung cua nhom la: **NB04 tim insight -> NB05 tao feature -> NB06 train va danh gia model**.
+- Ket qua EDA cua NB04 la dau vao y tuong cho NB05; ket qua feature importance/metric o NB06 la bang chung de quay lai tinh chinh feature neu can.
+- Can tranh data leakage: chi dung thong tin co tai thoi diem khach hang nop ho so vay hien tai.
+
+## Tai lieu tham khao - Home Credit Default Risk
+
+- Nguon: `docs/home-credit-default-risk (1).docx` (tai lieu do Hung cung cap, tom tat va ap dung vao du an ngay 2026-08-06).
+- Vai tro: tai lieu tham khao ky thuat cho **NB05 - Feature Engineering** va **NB06 - Machine Learning**; khong sao chep nguyen code ma doi chieu voi `application_flat_cleaned`, insight NB04 va quy uoc du an hien tai.
+
+### Feature theo tung nguon du lieu
+
+- **Bang chinh:** tuoi, so nam lam viec, ty le khoan vay/thu nhap, tra gop/thu nhap, gia tri hang hoa/khoan vay, thu nhap theo quy mo gia dinh va thong ke `EXT_SOURCE_*` (mean/min/std).
+- **Bureau:** so khoan vay, khoan dang hoat dong, tong du no, ty le du no/tong tin dung, so va ty le khoan qua han, so ngay qua han lon nhat, so khoan vay gan day.
+- **Previous application:** so ho so cu, so/ty le duyet va tu choi, khoan vay cu trung binh/lon nhat, muc duyet so voi muc yeu cau va do gan day cua ho so cu.
+- **Installments:** so ky tra, so/ty le tra tre, so ngay tre trung binh/lon nhat, so/ty le tra thieu va ty le thanh toan.
+- **Credit card va POS/Cash:** du no, ty le su dung han muc, DPD trung binh/lon nhat, so thang qua han va so ky tra con lai.
+
+### Quy tac bat buoc khi lam NB05
+
+1. Tong hop moi bang lich su ve `SK_ID_CURR` **truoc** khi join; sau join, mot khach hang chi duoc mot dong.
+2. Tao ratio co `EPSILON` hoac quy tac tranh chia cho 0; kiem tra `inf`, `-inf` va outlier sau bien doi.
+3. Phan biet ro **khong co lich su** voi gia tri lich su bang 0; tao co khi can, khong dien 0 tuy tien.
+4. Chi dung thong tin co truoc thoi diem nop ho so vay; khong dung target, thong tin tuong lai hay thong tin hoc tu validation/test.
+5. Luu cong thuc, danh sach va thu tu feature, quy tac missing, encoder/scaler va threshold de NB06, app va tai lap ket qua dung cung mot pipeline.
+6. Chi giu feature co ly do nghiep vu va/hoac bang chung tu NB04/NB06; feature importance la tin hieu du doan, khong phai bang chung nhan qua.
+
+### Quy tac cho NB06
+
+- Ma hoa bien phan loai, chia train/test truoc khi hoc cac quy tac tu du lieu, va chi fit scaler/encoder tren train.
+- Danh gia it nhat ROC-AUC, Precision, Recall, F1, PR-AUC va Confusion Matrix; khong dung Accuracy lam chi so duy nhat.
+- So sanh baseline, feature engineering co ban va feature engineering da bang; phan tich threshold thay vi mac dinh 0,5.
+
