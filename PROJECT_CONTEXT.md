@@ -74,7 +74,7 @@
 
 > Cập nhật 2026-07-28: sau khi Hưng reset để làm lại gọn hơn, trạng thái thật của repo đã khác pipeline cũ. Không dùng các notebook/SQL cũ làm nguồn sự thật nếu file không còn trong repo.
 
-1. **Notebooks** (`notebooks/`): có `00_business_understanding.ipynb` (Markdown), NB01, NB02, NB03 và NB04. NB01/NB02 đã hoàn thành; NB03 đã được cập nhật lại sau các PR #80–81 nhưng cần `Restart & Run All` để đồng bộ toàn bộ output; NB04 đã hoàn thành EDA 9 nhóm biến và 3 cặp đa biến, cần `Restart & Run All` trước PR. NB05–NB07 chưa được xây dựng lại theo pipeline mới.
+1. **Notebooks** (`notebooks/`): có `00_business_understanding.ipynb` (Markdown), NB01–NB06. NB01/NB02 đã hoàn thành; NB03 đã được cập nhật lại sau các PR #80–81 nhưng cần `Restart & Run All` để đồng bộ toàn bộ output; NB04 đã hoàn thành EDA 9 nhóm biến và 3 cặp đa biến, cần `Restart & Run All` trước PR. NB05 đã hoàn thành nội dung nhưng cần kiểm tra Runtime; NB06 đã có header, khung 9 mục và hoàn thành Mục I–II, III.1; NB07 chưa được xây dựng lại theo pipeline mới.
 2. **SQL** (`sql/`, PostgreSQL): có 11 file đánh số liền mạch `01_create_tables.sql` → `11_check_flat_nulls.sql`, đi kèm NB02. Mạch chạy: tạo bảng → import → kiểm tra số dòng và kiểu dữ liệu → index → 5 bảng summary → `application_flat` → validation. Mỗi file có một SQL cell tương ứng trong NB02.
 3. **App** (`app/`): demo bằng **Streamlit** (`stream_app.py`, `pages/`, `prediction.py`) + có thể thêm API (`api.py`), hiện các file chính vẫn rỗng.
 4. **Models** (`models/`): còn `model.pkl`, `scaler.pkl`, `model_metadata.json` từ pipeline cũ. Trước khi dùng cho app/NB07 cần kiểm tra tương thích với pipeline làm lại.
@@ -164,7 +164,7 @@ Sau đợt reset, nền tảng Business Understanding và Data Understanding đ�
 
 | Sản phẩm phải nộp | Mức hoàn thành |
 |---|---|
-| Mã nguồn `.ipynb` | **NB00–NB02 xong; NB03 cần Restart & Run All; NB04 đã xong EDA 9 nhóm và 3 cặp đa biến, cần Restart & Run All; NB05–NB07 chưa xây dựng lại** |
+| Mã nguồn `.ipynb` | **NB00–NB02 xong; NB03 cần Restart & Run All; NB04 đã xong EDA 9 nhóm và 3 cặp đa biến, cần Restart & Run All; NB05 đã xong nội dung nhưng cần kiểm tra Runtime; NB06 đã hoàn thành Mục I–II và III.1; NB07 chưa xây dựng lại** |
 | SQL/PostgreSQL | **Xong — 11 file `sql/01`–`sql/11`, bảng `application_flat` 307.511 × 154 sẵn sàng trong PostgreSQL** |
 | **Whitepaper `.docx` 6 chương** | **Có bản thảo Business/Data Understanding trong `docs/`; file nộp `reports/` vẫn cần ghép/viết tiếp** |
 | **Slide `.pptx`** | **0% — md5 trùng khít file mẫu** |
@@ -176,7 +176,7 @@ Cộng thêm **dashboard interactive** (Phần A mục 7) vẫn chưa có và c�
 
 1. **Xác minh lại NB03:** chạy `Restart & Run All` với PostgreSQL và `.env`, kiểm tra execution count liền mạch, output/nhận xét khớp code, rồi xác nhận bảng `application_flat_cleaned` được lưu và đọc lại đúng.
 2. **Xác minh và chốt NB04 — EDA & Visualization:** chạy Restart & Run All để đồng bộ output; rà soát lần cuối 38 insight và 26 cụm biến bàn giao trước PR. Không dùng lại EDA của pipeline cũ làm nguồn sự thật.
-3. **Lên kế hoạch NB05–NB07:** bắt đầu từ Feature Engineering theo danh sách bàn giao của NB04; chỉ chốt Modeling và Prediction Demo sau khi NB03/NB04 ổn định. Các artifact cũ trong `models/` cần kiểm tra tương thích trước khi sử dụng.
+3. **Xác minh NB05 và tiếp tục NB06:** chạy NB05 với PostgreSQL để kiểm tra Runtime; sau đó tiếp tục NB06 từ Mục III.2 (chia train/test), tạo lại interaction sau khi chia, xử lý missing, mã hóa và chuẩn hóa trước khi huấn luyện. Chỉ chốt Modeling và Prediction Demo sau khi pipeline mới ổn định. Các artifact cũ trong `models/` cần kiểm tra tương thích trước khi sử dụng.
 4. **Whitepaper `.docx` + slide `.pptx`:** Business/Data Understanding đã có nền trong `docs/`, nhưng file nộp trong `reports/` vẫn cần ghép và viết tiếp Chương 2–6 + 16 slide.
 5. **`app/` Streamlit + dashboard interactive:** đây vẫn là yêu cầu bắt buộc; chỉ triển khai sau khi pipeline/model mới ổn định. Dashboard phải cho phép tương tác, không chỉ dùng biểu đồ tĩnh.
 6. **Hỏi giảng viên về Jira/Trello:** đề bài đòi "Nhật ký Jira" (Chương 5) + ảnh bảng Kanban (slide 12); nhóm đang dùng Google Sheet. Hỏi sớm, đừng để tới lúc nộp mới biết.
@@ -186,7 +186,7 @@ Cộng thêm **dashboard interactive** (Phần A mục 7) vẫn chưa có và c�
 - **Có thêm `sqlalchemy` vào `requirements.txt` không?** Checklist của thầy ghi cả `psycopg2` lẫn `SQLAlchemy`, nhưng nhóm đã chốt chỉ dùng `psycopg2` (ghi rõ lý do trong `requirements.txt`: truyền connection `psycopg2` vào `pandas.read_sql` chỉ in cảnh báo, code vẫn chạy đúng). NB02 đã ghi rõ lựa chọn này trong nhận xét mục 8.1 để không bị hiểu là bỏ sót.
 - **Hỏi thầy về đánh số trong `docs/Task Checklist for Each Notebook.docx`:** phần NB01 kết thúc bằng `IV. Kết luận` trong khi đáng lẽ là `IX`; phần NB03 nhảy từ `III` sang `V`. Riêng chữ `aaa` trong tiêu đề `VI. Khảo sát dữ liệu của bảng phụ aaa` **không phải lỗi gõ** — đó là chỗ trống để điền tên bảng phụ, tức thầy muốn làm mục này cho từng bảng cụ thể.
 
-> Trạng thái thật: NB00, NB01 và NB02 đã có trên `main`; NB03 đã cập nhật tới PR #81 nhưng cần chạy xác minh lại; NB04 đã hoàn thành EDA 9 nhóm biến và 3 cặp đa biến nhưng cần Restart & Run All trước PR; NB05–NB07 chưa xây dựng lại theo pipeline mới. Tài liệu hướng dẫn giảng viên, `README.md` và `requirements.txt` vẫn có sẵn.
+> Trạng thái thật: NB00, NB01 và NB02 đã có trên `main`; NB03 đã cập nhật tới PR #81 nhưng cần chạy xác minh lại; NB04 đã hoàn thành EDA 9 nhóm biến và 3 cặp đa biến nhưng cần Restart & Run All trước PR; NB05 đã hoàn thành nội dung nhưng cần kiểm tra Runtime; NB06 đã có header, khung 9 mục và hoàn thành Mục I–II, III.1; NB07 chưa xây dựng lại theo pipeline mới. Tài liệu hướng dẫn giảng viên, `README.md` và `requirements.txt` vẫn có sẵn.
 
 ## 5. Ghi chú làm việc
 
