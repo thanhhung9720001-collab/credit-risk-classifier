@@ -333,6 +333,42 @@
 - Ket qua EDA cua NB04 la dau vao y tuong cho NB05; ket qua feature importance/metric o NB06 la bang chung de quay lai tinh chinh feature neu can.
 - Can tranh data leakage: chi dung thong tin co tai thoi diem khach hang nop ho so vay hien tai.
 
+## Clip bo sung - Cac mo hinh Machine Learning pho bien va cach danh gia
+
+- Link: [Cac mo hinh Machine Learning pho bien va cach danh gia](https://www.youtube.com/watch?v=TO2atlphblc)
+- Ghi chu: Tom tat duoc lap tu noi dung clip do Hung cung cap ngay 2026-08-06; muc dich la lam nen kien thuc cho NB06, khong sao chep nguyen code demo tren du lieu tai nan giao thong.
+
+### Bon dang bai toan Machine Learning
+
+- **Regression:** du doan gia tri lien tuc; cac chi so thuong dung la MAE, MSE/RMSE va R2. Day khong phai bai toan cua nhom.
+- **Classification:** gan nhan/lop cho tung dong du lieu. Home Credit la **binary classification**, du doan `TARGET = 1` (khach hang gap kho khan thanh toan) hoac `TARGET = 0`.
+- **Clustering:** gom nhom du lieu khong co nhan; co the dung K-Means/DBSCAN va danh gia bang Silhouette Score hoac Davies-Bouldin Index. Khong nam trong pham vi NB06 hien tai.
+- **Recommendation system:** goi y san pham/noi dung dua tren hanh vi nguoi dung; khong nam trong pham vi du an.
+
+### Cac mo hinh va quy trinh ap dung cho NB06
+
+- Dung **Logistic Regression** lam baseline de co moc so sanh de giai thich.
+- Dung **Random Forest** de so sanh mo hinh phi tuyen va xem feature importance.
+- Co the can nhac **XGBoost** neu nhom thong nhat bo sung va ghim dependency; khong tu y them thu vien chi vi clip co demo XGBoost. Neu chua them dependency, dung cac mo hinh co san trong scikit-learn.
+- Doc `application_features` tu PostgreSQL, tach `X` va `target`, loai `sk_id_curr` khoi tap feature. Khong xoa cot chi vi cam tinh; can ghi ly do neu loai cot ID/text/cot trung lap hoac khong co gia tri mo hinh.
+- Chia train/test voi `stratify=target` de giu ty le lop mat can bang. Chi fit median imputer, encoder va scaler tren train, sau do ap dung sang test de tranh leakage.
+- Luu model duoc chon cung metadata: danh sach va thu tu feature, quy tac xu ly missing/encoding, metric, random state va decision threshold. Day la hop dong de NB07/app tai lap dung pipeline.
+
+### Confusion Matrix va chi so danh gia
+
+- **TP:** canh bao dung khach hang co rui ro; **FP:** tu choi/canh bao nham khach hang tot; **FN:** bo sot khach hang rui ro; **TN:** xac dinh dung khach hang an toan.
+- Accuracy chi la chi so tham khao vi `TARGET` mat can bang. NB06 phai bao cao it nhat ROC-AUC, PR-AUC, Precision, Recall, F1 va Confusion Matrix.
+- Precision phan anh do tin cay cua canh bao; Recall phan anh kha nang bat duoc khach hang rui ro; F1 can bang hai chi so nay. Khi lua chon threshold, phai dien giai trade-off giua bo sot rui ro (FN) va tu choi oan (FP) theo nghiep vu tin dung.
+- Khong mac dinh dung nguong 0,5 hoac `.predict()`. So sanh cac nguong tren xac suat du doan, chon nguong phu hop voi muc tieu nghiep vu va luu vao metadata.
+
+### Cau hoi NB06 can tra loi
+
+1. Bo feature sau NB05 da duoc chuan bi khong leakage va san sang huan luyen chua?
+2. Mo hinh nao tot hon baseline theo cac chi so danh gia phu hop voi du lieu mat can bang?
+3. Feature nao dong gop dang ke, va ket qua nay co quay lai dieu chinh NB05 khong?
+4. Nguong du doan nao phu hop voi trade-off giua bo sot rui ro va canh bao nham?
+5. Model, metadata va danh sach feature da duoc luu du de NB07/app tai lap dung ket qua chua?
+
 ## Tai lieu tham khao - Home Credit Default Risk
 
 - Nguon: `docs/home-credit-default-risk (1).docx` (tai lieu do Hung cung cap, tom tat va ap dung vao du an ngay 2026-08-06).
