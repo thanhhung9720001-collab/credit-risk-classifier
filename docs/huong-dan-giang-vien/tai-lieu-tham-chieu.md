@@ -19,6 +19,7 @@
 | `docs/Buoi1-Gioi thiệu các bộ dữ liệu.docx` | Ghi chu ve cac bo du lieu/huong dan ngay dau. |
 | `docs/Business_Understanding.docx` | Ban thao Business Understanding cho de tai Home Credit. Dung khi viet Chuong 1 whitepaper. |
 | `docs/Data_Understanding.docx` | Nen tang Data Understanding cho nhom: hieu cac bang, khoa noi, target va cau hoi tu kiem tra. |
+| `docs/home-credit-default-risk (1).docx` | Tai lieu tham khao ky thuat cho NB05/NB06: feature engineering da bang, anti-leakage, join an toan, feature scaling va danh gia classification. Xem ban tom tat ap dung trong `video-bai-giang.md`. |
 | `docs/Hướng dẫn viết tài liệu dự án.docx` | Huong dan viet tai lieu du an. Dung khi viet whitepaper va chuan bi nghiem thu. |
 | `docs/QUY-TRINH-LAM-VIEC.md` | Quy trinh lam viec chi tiet cua nhom. Day la quy dinh noi bo, khac voi huong dan giang vien. |
 
