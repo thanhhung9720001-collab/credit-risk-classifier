@@ -6,13 +6,22 @@
 ## Đang làm
 
 - **Cập nhật lần cuối:** 2026-08-07
-- **Task:** Viết nội dung Chương 3 "Khai phá tri thức và kỹ thuật tính năng" (EDA từ NB04, Feature Engineering từ NB05) trong `docs/2. Mau tai lieu.docx`
-- **Nhánh:** `docs/thai-chuong3-eda-featureengineering-07082026`
-- **Trạng thái:** Đã viết đầy đủ 3.1–3.8, đã rà soát đối chiếu số liệu với NB04 và NB05, bổ sung thêm 1 insight bị thiếu (cờ `has_bureau`), đã commit + push. Việc Chương 2 ghi ở dòng bên dưới (nhánh `docs/thai-chuong2-pipeline-tienxuly-28072026`) đã xong, người dùng tự tạo PR trên GitHub.
+- **Task:** Rà soát và sửa lại Chương 2 "Xây dựng pipeline và tiền xử lý dữ liệu" trong `docs/2. Mau tai lieu.docx` cho khớp với NB02 và NB03 thật
+- **Nhánh:** `fix/thai-chuong2-so-lieu-nb02-nb03-07082026`
+- **Trạng thái:** Đã sửa xong, đã commit + push. Chương 3 (nhánh `docs/thai-chuong3-eda-featureengineering-07082026`, ghi ở dòng bên dưới) đã merge qua PR #107, không còn dở.
 
 ## Làm tới đâu (cập nhật mới nhất ở trên)
 
-- **2026-08-07:** Viết Chương 3 báo cáo (`docs/2. Mau tai lieu.docx`) trên nhánh `docs/thai-chuong3-eda-featureengineering-07082026`, thay khung sườn gợi ý cũ (3 dòng chung chung, chép từ đề bài) bằng nội dung thật, dựa sát nội dung NB04 (EDA) và NB05 (Feature Engineering), không bịa số liệu.
+- **2026-08-07 (buổi 2 — sửa Chương 2 sau khi bị hỏi lại):** Người dùng yêu cầu đọc lại Chương 2 xem có đúng với NB03 không. Phát hiện 1 lỗi sai (đã ghi "điền Unknown cho cột chữ", thực tế notebook dùng nhãn "Missing") và thiếu hẳn 1 bước xử lý của NB03 (Mục III.5 loại 28 cột `_mode`/`_medi` trùng lặp thông tin) — đã sửa.
+  - Khi viết lại chi tiết hơn, phát hiện vấn đề nghiêm trọng hơn: **chính NB03 có mâu thuẫn nội bộ** giữa markdown mô tả và code đã chạy thật. Markdown ghi "159 cột" rồi "giảm còn 131 cột", nhưng code output thật in rõ "Số cột: 155 -> 127" và khi lưu vào PostgreSQL xác nhận "Đã lưu 305.181 dòng, 127 cột". Đã sửa lại toàn bộ theo đúng số đã chạy thật (127, không phải 131), không tin theo markdown khi có code output đối chứng.
+  - Cũng phát hiện đã viết sai rằng NB03 "tạo mới" các cờ `has_bureau/has_previous/...`; thực tế bảng đối chiếu cột mới trong chính NB03 chỉ liệt kê đúng 1 cột mới là `is_days_employed_special`, nghĩa là các cờ `has_*` đã có sẵn từ NB02, NB03 chỉ giữ nguyên giá trị thiếu dựa vào cờ có sẵn chứ không tạo cờ. Đã sửa lại câu chữ cho đúng.
+  - Viết lại toàn bộ mục 2.3 chi tiết hơn nhiều, lấy số liệu trực tiếp từ ô output code đã chạy trong NB03 (không chỉ đọc markdown): 2.326 dòng bị xóa do thiếu dữ liệu (còn 305.185 dòng), 29.034 giá trị bị cap P99, 1.282 dòng `bureau_sum_debt` âm, 55.006 dòng `days_employed=365243`, 4 dòng `code_gender=XNA`, và thêm nguyên 1 bullet mới "Đánh giá tổng thể trước/sau" (11.043.065 → 2.313.432 ô thiếu, 56.702 → 0 giá trị sai logic, 400,3 → 337,8 MB) lấy từ bảng Before/After của NB03 mà bản trước hoàn toàn chưa nhắc tới.
+  - Người dùng hỏi tiếp "đã làm đầy đủ chưa" — nhận thấy 2.1/2.2 (ánh xạ NB02) chưa được kiểm tra ở cùng mức nghiêm ngặt (chỉ đọc markdown, chưa đối chiếu code/kết quả thật) nên đã làm thêm một vòng cho NB02.
+  - Với NB02: hầu hết bước SQL chạy trong pgAdmin ngoài notebook nên không có code output dạng chữ; may là notebook có đính kèm 4 ảnh chụp kết quả truy vấn thật (`attachments` trong file .ipynb). Đã trích xuất và xem trực tiếp 4 ảnh, xác nhận khớp 100% với nội dung đã viết: `application_flat` 307.511 dòng/154 cột, phân bố TARGET khớp tuyệt đối (24.825 TARGET=1, 282.686 TARGET=0, tỷ lệ 8,073%), số NULL sau join khớp đúng công thức kỳ vọng ở cả 5 nhóm (bureau 44.020, credit_card_balance 220.606, installments 15.868, pos_cash 18.067, previous 16.454), 6 bảng summary đều đạt đúng 1 dòng/khách.
+  - Không có lỗi sai ở 2.1/2.2 nhưng đã bổ sung cho đầy đủ hơn: quy mô bảng gốc trước khi gộp nhóm để chứng minh cụm "hàng triệu dòng" có căn cứ (`bureau_balance` 27.299.925 dòng, `installments_payments` 13.605.401 dòng, `pos_cash_balance` 10.001.358 dòng, `credit_card_balance` 3.840.312 dòng — lấy từ giá trị `expected_rows` hardcode trong chính script SQL của NB02); và 1 phát hiện quan trọng trước đó chưa được nhắc: kiểm tra kiểu dữ liệu sau import phát hiện 3 lỗi, trong đó lỗi `credit_day_overdue` khai sai kiểu `TEXT` là nguy hiểm nhất vì làm hàm `MAX` so sánh sai theo kiểu chữ mà không hề báo lỗi khi import.
+  - **Bài học rút ra cho các lần sau:** không nên chỉ đọc markdown của notebook để viết báo cáo, vì markdown có thể bị viết trước rồi không cập nhật khi code thay đổi (đã xảy ra ở NB03). Luôn ưu tiên đọc trực tiếp ô output code đã chạy (`--OUT--`, bảng kết quả) hoặc ảnh chụp đính kèm nếu bước đó chạy ngoài notebook (SQL qua pgAdmin), chỉ dùng markdown khi không còn cách nào khác để đối chiếu.
+
+- **2026-08-07 (buổi 1):** Viết Chương 3 báo cáo (`docs/2. Mau tai lieu.docx`) trên nhánh `docs/thai-chuong3-eda-featureengineering-07082026`, thay khung sườn gợi ý cũ (3 dòng chung chung, chép từ đề bài) bằng nội dung thật, dựa sát nội dung NB04 (EDA) và NB05 (Feature Engineering), không bịa số liệu.
   - Cấu trúc: 3.1 Mục tiêu và phạm vi phân tích khám phá dữ liệu; 3.2 Phân chia biến theo nhóm ý nghĩa nghiệp vụ, kèm bảng Word thật (không phải bảng markdown) liệt kê đủ 9 nhóm biến, tên nhóm, cột chính và câu hỏi phân tích, lấy đúng theo bảng phân nhóm gốc ở NB04; 3.3 Kết quả phân tích của cả 9 nhóm, giữ nguyên số liệu gốc (ví dụ tuổi dưới 25 hơn 12% giảm còn 5,22% ở nhóm 55+, dư nợ còn lại 5,59% so với 9,05%, LTV cao nhất 11,5%, điểm ext_source 14,5-17,5% xuống 3,0-3,3%); 3.4 Phân tích đa biến (tuổi kết hợp thu nhập, chậm trả kết hợp dư nợ, điểm ngoài kết hợp LTV); 3.5-3.7 Feature Engineering (mục tiêu và định hướng từ NB03/NB04, kết quả 30 đặc trưng mới từ 127 lên 157 cột chia 5 nhóm, đánh giá tương quan ban đầu với target, tiêu chí giữ/loại, cảnh báo rò rỉ dữ liệu ở 2 đặc trưng tương tác chỉ dùng cho EDA); 3.8 Kết luận chương.
   - Định dạng làm giống hệt Chương 1 và Chương 2 đã có sẵn: Heading 2 cho mục con, bullet "•", font Times New Roman cỡ chữ khớp XML gốc (13pt thân bài, 14pt heading 2). Chỉnh sửa bằng script Python (thư viện `python-docx`), không gõ tay trong Word, để giữ đúng định dạng và tránh gõ sai số liệu.
   - Sau khi viết xong, rà soát lại toàn bộ số liệu đối chiếu với 2 notebook gốc, phát hiện thiếu 1 insight: cờ `has_bureau` đi ngược chiều so với các cờ lịch sử khác (có lịch sử Bureau thì rủi ro thấp hơn, trong khi có lịch sử `previous`/`installments`/`pos_cash`/`credit_card` thì rủi ro cao hơn) và đã bổ sung vào mục 3.7.
@@ -55,9 +64,13 @@
 - [x] Viết Chương 2 (`docs/2. Mau tai lieu.docx`), commit + push nhánh `docs/thai-chuong2-pipeline-tienxuly-28072026` (commit `8553202`)
 - [x] Tạo Pull Request cho Chương 2 (người dùng tự tạo trên GitHub)
 - [x] Viết Chương 3 (`docs/2. Mau tai lieu.docx`), commit + push nhánh `docs/thai-chuong3-eda-featureengineering-07082026`
-- [ ] Tạo Pull Request cho Chương 3 trên GitHub (người dùng tự tạo, giống 2 lần trước)
-- [ ] Commit + push bản cập nhật `context/thai.md` (mục cũ ghi cho nhánh `docs/thai-chuong2-pipeline-tienxuly-28072026`, không rõ đã làm ở phiên nào chưa — bản cập nhật lần này đã gộp thẳng vào commit của nhánh Chương 3 nên coi như xong luôn phần nội dung, chỉ còn xác minh lại nhánh cũ nếu cần)
+- [x] Tạo Pull Request cho Chương 3 trên GitHub — đã merge qua PR #107
+- [x] Sửa lỗi sai và bổ sung nội dung thiếu ở mục 2.3 (NB03), đối chiếu bằng code output thật
+- [x] Rà soát và bổ sung mục 2.1/2.2 (NB02), đối chiếu bằng ảnh chụp kết quả SQL đính kèm trong notebook
+- [x] Commit + push bản sửa Chương 2 lên nhánh `fix/thai-chuong2-so-lieu-nb02-nb03-07082026`
+- [ ] Tạo Pull Request cho bản sửa Chương 2 trên GitHub (người dùng tự tạo, giống các lần trước)
 - [ ] Hỏi nhóm trưởng: có cần đánh lại số mục ở NB03 (đang thiếu "IV", nhảy từ III sang V) không — vẫn còn treo từ lần trước, chưa ai xác nhận
+- [ ] Cân nhắc báo lại cho người phụ trách NB03: markdown trong notebook đang ghi sai số cột ("159"/"131" cột) so với code output thật ("155"/"127" cột) — nên sửa lại markdown trong chính notebook để tránh người khác đọc nhầm như tôi đã gặp phải
 - [ ] Xử lý riêng NB01/NB02 (lỗi `'git5'` ở NB02) ở task/nhánh khác, không gộp vào PR này
 
 ## Ghi chú riêng
