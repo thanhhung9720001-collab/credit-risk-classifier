@@ -5,14 +5,20 @@
 
 ## Đang làm
 
-- **Cập nhật lần cuối:** 2026-07-28
-- **Task:** Viết nội dung Chương 2 "Xây dựng pipeline và tiền xử lý dữ liệu" trong `docs/2. Mau tai lieu.docx`
-- **Nhánh:** `docs/thai-chuong2-pipeline-tienxuly-28072026`
-- **Trạng thái:** Đã viết đầy đủ 2.1–2.4, đã commit + push (`8553202`), người dùng đã tự tạo Pull Request trên GitHub. Việc T03 NB03 ghi ở các dòng bên dưới (nhánh `fix/thai-nb03-dtype-grouping`) **đã merge xong** qua PR #76 — không còn dở.
+- **Cập nhật lần cuối:** 2026-08-07
+- **Task:** Viết nội dung Chương 3 "Khai phá tri thức và kỹ thuật tính năng" (EDA từ NB04, Feature Engineering từ NB05) trong `docs/2. Mau tai lieu.docx`
+- **Nhánh:** `docs/thai-chuong3-eda-featureengineering-07082026`
+- **Trạng thái:** Đã viết đầy đủ 3.1–3.8, đã rà soát đối chiếu số liệu với NB04 và NB05, bổ sung thêm 1 insight bị thiếu (cờ `has_bureau`), đã commit + push. Việc Chương 2 ghi ở dòng bên dưới (nhánh `docs/thai-chuong2-pipeline-tienxuly-28072026`) đã xong, người dùng tự tạo PR trên GitHub.
 
 ## Làm tới đâu (cập nhật mới nhất ở trên)
 
-- **2026-07-28:** Viết Chương 2 báo cáo (`docs/2. Mau tai lieu.docx`) trên nhánh `docs/thai-chuong2-pipeline-tienxuly-28072026`, dựa trên nội dung thật của NB02 (tích hợp/join, tối ưu bằng SQL trong PostgreSQL, tạo index, gom bảng summary tránh row explosion) và NB03 (capping P99 bất đối xứng, điền khuyết theo nhóm cột, sửa giá trị sai logic) — không bịa số liệu, lấy đúng theo nội dung 2 notebook. Cấu trúc và định dạng (Heading 2 cho mục con, bullet "•", font Times New Roman 13pt) làm giống hệt Chương 1 đã có sẵn trong file mẫu. Nội dung gồm: 2.1 Quy trình tích hợp dữ liệu, 2.2 Làm sạch dữ liệu chuyên sâu, 2.3 Kịch bản kiểm thử dữ liệu (unit test sau join), 2.4 Kết luận chương (bản tóm tắt, theo yêu cầu rút gọn của người dùng). Đã commit (`8553202`) + push; PR do người dùng tự tạo trên GitHub, không phải qua Claude Code.
+- **2026-08-07:** Viết Chương 3 báo cáo (`docs/2. Mau tai lieu.docx`) trên nhánh `docs/thai-chuong3-eda-featureengineering-07082026`, thay khung sườn gợi ý cũ (3 dòng chung chung, chép từ đề bài) bằng nội dung thật, dựa sát nội dung NB04 (EDA) và NB05 (Feature Engineering), không bịa số liệu.
+  - Cấu trúc: 3.1 Mục tiêu và phạm vi phân tích khám phá dữ liệu; 3.2 Phân chia biến theo nhóm ý nghĩa nghiệp vụ, kèm bảng Word thật (không phải bảng markdown) liệt kê đủ 9 nhóm biến, tên nhóm, cột chính và câu hỏi phân tích, lấy đúng theo bảng phân nhóm gốc ở NB04; 3.3 Kết quả phân tích của cả 9 nhóm, giữ nguyên số liệu gốc (ví dụ tuổi dưới 25 hơn 12% giảm còn 5,22% ở nhóm 55+, dư nợ còn lại 5,59% so với 9,05%, LTV cao nhất 11,5%, điểm ext_source 14,5-17,5% xuống 3,0-3,3%); 3.4 Phân tích đa biến (tuổi kết hợp thu nhập, chậm trả kết hợp dư nợ, điểm ngoài kết hợp LTV); 3.5-3.7 Feature Engineering (mục tiêu và định hướng từ NB03/NB04, kết quả 30 đặc trưng mới từ 127 lên 157 cột chia 5 nhóm, đánh giá tương quan ban đầu với target, tiêu chí giữ/loại, cảnh báo rò rỉ dữ liệu ở 2 đặc trưng tương tác chỉ dùng cho EDA); 3.8 Kết luận chương.
+  - Định dạng làm giống hệt Chương 1 và Chương 2 đã có sẵn: Heading 2 cho mục con, bullet "•", font Times New Roman cỡ chữ khớp XML gốc (13pt thân bài, 14pt heading 2). Chỉnh sửa bằng script Python (thư viện `python-docx`), không gõ tay trong Word, để giữ đúng định dạng và tránh gõ sai số liệu.
+  - Sau khi viết xong, rà soát lại toàn bộ số liệu đối chiếu với 2 notebook gốc, phát hiện thiếu 1 insight: cờ `has_bureau` đi ngược chiều so với các cờ lịch sử khác (có lịch sử Bureau thì rủi ro thấp hơn, trong khi có lịch sử `previous`/`installments`/`pos_cash`/`credit_card` thì rủi ro cao hơn) và đã bổ sung vào mục 3.7.
+  - Sự cố gặp phải: script lưu file lần đầu bị `PermissionError` vì Word đang mở sẵn "2. Mau tai lieu.docx" (tiến trình WINWORD giữ file); phải đóng Word rồi chạy lại script mới lưu được.
+
+- **2026-07-28:** Viết Chương 2 báo cáo (`docs/2. Mau tai lieu.docx`) trên nhánh `docs/thai-chuong2-pipeline-tienxuly-28072026`, dựa trên nội dung thật của NB02 (tích hợp/join, tối ưu bằng SQL trong PostgreSQL, tạo index, gom bảng summary tránh row explosion) và NB03 (capping P99 bất đối xứng, điền khuyết theo nhóm cột, sửa giá trị sai logic), không bịa số liệu, lấy đúng theo nội dung 2 notebook. Cấu trúc và định dạng (Heading 2 cho mục con, bullet "•", font Times New Roman 13pt) làm giống hệt Chương 1 đã có sẵn trong file mẫu. Nội dung gồm: 2.1 Quy trình tích hợp dữ liệu, 2.2 Làm sạch dữ liệu chuyên sâu, 2.3 Kịch bản kiểm thử dữ liệu (unit test sau join), 2.4 Kết luận chương (bản tóm tắt, theo yêu cầu rút gọn của người dùng). Đã commit (`8553202`) + push; PR do người dùng tự tạo trên GitHub, không phải qua Claude Code.
 - **2026-07-26:** Dựng lại toàn bộ `notebooks/03_data_cleaning.ipynb` từ đầu trên nhánh `fix/thai-nb03-dtype-grouping` (khác hẳn bản 2026-07-22/23 bên dưới — làm mới hoàn toàn qua nhiều lượt confirm với người dùng, viết nháp ở `03_data_cleaning2.ipynb` rồi người dùng tự đổi tên đè lên `03_data_cleaning.ipynb`).
   - Cấu trúc thật (126 cell: 89 markdown + 37 code): I. Giới thiệu → II. Đọc dữ liệu → III. Làm sạch dữ liệu (1. Missing Values, 2. Duplicate, 3. Outlier, 4. Xử lý dữ liệu sai logic, 5. Loại cột trùng lặp) → V. Đánh giá sau Data Cleaning → VI. Lưu dữ liệu → VII. Kết luận. **Lưu ý: đang thiếu số "IV"** (nhảy từ III sang V) — sinh ra từ lúc làm từng phần theo yêu cầu người dùng, chưa ai yêu cầu sửa lại số thứ tự nên vẫn để nguyên, nhóm trưởng xem có cần đổi không.
   - Input thật: `application_flat` qua `pd.read_sql` (307.511 dòng × 154 cột — khác 148 cột ghi ở bản cũ bên dưới, có thể do schema DB đã đổi giữa các lần). Missing Values xử lý theo nhóm (business-null flag `has_bureau/has_previous/has_installments/has_pos_cash/has_credit_card`, `own_car_age` giữ NaN, median-fill 46 cột số, `'Unknown'`-fill 5 cột chữ, drop dòng cho 9 cột missing rất ít). Outlier: IQR để phát hiện, capping **P99 chỉ chặn trên** (không chặn dưới, để không che lấp giá trị âm sai logic) cho 13 cột tiền tệ. Logic Validation: `bureau_sum_debt`/`credit_card_avg_balance` âm → clip 0; `days_employed=365243` (sentinel, trùng 100% với `organization_type='XNA'`) → NaN; `code_gender='XNA'` (4 dòng) → xoá dòng.
@@ -48,7 +54,9 @@
 - [x] Tạo Pull Request cho NB03 — đã merge qua PR #76 (xác nhận qua `git log`)
 - [x] Viết Chương 2 (`docs/2. Mau tai lieu.docx`), commit + push nhánh `docs/thai-chuong2-pipeline-tienxuly-28072026` (commit `8553202`)
 - [x] Tạo Pull Request cho Chương 2 (người dùng tự tạo trên GitHub)
-- [ ] Commit + push bản cập nhật `context/thai.md` này lên nhánh `docs/thai-chuong2-pipeline-tienxuly-28072026`
+- [x] Viết Chương 3 (`docs/2. Mau tai lieu.docx`), commit + push nhánh `docs/thai-chuong3-eda-featureengineering-07082026`
+- [ ] Tạo Pull Request cho Chương 3 trên GitHub (người dùng tự tạo, giống 2 lần trước)
+- [ ] Commit + push bản cập nhật `context/thai.md` (mục cũ ghi cho nhánh `docs/thai-chuong2-pipeline-tienxuly-28072026`, không rõ đã làm ở phiên nào chưa — bản cập nhật lần này đã gộp thẳng vào commit của nhánh Chương 3 nên coi như xong luôn phần nội dung, chỉ còn xác minh lại nhánh cũ nếu cần)
 - [ ] Hỏi nhóm trưởng: có cần đánh lại số mục ở NB03 (đang thiếu "IV", nhảy từ III sang V) không — vẫn còn treo từ lần trước, chưa ai xác nhận
 - [ ] Xử lý riêng NB01/NB02 (lỗi `'git5'` ở NB02) ở task/nhánh khác, không gộp vào PR này
 
