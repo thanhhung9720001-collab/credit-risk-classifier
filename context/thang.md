@@ -11,6 +11,7 @@
 
 ## Làm tới đâu (cập nhật mới nhất ở trên)
 
+- **2026-08-09:** Cập nhật slide báo cáo PowerPoint trong [3. Mau bao cao.pptx](file:///c:/Users/bivibi/Desktop/credit-risk-classifier-main/docs/3.%20Mau%20bao%20cao.pptx). Đã push nhánh `docs/thang-quianh-powerpoint` lên remote và chuẩn bị tạo PR.
 - **2026-07-15:** Hoàn thành T11 — notebook `06_machine_learnig.ipynb` (34 cell, 12 cell code), đã Restart & Run All trên **toàn bộ 307.511 dòng** (`DEBUG = False`, execution_count liền mạch 1→12, 3 biểu đồ nhúng thật).
   - **Kết quả mốc nền:** so sánh 4 mô hình trên 61.503 dòng kiểm định — **HistGradientBoosting thắng, AUC-ROC = 0,7792**; Logistic Regression 0,7691; Random Forest 0,7630; Dummy 0,5000. Chỉ dùng scikit-learn, **không cài thêm LightGBM/XGBoost**.
   - **Đã gỡ nút thắt:** `models/model.pkl` (trước là file rỗng 0 byte) nay là model thật 1,0 MB → Thái (T14), Huy (T13/T15) và báo cáo Chương 4 hết bị chặn.
