@@ -3,12 +3,7 @@
 -- Index giup PostgreSQL tim nhanh cac dong theo khoa thay vi quet ca bang.
 -- Chay file nay sau khi da import du lieu raw va kiem tra so dong.
 
--- Khoa chinh cua bang trung tam, dung khi join voi cac bang summary o Muc 6.
-DROP INDEX IF EXISTS idx_application_train_curr;
-CREATE INDEX idx_application_train_curr ON application_train (sk_id_curr);
-
-DROP INDEX IF EXISTS idx_application_test_curr;
-CREATE INDEX idx_application_test_curr ON application_test (sk_id_curr);
+-- application_train.sk_id_curr da la PRIMARY KEY, PostgreSQL tu tao unique index.
 
 -- Cac bang phu noi ve khach hang bang sk_id_curr.
 DROP INDEX IF EXISTS idx_bureau_curr;

@@ -5,10 +5,6 @@ SELECT 'application_train' AS table_name, 307511::BIGINT AS expected_rows, COUNT
        CASE WHEN COUNT(*) = 307511 THEN 'OK' ELSE 'CAN_KIEM_TRA' END AS result
 FROM application_train
 UNION ALL
-SELECT 'application_test', 48744::BIGINT, COUNT(*)::BIGINT,
-       CASE WHEN COUNT(*) = 48744 THEN 'OK' ELSE 'CAN_KIEM_TRA' END
-FROM application_test
-UNION ALL
 SELECT 'bureau', 1716428::BIGINT, COUNT(*)::BIGINT,
        CASE WHEN COUNT(*) = 1716428 THEN 'OK' ELSE 'CAN_KIEM_TRA' END
 FROM bureau

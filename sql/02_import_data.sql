@@ -4,8 +4,7 @@
 -- Neu may thanh vien dat project o thu muc khac, hay sua lai duong dan truoc khi chay.
 
 TRUNCATE TABLE
-    application_train,
-    application_test,
+    applications,
     bureau,
     bureau_balance,
     previous_application,
@@ -13,12 +12,8 @@ TRUNCATE TABLE
     pos_cash_balance,
     credit_card_balance;
 
-COPY application_train
+COPY applications
 FROM 'D:/FPT Polytechnic/2026/HK Summer 2026/Block2/Du-an-01/credit-risk-classifier/data/raw/application_train.csv'
-WITH (FORMAT csv, HEADER true, DELIMITER ',', NULL '', QUOTE '"');
-
-COPY application_test
-FROM 'D:/FPT Polytechnic/2026/HK Summer 2026/Block2/Du-an-01/credit-risk-classifier/data/raw/application_test.csv'
 WITH (FORMAT csv, HEADER true, DELIMITER ',', NULL '', QUOTE '"');
 
 COPY bureau

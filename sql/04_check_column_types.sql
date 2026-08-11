@@ -20,7 +20,6 @@ SELECT
     STRING_AGG(DISTINCT cols.data_type, ', ' ORDER BY cols.data_type) AS cac_kieu_du_lieu
 FROM (VALUES
     ('application_train',     122, 16),
-    ('application_test',      121, 16),
     ('bureau',                 17,  3),
     ('bureau_balance',          3,  1),
     ('previous_application',   37, 16),

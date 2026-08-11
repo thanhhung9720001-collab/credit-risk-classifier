@@ -31,6 +31,11 @@ SELECT
     MAX(b.credit_day_overdue)  AS bureau_max_overdue,
     AVG(b.days_credit)         AS bureau_avg_days_credit,
     MAX(b.days_credit)         AS bureau_latest_days_credit,
+    COUNT(*) FILTER (WHERE b.days_credit >= -365) AS bureau_recent_loan_12m_count,
+    COUNT(*) FILTER (WHERE b.credit_active = 'Active') AS bureau_active_count,
+    COUNT(*) FILTER (WHERE b.credit_active = 'Closed') AS bureau_closed_count,
+    SUM(b.amt_credit_sum_overdue) AS bureau_sum_overdue,
+    COUNT(*) FILTER (WHERE b.credit_day_overdue > 0) AS bureau_overdue_loan_count,
     COUNT(*) FILTER (WHERE COALESCE(bb.bureau_balance_dpd_month_count, 0) > 0) AS bureau_balance_delinquent_loan_count,
     SUM(COALESCE(bb.bureau_balance_dpd_month_count, 0)) AS bureau_balance_dpd_month_count,
     MAX(COALESCE(bb.bureau_balance_max_dpd_status, 0)) AS bureau_balance_max_dpd_status,
@@ -53,7 +58,10 @@ SELECT
     SUM(amt_credit)    AS previous_sum_credit,
     AVG(amt_credit)    AS previous_avg_credit,
     AVG(days_decision) AS previous_avg_days_decision,
-    MAX(days_decision) AS previous_latest_decision
+    MAX(days_decision) AS previous_latest_decision,
+    COUNT(*) FILTER (WHERE name_contract_status = 'Approved') AS previous_approved_count,
+    COUNT(*) FILTER (WHERE name_contract_status = 'Refused') AS previous_refused_count,
+    COUNT(*) FILTER (WHERE days_decision >= -365) AS previous_recent_12m_count
 FROM previous_application
 GROUP BY sk_id_curr;
 
@@ -69,7 +77,8 @@ SELECT
     SUM(amt_instalment)                       AS installments_sum_due,
     SUM(amt_payment)                          AS installments_sum_paid,
     AVG(days_entry_payment - days_instalment) AS installments_avg_late,
-    MAX(days_entry_payment - days_instalment) AS installments_max_late
+    MAX(days_entry_payment - days_instalment) AS installments_max_late,
+    COUNT(*) FILTER (WHERE days_entry_payment > days_instalment) AS installments_late_count
 FROM installments_payments
 GROUP BY sk_id_curr;
 
