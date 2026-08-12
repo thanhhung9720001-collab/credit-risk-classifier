@@ -1,5 +1,5 @@
 -- 08_create_application_flat.sql
--- Muc dich: gop application_train voi 5 bang summary thanh bang phang 1 khach = 1 dong.
+-- Muc dich: gop applications voi 5 bang summary thanh bang phang 1 khach = 1 dong.
 -- Giai thich chi tiet: xem Muc 6 trong notebook 02.
 
 DROP TABLE IF EXISTS application_flat CASCADE;
@@ -13,6 +13,11 @@ SELECT
     b.bureau_max_overdue,
     b.bureau_avg_days_credit,
     b.bureau_latest_days_credit,
+    b.bureau_recent_loan_12m_count,
+    b.bureau_active_count,
+    b.bureau_closed_count,
+    b.bureau_sum_overdue,
+    b.bureau_overdue_loan_count,
     b.bureau_balance_delinquent_loan_count,
     b.bureau_balance_dpd_month_count,
     b.bureau_balance_max_dpd_status,
@@ -22,15 +27,20 @@ SELECT
 
     p.previous_count,
     p.previous_sum_credit,
+    p.previous_approved_sum_credit,
     p.previous_avg_credit,
     p.previous_avg_days_decision,
     p.previous_latest_decision,
+    p.previous_approved_count,
+    p.previous_refused_count,
+    p.previous_recent_12m_count,
 
     i.installments_count,
     i.installments_sum_due,
     i.installments_sum_paid,
     i.installments_avg_late,
     i.installments_max_late,
+    i.installments_late_count,
 
     pc.pos_cash_count,
     pc.pos_cash_avg_dpd,
@@ -43,7 +53,7 @@ SELECT
     cc.credit_card_max_balance,
     cc.credit_card_avg_limit,
     cc.credit_card_max_dpd
-FROM application_train a
+FROM applications a
 LEFT JOIN bureau_summary         b   ON b.sk_id_curr = a.sk_id_curr
 LEFT JOIN previous_application_summary   p   ON p.sk_id_curr = a.sk_id_curr
 LEFT JOIN installments_payments_summary   i   ON i.sk_id_curr = a.sk_id_curr
