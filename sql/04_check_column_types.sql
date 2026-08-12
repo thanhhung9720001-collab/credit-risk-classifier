@@ -1,7 +1,7 @@
 -- 04_check_column_types.sql
--- Muc dich: kiem tra kieu du lieu sau import co dung nhu thiet ke trong 01_create_tables.sql hay khong.
--- COPY ghep du lieu THEO VI TRI COT chu khong theo ten cot, nen neu so cot lech thi
--- du lieu co the vao nham cot ma van import thanh cong, khong bao loi.
+-- Muc dich: kiem tra cau truc schema co dung nhu thiet ke trong 01_create_tables.sql hay khong.
+-- Thu tu cot khi import da duoc kiem soat boi danh sach cot tuong minh trong 02_import_data.sql.
+-- Script nay kiem tra so cot va so cot TEXT; khong dung de chung minh thu tu cot.
 -- Cot kieu chu cung phai dung so luong: mot cot dang le la so ma khai thanh TEXT
 -- se lam SUM/AVG bao loi va MAX so sanh theo bang chu cai (vi du '9' > '2792').
 
@@ -19,7 +19,7 @@ SELECT
     END AS result,
     STRING_AGG(DISTINCT cols.data_type, ', ' ORDER BY cols.data_type) AS cac_kieu_du_lieu
 FROM (VALUES
-    ('application_train',     122, 16),
+    ('applications',           122, 16),
     ('bureau',                 17,  3),
     ('bureau_balance',          3,  1),
     ('previous_application',   37, 16),

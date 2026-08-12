@@ -1,9 +1,9 @@
 -- 03_check_import_counts.sql
 -- Muc dich: kiem tra so dong sau import co khop voi ket qua da ghi nhan o NB01 hay khong.
 
-SELECT 'application_train' AS table_name, 307511::BIGINT AS expected_rows, COUNT(*)::BIGINT AS actual_rows,
+SELECT 'applications' AS table_name, 307511::BIGINT AS expected_rows, COUNT(*)::BIGINT AS actual_rows,
        CASE WHEN COUNT(*) = 307511 THEN 'OK' ELSE 'CAN_KIEM_TRA' END AS result
-FROM application_train
+FROM applications
 UNION ALL
 SELECT 'bureau', 1716428::BIGINT, COUNT(*)::BIGINT,
        CASE WHEN COUNT(*) = 1716428 THEN 'OK' ELSE 'CAN_KIEM_TRA' END

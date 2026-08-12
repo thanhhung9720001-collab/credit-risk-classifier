@@ -1,5 +1,5 @@
 -- 01_create_tables.sql
--- Mục đích: tạo 8 bảng raw từ 8 file CSV chính của Home Credit.
+-- Mục đích: tạo 7 bảng raw từ 7 file CSV chính của Home Credit.
 -- Kiểu dữ liệu được khai báo gần với dữ liệu gốc để vừa dễ import vừa dễ giải thích.
 -- Chạy file này sau khi đã kết nối vào database credit_risk_db.
 
@@ -136,7 +136,7 @@ CREATE TABLE applications (
 DROP TABLE IF EXISTS bureau CASCADE;
 CREATE TABLE bureau (
     sk_id_curr BIGINT,
-    sk_id_bureau BIGINT,
+    sk_id_bureau BIGINT PRIMARY KEY,
     credit_active TEXT,
     credit_currency TEXT,
     days_credit NUMERIC,
@@ -165,7 +165,7 @@ CREATE TABLE bureau_balance (
 -- Bảng raw từ file previous_application.csv
 DROP TABLE IF EXISTS previous_application CASCADE;
 CREATE TABLE previous_application (
-    sk_id_prev BIGINT,
+    sk_id_prev BIGINT PRIMARY KEY,
     sk_id_curr BIGINT,
     name_contract_type TEXT,
     amt_annuity NUMERIC,

@@ -56,6 +56,7 @@ SELECT
     sk_id_curr,
     COUNT(*)           AS previous_count,
     SUM(amt_credit)    AS previous_sum_credit,
+    SUM(amt_credit) FILTER (WHERE name_contract_status = 'Approved') AS previous_approved_sum_credit,
     AVG(amt_credit)    AS previous_avg_credit,
     AVG(days_decision) AS previous_avg_days_decision,
     MAX(days_decision) AS previous_latest_decision,
