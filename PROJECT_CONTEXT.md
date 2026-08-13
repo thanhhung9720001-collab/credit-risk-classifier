@@ -80,7 +80,7 @@
 4. **Models** (`models/`): còn `model.pkl`, `scaler.pkl`, `model_metadata.json` từ pipeline cũ. Trước khi dùng cho app/NB07 cần kiểm tra tương thích với pipeline làm lại.
 5. **Báo cáo** (`reports/`): Word + PowerPoint theo mẫu trường; theo dõi tiến độ nhóm bằng **Google Sheet** (nhóm trưởng quản lý, link ở nhóm chat — không nằm trong repo).  Đề bài nhắc tới **Jira/Trello + ảnh bảng Kanban** (Chương 5 + slide 12) — cần hỏi giảng viên xem Google Sheet có được chấp nhận thay thế không.
 
-## 3. Trạng thái hiện tại (cập nhật 2026-08-06)
+## 3. Trạng thái hiện tại (cập nhật 2026-08-13)
 
 -  Đã dựng xong cấu trúc thư mục hoàn chỉnh
 -  Đã tải đầy đủ dữ liệu Home Credit vào `data/raw/`
@@ -99,6 +99,7 @@
   - **NB02:** đã chuẩn hóa hệ heading I–IX, tách rõ 8 bảng raw trong phần tạo bảng và giữ nguyên SQL/pipeline. `application_flat` hiện có 307.511 dòng × 154 cột sau khi bổ sung đặc trưng từ `bureau_balance`.
   - **NB03:** đã tổ chức lại theo mạch đọc PostgreSQL → khảo sát missing → xử lý missing/duplicate/outlier/logic → đánh giá Before/After → lưu `application_flat_cleaned`. Các cập nhật gần nhất gồm nhóm hóa xử lý missing, rà soát các cột tương tự và chuẩn hóa heading/comment. **Chưa được xác nhận lại bằng một lượt Restart & Run All sạch sau các cập nhật mới nhất.**
   - **NB04:** đã hoàn thành EDA theo 9 nhóm biến: nhân khẩu học/công việc, tài chính/khoản vay, lịch sử tín dụng, nhà ở/tài sản, hồ sơ đăng ký, khu vực/quan hệ xã hội, liên lạc/giấy tờ, điểm đánh giá ngoài và tra cứu tín dụng; đồng thời bổ sung **IV. EDA đa biến** gồm tuổi × thu nhập, lịch sử chậm trả × dư nợ còn lại và điểm đánh giá ngoài × LTV. Mục Tổng kết có bảng **38 insight** theo mã `1a`–`9b`, `IV.1`–`IV.3` và bảng **26 cụm biến bàn giao sang NB05**, gồm 3 feature tương tác mới. **Cần Restart & Run All để đồng bộ output và kiểm tra nhận xét trước PR.**
+  - **NB05:** đã hoàn tất rà soát và chạy lại `notebooks/05_feature_engineering.ipynb` trên `application_flat_cleaned` gồm **306.195 dòng × 172 cột**. Notebook tạo **40 feature mới** từ hồ sơ hiện tại và các nguồn lịch sử, nâng dữ liệu lên **212 cột** mà không thay đổi `sk_id_curr`, thứ tự khách hàng hoặc `target`. Phần kiểm tra, phân tích với `target`, đánh giá đóng góp, tiêu chí lựa chọn và bảng bàn giao đã được cập nhật theo output thực tế. NB05 bàn giao trực tiếp **38 feature**; `age_income_interaction` và `late_debt_interaction` phải được tạo lại từ tập train trong NB06. Bảng `public.application_features` có **306.195 dòng × 212 cột** và đã vượt qua kiểm tra cấu trúc, dữ liệu khách hàng cùng mẫu 1.000 dòng; bảng cũ được giữ dưới tên `public.application_feature_backup_20260813`.
 - **Triển khai nội dung code** (cập nhật 2026-07-25):
   - **Mốc reset làm lại gọn hơn (PR #52, 2026-07-20):** Hưng đã quyết định reset notebook/SQL để tránh tiếp tục vá trên nền cũ quá dài/khó giải thích. Sau reset, `notebooks/` chỉ còn NB01 và `sql/` trống. **Tính tới 2026-07-22 đã dựng lại xong NB02 và toàn bộ `sql/`** — xem hai mục PR #59 và PR #61 phía dưới. Đây là trạng thái tại thời điểm đó; tiến độ hiện tại của NB03–NB07 xem phần cập nhật 2026-07-28 phía trên.
   - **Business Understanding — hoàn thành bản docs mới (PR #53, 2026-07-20):** `docs/Business_Understanding.docx` đã được bổ sung mục tiêu nghiên cứu, giới thiệu dataset, giới thiệu công nghệ, lý do chọn Home Credit, tầm quan trọng trong ngành AI, SWOT và chỉnh lại heading/bullet. Đây là nền để viết Chương 1 trong whitepaper, nhưng vẫn cần ghép vào file nộp trong `reports/`.
@@ -152,7 +153,7 @@
        - **Cách bắt:** quét **toàn bộ** giá trị thật của mọi cột khai `TEXT` xem cột nào chứa thuần số. Hai lượt kiểm tra trước đó không phát hiện được vì chỉ kiểm "dữ liệu có import lọt hay không".
        - **Cách phòng:** `sql/04_check_column_types.sql` đối chiếu số cột và số cột kiểu chữ của từng bảng với thiết kế, chạy sau mỗi lần import. Cũng cần vì `COPY` ghép dữ liệu **theo vị trí cột chứ không theo tên cột** — thứ tự lệch thì dữ liệu vào nhầm cột mà vẫn báo import thành công.
 
-## 4. Việc tiếp theo (cập nhật 2026-08-06)
+## 4. Việc tiếp theo (cập nhật 2026-08-13)
 
 **Với mọi thành viên trước khi bắt đầu:** đọc `docs/QUY-TRINH-LAM-VIEC.md` và làm theo checklist đầu phiên (pull code mới → **khai báo tên** `echo <tên> > .claude/whoami` + tạo `context/<tên>.md` → tạo/chuyển nhánh, KHÔNG code trên main). Ai đã kéo quy trình mới về nhớ **khởi động lại Claude Code** để nạp hook.
 
@@ -164,8 +165,8 @@ Sau đợt reset, nền tảng Business Understanding và Data Understanding đ�
 
 | Sản phẩm phải nộp | Mức hoàn thành |
 |---|---|
-| Mã nguồn `.ipynb` | **NB00–NB02 xong; NB03 cần Restart & Run All; NB04 đã xong EDA 9 nhóm và 3 cặp đa biến, cần Restart & Run All; NB05 đã xong nội dung nhưng cần kiểm tra Runtime; NB06 đã hoàn thành Mục I–II và III.1; NB07 chưa xây dựng lại** |
-| SQL/PostgreSQL | **Xong — 11 file `sql/01`–`sql/11`, bảng `application_flat` 307.511 × 154 sẵn sàng trong PostgreSQL** |
+| Mã nguồn `.ipynb` | **NB00–NB02 xong; NB03 cần xác nhận lượt Restart & Run All cuối; NB04 đã xong EDA 9 nhóm và 3 cặp đa biến; NB05 đã hoàn tất và kiểm tra Runtime; NB06 đã hoàn thành Mục I–II và III.1; NB07 chưa xây dựng lại** |
+| SQL/PostgreSQL | **Có 11 file `sql/01`–`sql/11`; `application_flat_cleaned` 306.195 × 172 là đầu vào NB05 và `application_features` 306.195 × 212 đã sẵn sàng cho NB06** |
 | **Whitepaper `.docx` 6 chương** | **Có bản thảo Business/Data Understanding trong `docs/`; file nộp `reports/` vẫn cần ghép/viết tiếp** |
 | **Slide `.pptx`** | **0% — md5 trùng khít file mẫu** |
 | **Ứng dụng web** | **0% — `app/` gồm 4 file 0 byte** |
@@ -176,7 +177,7 @@ Cộng thêm **dashboard interactive** (Phần A mục 7) vẫn chưa có và c�
 
 1. **Xác minh lại NB03:** chạy `Restart & Run All` với PostgreSQL và `.env`, kiểm tra execution count liền mạch, output/nhận xét khớp code, rồi xác nhận bảng `application_flat_cleaned` được lưu và đọc lại đúng.
 2. **Xác minh và chốt NB04 — EDA & Visualization:** chạy Restart & Run All để đồng bộ output; rà soát lần cuối 38 insight và 26 cụm biến bàn giao trước PR. Không dùng lại EDA của pipeline cũ làm nguồn sự thật.
-3. **Xác minh NB05 và tiếp tục NB06:** chạy NB05 với PostgreSQL để kiểm tra Runtime; sau đó tiếp tục NB06 từ Mục III.2 (chia train/test), tạo lại interaction sau khi chia, xử lý missing, mã hóa và chuẩn hóa trước khi huấn luyện. Chỉ chốt Modeling và Prediction Demo sau khi pipeline mới ổn định. Các artifact cũ trong `models/` cần kiểm tra tương thích trước khi sử dụng.
+3. **Tiếp tục NB06 trên đầu vào đã xác nhận:** đọc `public.application_features`, tiếp tục từ Mục III.2 (chia train/test), tạo lại `age_income_interaction` và `late_debt_interaction` từ tập train, xử lý missing, mã hóa và chuẩn hóa trước khi huấn luyện. Chỉ chốt Modeling và Prediction Demo sau khi pipeline mới ổn định. Các artifact cũ trong `models/` cần kiểm tra tương thích trước khi sử dụng.
 4. **Whitepaper `.docx` + slide `.pptx`:** Business/Data Understanding đã có nền trong `docs/`, nhưng file nộp trong `reports/` vẫn cần ghép và viết tiếp Chương 2–6 + 16 slide.
 5. **`app/` Streamlit + dashboard interactive:** đây vẫn là yêu cầu bắt buộc; chỉ triển khai sau khi pipeline/model mới ổn định. Dashboard phải cho phép tương tác, không chỉ dùng biểu đồ tĩnh.
 6. **Hỏi giảng viên về Jira/Trello:** đề bài đòi "Nhật ký Jira" (Chương 5) + ảnh bảng Kanban (slide 12); nhóm đang dùng Google Sheet. Hỏi sớm, đừng để tới lúc nộp mới biết.
@@ -186,7 +187,7 @@ Cộng thêm **dashboard interactive** (Phần A mục 7) vẫn chưa có và c�
 - **Có thêm `sqlalchemy` vào `requirements.txt` không?** Checklist của thầy ghi cả `psycopg2` lẫn `SQLAlchemy`, nhưng nhóm đã chốt chỉ dùng `psycopg2` (ghi rõ lý do trong `requirements.txt`: truyền connection `psycopg2` vào `pandas.read_sql` chỉ in cảnh báo, code vẫn chạy đúng). NB02 đã ghi rõ lựa chọn này trong nhận xét mục 8.1 để không bị hiểu là bỏ sót.
 - **Hỏi thầy về đánh số trong `docs/Task Checklist for Each Notebook.docx`:** phần NB01 kết thúc bằng `IV. Kết luận` trong khi đáng lẽ là `IX`; phần NB03 nhảy từ `III` sang `V`. Riêng chữ `aaa` trong tiêu đề `VI. Khảo sát dữ liệu của bảng phụ aaa` **không phải lỗi gõ** — đó là chỗ trống để điền tên bảng phụ, tức thầy muốn làm mục này cho từng bảng cụ thể.
 
-> Trạng thái thật: NB00, NB01 và NB02 đã có trên `main`; NB03 đã cập nhật tới PR #81 nhưng cần chạy xác minh lại; NB04 đã hoàn thành EDA 9 nhóm biến và 3 cặp đa biến nhưng cần Restart & Run All trước PR; NB05 đã hoàn thành nội dung nhưng cần kiểm tra Runtime; NB06 đã có header, khung 9 mục và hoàn thành Mục I–II, III.1; NB07 chưa xây dựng lại theo pipeline mới. Tài liệu hướng dẫn giảng viên, `README.md` và `requirements.txt` vẫn có sẵn.
+> Trạng thái thật: NB00, NB01 và NB02 đã có trên `main`; NB03 đã cập nhật tới PR #81 nhưng cần xác nhận lượt chạy cuối; NB04 đã hoàn thành EDA 9 nhóm biến và 3 cặp đa biến; NB05 đã hoàn tất Runtime và tạo bảng `application_features` 306.195 × 212; NB06 đã có header, khung 9 mục và hoàn thành Mục I–II, III.1; NB07 chưa xây dựng lại theo pipeline mới. Tài liệu hướng dẫn giảng viên, `README.md` và `requirements.txt` vẫn có sẵn.
 
 ## 5. Ghi chú làm việc
 
