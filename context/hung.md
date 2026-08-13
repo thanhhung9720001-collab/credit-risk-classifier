@@ -14,7 +14,7 @@
 
 - **Tài liệu hướng dẫn giảng viên (2026-08-06 — nhánh `docs/hung-uodate-docs`):** Đã bổ sung clip **Notebook 5 & 6 - Thầy Long Web** và tài liệu `home-credit-default-risk (1).docx` vào `docs/huong-dan-giang-vien/`. Chốt mạch áp dụng: NB04 tìm insight -> NB05 tạo feature -> NB06 Machine Learning; mã hóa là bước chuẩn bị trong NB06. Đã thêm khung chuẩn bị NB05 gồm 6 nhóm feature (interaction, ratio, aggregation/context, count, history/recency, domain-specific), mapping feature theo 5 bảng lịch sử, quy tắc join/anti-leakage và checklist cho từng feature. Home Credit không áp dụng máy móc lag/rolling mà ưu tiên aggregation lịch sử, ratio và interaction.
 
-- **Task NB04 (2026-08-06 — nhánh `fix/hung-update-NB04-06082026`):** Hoàn thành EDA cho **9 nhóm biến** và mục **IV. EDA đa biến** gồm 3 cặp: tuổi × thu nhập, lịch sử chậm trả × dư nợ còn lại, điểm đánh giá ngoài × LTV. Mục Tổng kết hiện có **38 insight** theo mã `1a`–`9b`, `IV.1`–`IV.3` và **26 cụm biến bàn giao sang NB05**, trong đó bổ sung 3 feature tương tác. Cần `Restart & Run All` để kiểm tra output/nhận xét khớp code trước khi commit/PR; sau đó lập kế hoạch NB05.
+- **NB04 — EDA & Visualization (hoàn tất nội dung 2026-08-13 — nhánh `fix/hung-fix-NBs-12082026`):** Đã đồng bộ NB04 với đầu vào `application_flat_cleaned` hiện tại gồm **306.195 dòng × 172 cột**. Hoàn thành EDA cho 9 nhóm biến, phần đa biến gồm tuổi × thu nhập, chậm trả × dư nợ và điểm ngoài × LTV; toàn bộ code, output, biểu đồ và nhận xét đã được rà lại. Bảng insight chính đã cập nhật theo output mới; bảng bàn giao có **41 dòng**, dùng bốn mức quyết định thống nhất và phân biệt cột hiện có với feature cần tạo lại. Lần chạy lại từ đầu đã phát hiện cell biểu đồ Nhóm 6 tham chiếu nhầm biến `bang_tra_cuu_trung_dai_han` của Nhóm 9; dòng thừa đã được xóa và cú pháp của **94 code cell** đã được kiểm tra. Còn cần chạy lại cell Nhóm 6 rồi tiếp tục đến cuối notebook, xác nhận không còn runtime error và lưu file trước khi commit/PR.
 
 - **Task mới (2026-07-30):** Đã bổ sung tài liệu cho clip Classification và Feature Engineering vào `docs/huong-dan-giang-vien/video-bai-giang.md`; README đã cập nhật từ 3 thành 4 clip bổ sung. Nội dung gồm các dạng classification, 6 nhóm feature engineering, sai lầm thường gặp và liên hệ với Home Credit.
 
@@ -210,6 +210,7 @@
 
 ## Còn dở / việc tiếp theo của tôi
 
+- [ ] **NB04:** chạy lại cell biểu đồ mật độ dân số/xếp hạng khu vực và tiếp tục tới cuối notebook; xác nhận Run All không còn lỗi, lưu notebook rồi mới commit/PR.
 - [x] Push nhánh `feature/t19-readme-va-requirements`, tạo PR và merge (T19 — README + requirements → PR #36).
 - [x] Sau khi merge T19: cập nhật `PROJECT_CONTEXT.md` (PR #37).
 - [x] Phân công **Notebook 06 (huấn luyện ML)** → Thắng nhận T11, xong, merge PR #38 (AUC 0,7792).
