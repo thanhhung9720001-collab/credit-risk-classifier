@@ -32,6 +32,10 @@ SELECT
     AVG(b.days_credit)         AS bureau_avg_days_credit,
     MAX(b.days_credit)         AS bureau_latest_days_credit,
     COUNT(*) FILTER (WHERE b.days_credit >= -365) AS bureau_recent_loan_12m_count,
+    COUNT(*) FILTER (
+        WHERE b.days_credit BETWEEN -365 AND 0
+          AND b.credit_day_overdue > 0
+    ) AS bureau_recent_12m_overdue_count,
     COUNT(*) FILTER (WHERE b.credit_active = 'Active') AS bureau_active_count,
     COUNT(*) FILTER (WHERE b.credit_active = 'Closed') AS bureau_closed_count,
     SUM(b.amt_credit_sum_overdue) AS bureau_sum_overdue,
@@ -62,7 +66,15 @@ SELECT
     MAX(days_decision) AS previous_latest_decision,
     COUNT(*) FILTER (WHERE name_contract_status = 'Approved') AS previous_approved_count,
     COUNT(*) FILTER (WHERE name_contract_status = 'Refused') AS previous_refused_count,
-    COUNT(*) FILTER (WHERE days_decision >= -365) AS previous_recent_12m_count
+    COUNT(*) FILTER (WHERE days_decision >= -365) AS previous_recent_12m_count,
+    COUNT(*) FILTER (
+        WHERE days_decision BETWEEN -365 AND 0
+          AND name_contract_status = 'Approved'
+    ) AS previous_recent_12m_approved_count,
+    COUNT(*) FILTER (
+        WHERE days_decision BETWEEN -365 AND 0
+          AND name_contract_status = 'Refused'
+    ) AS previous_recent_12m_refused_count
 FROM previous_application
 GROUP BY sk_id_curr;
 
@@ -79,7 +91,31 @@ SELECT
     SUM(amt_payment)                          AS installments_sum_paid,
     AVG(days_entry_payment - days_instalment) AS installments_avg_late,
     MAX(days_entry_payment - days_instalment) AS installments_max_late,
-    COUNT(*) FILTER (WHERE days_entry_payment > days_instalment) AS installments_late_count
+    COUNT(*) FILTER (WHERE days_entry_payment > days_instalment) AS installments_late_count,
+    COUNT(*) FILTER (WHERE amt_payment < amt_instalment) AS installments_underpaid_count,
+    COALESCE(
+        SUM(amt_instalment - amt_payment)
+        FILTER (WHERE amt_payment < amt_instalment),
+        0
+    ) AS installments_underpaid_amount,
+    COUNT(*) FILTER (
+        WHERE days_instalment BETWEEN -365 AND 0
+          AND days_entry_payment > days_instalment
+    ) AS installments_recent_12m_late_count,
+    COUNT(*) FILTER (
+        WHERE days_instalment BETWEEN -365 AND 0
+    ) AS installments_recent_12m_count,
+    COUNT(*) FILTER (
+        WHERE days_instalment BETWEEN -365 AND 0
+          AND amt_payment < amt_instalment
+    ) AS installments_recent_12m_underpaid_count,
+    COALESCE(
+        SUM(amt_instalment - amt_payment) FILTER (
+            WHERE days_instalment BETWEEN -365 AND 0
+              AND amt_payment < amt_instalment
+        ),
+        0
+    ) AS installments_recent_12m_underpaid_amount
 FROM installments_payments
 GROUP BY sk_id_curr;
 
@@ -95,7 +131,16 @@ SELECT
     AVG(sk_dpd)         AS pos_cash_avg_dpd,
     MAX(sk_dpd)         AS pos_cash_max_dpd,
     MIN(months_balance) AS pos_cash_oldest_month,
-    MAX(months_balance) AS pos_cash_latest_month
+    MAX(months_balance) AS pos_cash_latest_month,
+    COUNT(DISTINCT sk_id_prev) AS pos_cash_contract_count,
+    COUNT(*) FILTER (
+        WHERE months_balance BETWEEN -12 AND -1
+          AND sk_dpd > 0
+    ) AS pos_cash_recent_12m_dpd_count,
+    COALESCE(
+        MAX(sk_dpd) FILTER (WHERE months_balance BETWEEN -12 AND -1),
+        0
+    ) AS pos_cash_recent_12m_max_dpd
 FROM pos_cash_balance
 GROUP BY sk_id_curr;
 
@@ -111,7 +156,16 @@ SELECT
     AVG(amt_balance)             AS credit_card_avg_balance,
     MAX(amt_balance)             AS credit_card_max_balance,
     AVG(amt_credit_limit_actual) AS credit_card_avg_limit,
-    MAX(sk_dpd)                  AS credit_card_max_dpd
+    MAX(sk_dpd)                  AS credit_card_max_dpd,
+    COUNT(DISTINCT sk_id_prev)   AS credit_card_contract_count,
+    AVG(amt_balance / NULLIF(amt_credit_limit_actual, 0)) AS credit_card_avg_utilization,
+    MAX(amt_balance / NULLIF(amt_credit_limit_actual, 0)) AS credit_card_max_utilization,
+    COALESCE(
+        MAX(amt_balance / NULLIF(amt_credit_limit_actual, 0)) FILTER (
+            WHERE months_balance BETWEEN -12 AND -1
+        ),
+        0
+    ) AS credit_card_recent_12m_max_utilization
 FROM credit_card_balance
 GROUP BY sk_id_curr;
 

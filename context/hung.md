@@ -4,6 +4,21 @@
 
 ## Đang làm
 
+- **Cập nhật context cuối phiên (2026-08-14 — nhánh `fix/hung-fix-NB06-13082026`):** Đã chốt pipeline NB02 → NB03 → NB05 → NB06 → NB06.1 và lưu riêng hồ sơ nghiên cứu Feature Engineering/tối ưu F1-score ở phần bên dưới. Khi viết báo cáo hoặc chuẩn bị bảo vệ, dùng các số liệu cuối: `application_flat` 307.511 × 180, dữ liệu sau làm sạch 306.195 × 188, `application_features` 306.195 × 234; NB06 xử lý thành 397 feature cho ba mô hình, còn NB06.1 dùng 360 feature sau khi chia Train/Validation/Test và chọn ngưỡng. Các mốc 164/172/212 cột ở những dòng lịch sử cũ chỉ phản ánh trạng thái trước khi bổ sung feature, không dùng làm số liệu cuối.
+
+- **NB03 — Bổ sung Kết luận cuối notebook (2026-08-14 — nhánh `fix/hung-fix-NB06-13082026`):** Đã thêm một cell Markdown ngay sau heading `## VII. Kết luận`. Nội dung chốt output hiện có: dữ liệu sau làm sạch 306.195 dòng × 188 cột; missing giảm từ 12.456.340 xuống 3.280.224 ô và từ 125 xuống 58 cột; lỗi logic giảm từ 56.674 về 0; capping P99 áp dụng cho 8 cột với 22.446 giá trị; bảng `application_flat_cleaned` khớp DataFrame và được bàn giao cho NB05. Không sửa code hoặc output; NB03 không có error output.
+
+- **NB06.1 — Threshold Optimization (hoàn thành nội dung và Tổng kết ngày 2026-08-14 — nhánh `fix/hung-fix-NB06-13082026`):** Notebook đã chia Train/Validation/Test xấp xỉ 64/16/20, xử lý thành 360 feature đồng nhất, huấn luyện HistGradientBoosting và thử 91 ngưỡng trên Validation. Ngưỡng `0,67` đạt F1 Validation `0,3281`; vùng ngưỡng lân cận `0,65–0,69` cho kết quả gần nhau. Trên Test, ngưỡng `0,67` tăng Precision từ `0,1839` lên `0,2630` và F1 từ `0,2896` lên `0,3292`, nhưng Recall giảm từ `0,6813` xuống `0,4396`. Ma trận nhầm lẫn: TN 50.183, FP 6.102, FN 2.776, TP 2.178; caveat quan trọng là số nợ xấu bị bỏ sót lớn hơn số phát hiện đúng. Mục VIII đã có nhận xét sau từng output. Mục IX đã chạy thành công, tạo `hist_gradient_boosting_threshold_optimized.pkl` (khoảng 677 KB) và `hist_gradient_boosting_threshold_optimized_metrics.json` (khoảng 0,5 KB), không trùng file NB06. Mục X đã tổng kết theo mạch dữ liệu → chọn ngưỡng → Test → đánh đổi nghiệp vụ → bàn giao NB07. Notebook không có error output và hai file bàn giao đều tồn tại. Việc nhỏ còn lại nếu cần là bổ sung nhận xét riêng cho bảng/biểu đồ Mục VII; nội dung chính NB06.1 đã hoàn tất.
+
+- **Rà soát và bổ sung nhận xét NB03/NB05/NB06 (2026-08-14 — nhánh `fix/hung-fix-NB06-13082026`):** Đã đối chiếu trực tiếp output đã chạy và thêm nhận xét theo mạch kết quả → ý nghĩa → quyết định. NB03 thêm 7 nhận xét cho dữ liệu đầu vào, missing, dữ liệu sai logic, outlier, Before/After và bảng PostgreSQL. NB05 thêm 6 nhận xét cho đầu vào, 46 feature, chất lượng/tương quan, quan hệ với target, đánh giá đóng góp ban đầu và bàn giao PostgreSQL. NB06 thêm 13 nhận xét cho dữ liệu, chia tập, preprocessing, metric/giải thích của ba mô hình, ba vòng Permutation Importance và bảng so sánh; bổ sung `VIII. Tổng kết` ở cuối. Không thay đổi code, execution count, output hoặc cấu hình mô hình; các notebook không có error output.
+
+- **NB02/NB05/NB06 — Nhật ký đào feature theo nghiệp vụ và đánh giá sau huấn luyện (2026-08-14 — nhánh `fix/hung-fix-NB06-13082026`):** Giữ nguyên cả ba vòng đào feature trong notebook để làm bằng chứng cho quá trình hình thành giả thuyết, kiểm thử và ra quyết định. Khi viết báo cáo hoặc thuyết trình, trình bày theo mạch: quan sát nghiệp vụ → đề xuất feature → huấn luyện cùng điều kiện → dùng metric và Permutation Importance để đánh giá đóng góp. Không xóa vòng thử nghiệm không thành công, vì đây là bằng chứng nhóm biết kiểm chứng giả thuyết thay vì chỉ chọn kết quả tốt.
+  - **Vòng 1 — khai thác sâu hơn lịch sử tín dụng:** bổ sung 8 summary feature phản ánh số hợp đồng, mức trả thiếu, hành vi trễ hạn gần đây và mức sử dụng thẻ. Kết quả HGB: ROC-AUC `0,7760`, PR-AUC `0,2630`, F1-score `0,2885`. Phần lớn feature mới có đóng góp thấp; `installments_recent_12m_late_count` xếp hạng 11 và là tín hiệu tốt nhất của vòng này.
+  - **Vòng 2 — ưu tiên hành vi gần đây:** từ tư duy rằng hành vi 12 tháng gần nhất phản ánh rủi ro hiện tại tốt hơn toàn bộ lịch sử, bổ sung 8 summary feature ở NB02 và 2 tỷ lệ tại NB05. Kết quả HGB tăng lên ROC-AUC `0,7774`, PR-AUC `0,2765`, F1-score `0,2901`. `credit_card_recent_12m_max_utilization` đứng hạng 5 trong Permutation Importance, cho thấy mức sử dụng hạn mức cao nhất gần đây là tín hiệu nghiệp vụ có giá trị. Đây là vòng cải thiện rõ nhất, đặc biệt ở PR-AUC.
+  - **Vòng 3 — mở rộng từ feature mạnh nhất:** do `ext_ltv_interaction = (1 - ext_sources_mean) × ltv` đứng top 1, thử thêm 4 tương tác cùng logic giữa điểm đánh giá ngoài thấp và áp lực tài chính: `ext_credit_income_interaction`, `ext_dti_interaction`, `ext_min_ltv_interaction`, `ext_bureau_debt_interaction`. Kết quả HGB: ROC-AUC `0,7780`, PR-AUC `0,2717`, F1-score `0,2903`. F1 chỉ tăng `0,0002` so với vòng 2, PR-AUC giảm `0,0048`, cả 4 feature không vào top 20; nguyên nhân hợp lý là chúng dùng lại thông tin từ các biến nguồn nên đóng góp thêm rất ít.
+  - **Quyết định hiện tại:** vẫn giữ mã nguồn và phần đánh giá của cả ba vòng trong NB05/NB06 để trình bày quá trình nghiên cứu. Bảng `application_features` vẫn chứa 46 feature và chưa cần lưu lại. Khi chốt mô hình cuối, có thể loại 4 feature vòng 3 ngay trong NB06 mà không phải chạy lại NB05/PostgreSQL; tuy nhiên chỉ thực hiện sau khi Hưng chốt riêng bước đó. HistGradientBoosting vẫn là mô hình tốt nhất trong ba mô hình. Hướng tiếp theo hợp lý là chọn ngưỡng dự đoán bằng tập Validation thay vì tiếp tục nhân thêm các feature tương tự.
+  - **Thông điệp dùng cho báo cáo/bảo vệ:** feature không được tạo ngẫu nhiên. Vòng 1 xuất phát từ lịch sử thanh toán và dư nợ; vòng 2 xuất phát từ giả thuyết hành vi gần đây quan trọng hơn lịch sử dài hạn; vòng 3 xuất phát từ kết quả đóng góp của `ext_ltv_interaction`. Mỗi giả thuyết đều được kiểm chứng bằng cùng pipeline, metric và Permutation Importance. Kết quả cho thấy một feature có ý nghĩa nghiệp vụ chưa chắc cải thiện mô hình; cần đo đóng góp thực tế và chấp nhận loại giả thuyết không hiệu quả.
+
 - **NB05 — Feature Engineering (hoàn tất 2026-08-13 — nhánh `fix/hung-fix-NB05-13082026`):** Đã rà soát và chạy lại toàn bộ `notebooks/05_feature_engineering.ipynb` trên đầu vào `application_flat_cleaned` gồm **306.195 dòng × 172 cột**. NB05 tạo **40 feature mới** theo 7 nguồn/nhóm: `applications` (17), `bureau` và `bureau_balance` (8), `previous_application` (5), `installments_payments` (3), `credit_card_balance` (2), `pos_cash_balance` (2) và Interaction Features (3), nâng dữ liệu lên **212 cột** mà không thay đổi số khách hàng, thứ tự `sk_id_curr` hoặc `target`. Đã hoàn thiện phần ý tưởng, xây dựng feature, kiểm tra chất lượng, phân tích với `target`, đánh giá đóng góp ban đầu, tiêu chí lựa chọn và bảng bàn giao. NB05 bàn giao trực tiếp **38 feature**; `age_income_interaction` và `late_debt_interaction` chỉ phục vụ EDA, NB06 phải tạo lại từ ngưỡng tập train để tránh Data Leakage. Bảng PostgreSQL mới `public.application_features` đã được tạo với **306.195 dòng × 212 cột** và vượt qua kiểm tra cấu trúc, `sk_id_curr`, `target` cùng mẫu 1.000 khách hàng. Bảng cũ `public.application_feature` được giữ an toàn dưới tên `public.application_feature_backup_20260813`. Việc tiếp theo là tiếp tục NB06 trên đầu vào mới này.
 
 - **NB02 — Database Organization (hoàn tất 2026-08-12 — nhánh `fix/fix-NBs-by-Hung-09082026`):** Đã đồng bộ pipeline về 7 bảng `applications`/`applications.csv`; `applications.sk_id_curr`, `bureau.sk_id_bureau` và `previous_application.sk_id_prev` đều là Primary Key. `sql/02_import_data.sql` dùng danh sách cột tường minh cho cả 7 lệnh `COPY` (218 cột), đã đối chiếu khớp schema và header CSV để tránh rủi ro ghép sai cột. NB02 chỉ liên kết tới file import; `sql/04` giữ vai trò kiểm tra cấu trúc schema, không khẳng định kiểm tra thứ tự cột. Bổ sung các feature lịch sử cần cho NB05: `bureau_recent_loan_12m_count`, `previous_approved_count`, `previous_refused_count`, `previous_recent_12m_count` và `previous_approved_sum_credit`; `previous_sum_credit` giữ nghĩa trung tính cho mọi hồ sơ. Đã chạy lại phần dựng summary/flat từ `sql/06`–`sql/11`, không cần import lại; `application_flat` có 307.511 dòng × 164 cột (122 cột gốc + 42 summary). Đã làm rõ summary chỉ cần không trùng khóa để join không nhân dòng; summary có thể chứa thêm khách thuộc tập test. Diễn giải index được sửa theo hướng thận trọng: PostgreSQL có thể dùng index hoặc quét toàn bảng tùy execution plan.
@@ -24,6 +39,71 @@
 - **Nhánh hiện tại:** `docs/hung-update-context-28072026`.
 - **Trạng thái:** Đã tổng hợp trạng thái tới PR #82: NB00 đã thêm, NB01/NB02 đã chuẩn hóa, NB03 đã cập nhật nhưng cần Restart & Run All lại, NB04 mới có khung heading. Đã cập nhật `PROJECT_CONTEXT.md` mục 2.6, 3, 4 và 6 để phản ánh hiện trạng cùng quy ước heading đầy đủ `#`–`######`.
 - **Đã xong trước đó:** T02 (NB02 + 11 file SQL) merge PR #59; cập nhật tài liệu hướng dẫn giảng viên merge PR #60.
+
+## Hồ sơ nghiên cứu Feature Engineering và tối ưu F1-score — dùng cho báo cáo/bảo vệ
+
+### 1. Mục tiêu và nguyên tắc thử nghiệm
+
+- Bài toán có `TARGET = 1` là khách hàng nợ xấu, chỉ chiếm khoảng **8,09% tập Test**. Vì vậy Accuracy không đủ để đánh giá; nhóm theo dõi đồng thời ROC-AUC, PR-AUC, Precision, Recall và F1-score, trong đó PR-AUC/F1-score phản ánh rõ hơn khả năng nhận diện lớp thiểu số.
+- Mỗi vòng đào feature đều đi theo cùng một quy trình: quan sát nghiệp vụ → hình thành giả thuyết → tạo feature trong NB02/NB05 → chạy lại cùng pipeline huấn luyện → đo metric → dùng Permutation Importance để kiểm tra mức đóng góp thật.
+- Không xóa các thử nghiệm ít hiệu quả. Đây là bằng chứng nhóm biết kiểm chứng giả thuyết và ra quyết định từ dữ liệu, thay vì chỉ trình bày kết quả tốt nhất sau cùng.
+
+### 2. Vòng 1 — khai thác sâu lịch sử tín dụng và thanh toán
+
+- **Căn cứ nghiệp vụ:** một khách hàng có nhiều hợp đồng, thường trả thiếu, trễ hạn gần đây hoặc sử dụng thẻ sát hạn mức có thể chịu áp lực tài chính cao hơn. Các bảng phụ chứa lịch sử theo giao dịch/hợp đồng nên cần summary về một dòng cho mỗi `sk_id_curr` trước khi nối vào bảng chính.
+- **Nhóm feature được thử:** số hợp đồng thẻ/POS, số kỳ trả thiếu và số tiền trả thiếu, số lần chậm trả trong 12 tháng, DPD gần đây và mức sử dụng hạn mức thẻ. Đây là các biến tổng hợp từ `installments_payments`, `pos_cash_balance` và `credit_card_balance`, không phải feature được chọn ngẫu nhiên.
+- **Kết quả HGB:** ROC-AUC `0,7760`, PR-AUC `0,2630`, F1-score `0,2885`.
+- **Đánh giá đóng góp:** đa số feature mới chưa tạo ra nhiều thông tin bổ sung; `installments_recent_12m_late_count` là tín hiệu tốt nhất của vòng này, xếp hạng 11 trong Permutation Importance. Kết luận là hướng “hành vi gần đây” có tiềm năng nhưng chỉ dùng số lần xảy ra vẫn chưa đủ.
+
+### 3. Vòng 2 — ưu tiên hành vi 12 tháng gần nhất và chuyển số đếm thành tỷ lệ
+
+- **Căn cứ nghiệp vụ:** cùng có 3 lần trả chậm nhưng khách có 4 kỳ thanh toán rủi ro khác khách có 40 kỳ. Vì vậy ngoài số đếm cần có tỷ lệ để chuẩn hóa theo độ dài lịch sử; đồng thời hành vi trong 12 tháng gần nhất thường phản ánh tình trạng hiện tại tốt hơn toàn bộ lịch sử.
+- **Summary bổ sung tại NB02:** `bureau_recent_12m_overdue_count`, `previous_recent_12m_approved_count`, `previous_recent_12m_refused_count`, `installments_recent_12m_count`, `installments_recent_12m_underpaid_count`, `installments_recent_12m_underpaid_amount`, `pos_cash_recent_12m_max_dpd` và `credit_card_recent_12m_max_utilization`.
+- **Ratio bổ sung tại NB05:** trọng tâm là `installments_recent_12m_late_rate` và `installments_recent_12m_underpaid_rate`; notebook cũng kiểm tra các tỷ lệ thanh toán để không sinh giá trị vô cực và các rate phải nằm trong khoảng 0–1.
+- **Kết quả HGB:** ROC-AUC `0,7774`, PR-AUC `0,2765`, F1-score `0,2901`. So với vòng 1, PR-AUC tăng `0,0135` và F1 tăng `0,0016`.
+- **Đánh giá đóng góp:** `credit_card_recent_12m_max_utilization` đứng hạng 5 trong top feature của HistGradientBoosting. Đây là bằng chứng rõ nhất rằng mức sử dụng hạn mức cao nhất gần đây bổ sung tín hiệu rủi ro có giá trị. Vòng 2 là vòng cải thiện tốt nhất, đặc biệt ở PR-AUC.
+
+### 4. Vòng 3 — mở rộng từ feature đứng top 1
+
+- **Điểm xuất phát:** `ext_ltv_interaction = (1 - ext_sources_mean) × ltv` liên tục đứng top 1. Feature này kết hợp hai ý nghĩa: điểm đánh giá bên ngoài thấp và khoản vay lớn so với giá trị tài sản; khi cả hai cùng bất lợi, mức rủi ro được khuếch đại.
+- **Giả thuyết thử nghiệm:** nếu cách kết hợp điểm ngoài với LTV hiệu quả, có thể kết hợp cùng logic với các thước đo áp lực tài chính khác. NB05 bổ sung `ext_credit_income_interaction`, `ext_dti_interaction`, `ext_min_ltv_interaction` và `ext_bureau_debt_interaction`.
+- **Kết quả HGB cuối NB06:** ROC-AUC `0,7780`, PR-AUC `0,2717`, Precision `0,1840`, Recall `0,6871`, F1-score `0,2903`.
+- **So với vòng 2:** ROC-AUC tăng `0,0006`, F1 tăng `0,0002`, nhưng PR-AUC giảm `0,0048`; cả bốn interaction mới đều không vào top 20 Permutation Importance.
+- **Kết luận:** giả thuyết hợp lý về nghiệp vụ nhưng các feature mới chủ yếu tái sử dụng thông tin đã có trong `ext_sources`, thu nhập, DTI, LTV và dư nợ bureau nên đóng góp biên rất nhỏ. Nhóm giữ mã và lịch sử thử nghiệm để trình bày tư duy nghiên cứu, không lấy ý nghĩa nghiệp vụ làm bằng chứng thay cho kết quả đo.
+
+### 5. Trạng thái feature cuối pipeline
+
+- SQL bổ sung tổng cộng **16 summary feature** qua các vòng: `bureau_recent_12m_overdue_count`; `previous_recent_12m_approved_count`, `previous_recent_12m_refused_count`; `installments_underpaid_count`, `installments_underpaid_amount`, `installments_recent_12m_late_count`, `installments_recent_12m_count`, `installments_recent_12m_underpaid_count`, `installments_recent_12m_underpaid_amount`; `pos_cash_contract_count`, `pos_cash_recent_12m_dpd_count`, `pos_cash_recent_12m_max_dpd`; `credit_card_contract_count`, `credit_card_avg_utilization`, `credit_card_max_utilization`, `credit_card_recent_12m_max_utilization`.
+- NB05 tạo **46 feature** theo nghiệp vụ. Trong đó **44 feature** được bàn giao trực tiếp; `age_income_interaction` và `late_debt_interaction` phụ thuộc ngưỡng phân vị nên NB06 phải tính lại chỉ từ tập Train để tránh Data Leakage.
+- Bảng cuối `public.application_features` có **306.195 dòng × 234 cột**. Số khách hàng, thứ tự `sk_id_curr` và `target` được kiểm tra không thay đổi.
+- Khi huấn luyện ba mô hình trong NB06, preprocessing tạo **397 feature**. Bảng so sánh cuối: Logistic Regression `ROC 0,7714 / PR 0,2544 / F1 0,2788`; Random Forest `ROC 0,7600 / PR 0,2424 / F1 0,2893`; HistGradientBoosting `ROC 0,7780 / PR 0,2717 / F1 0,2903`. HGB được chọn vì đồng thời có ROC-AUC, PR-AUC và F1-score tốt nhất, thời gian huấn luyện `24,1` giây cũng thấp nhất trong ba mô hình ở lần chạy cuối.
+
+### 6. Vì sao F1-score chưa cao
+
+1. **Mất cân bằng lớp:** nợ xấu chỉ chiếm `8,09%` Test. Ở ngưỡng 0,5, HGB ưu tiên bắt nhiều khách nợ xấu nên Recall đạt `0,6871`, nhưng kéo theo nhiều dự đoán dương tính giả; Precision chỉ `0,1840`, làm F1 dừng ở `0,2903`.
+2. **Hai nhóm khách hàng còn chồng lấn:** ROC-AUC `0,7780` và PR-AUC `0,2717` cho thấy mô hình xếp hạng rủi ro khá nhưng chưa tách hoàn toàn khách tốt và khách nợ xấu. NB01 cũng cho thấy tương quan đơn biến mạnh nhất với `TARGET` chỉ khoảng `-0,18`; tín hiệu rủi ro phân tán trên nhiều biến chứ không có một feature quyết định.
+3. **Thông tin mới bị trùng với feature nguồn:** các interaction vòng 3 có ý nghĩa nghiệp vụ nhưng dùng lại `ext_sources`, LTV, thu nhập, DTI và dư nợ. Vì vậy chúng có thể giúp diễn giải mà không cung cấp nhiều thông tin mới cho mô hình.
+4. **Lợi ích giảm dần sau mỗi vòng:** vòng 2 cải thiện PR-AUC rõ nhất; vòng 3 gần như không cải thiện. Việc tiếp tục nhân thêm các biến tương tự có nguy cơ làm notebook phức tạp hơn mà không tăng chất lượng tương ứng.
+5. **F1 là điểm cân bằng, không phải mọi mục tiêu nghiệp vụ:** tăng Precision thường phải giảm Recall và ngược lại. Không thể kết luận mô hình “tốt hơn toàn diện” chỉ vì F1 tăng nếu số khách nợ xấu bị bỏ sót cũng tăng mạnh.
+
+### 7. NB06.1 — tối ưu ngưỡng dự đoán trên Validation
+
+- **Lý do tách notebook:** NB06 dùng ngưỡng 0,5 để so sánh công bằng ba mô hình. Sau khi chọn HGB, NB06.1 mới tối ưu ngưỡng riêng cho mô hình được chọn; như vậy không dùng Test để lựa chọn tham số và không làm sai lệch đánh giá cuối.
+- Dữ liệu được chia xấp xỉ **64% Train / 16% Validation / 20% Test**; preprocessing cho NB06.1 tạo 360 feature. HGB học 108 vòng trong `15,3` giây.
+- Thử **91 ngưỡng từ 0,05 đến 0,95** trên Validation. Ngưỡng `0,67` đạt F1 Validation cao nhất `0,3281`; các ngưỡng `0,65–0,69` cho kết quả gần nhau nên lựa chọn không phụ thuộc vào một điểm bất thường đơn lẻ.
+- Trên Test, ngưỡng 0,5 cho Precision `0,1839`, Recall `0,6813`, F1 `0,2896`. Ngưỡng 0,67 cho Precision `0,2630`, Recall `0,4396`, F1 `0,3292`: Precision tăng **7,91 điểm phần trăm**, F1 tăng **3,96 điểm phần trăm**, nhưng Recall giảm **24,17 điểm phần trăm**.
+- Ma trận nhầm lẫn ở ngưỡng 0,67: TN `50.183`, FP `6.102`, FN `2.776`, TP `2.178`. Điểm phải nói rõ khi bảo vệ: mô hình giảm báo động giả và tăng F1, nhưng số nợ xấu bỏ sót vẫn lớn hơn số phát hiện đúng; ngưỡng cuối phải phụ thuộc khẩu vị rủi ro của tổ chức tín dụng.
+- F1 Test `0,3292` gần F1 Validation `0,3281`, cho thấy ngưỡng được chọn tương đối ổn định trên dữ liệu chưa dùng để chọn ngưỡng. Đây là cải thiện có kiểm soát, không phải bảo đảm mô hình tốt hơn ở mọi chỉ tiêu.
+- Hai artifact được tạo cục bộ: `models/hist_gradient_boosting_threshold_optimized.pkl` và `models/hist_gradient_boosting_threshold_optimized_metrics.json`. Thư mục `models/` đang được gitignore nên các file này **không đi theo commit/push**; máy dùng NB07/app phải có artifact tương ứng hoặc chạy lại NB06.1.
+
+### 8. Mạch trình bày đề xuất trước hội đồng
+
+1. Nhóm không thêm feature tùy ý; mỗi vòng bắt đầu từ một vấn đề nghiệp vụ cụ thể trong lịch sử tín dụng.
+2. Vòng 1 kiểm tra tín hiệu từ số hợp đồng, trả thiếu, trễ hạn và sử dụng thẻ; kết quả dẫn tới giả thuyết chú trọng hành vi gần đây.
+3. Vòng 2 bổ sung cửa sổ 12 tháng và tỷ lệ chuẩn hóa; `credit_card_recent_12m_max_utilization` vào top 5 và PR-AUC cải thiện rõ nhất.
+4. Vòng 3 xuất phát từ chính Feature Importance của mô hình, nhưng kết quả cho thấy bốn interaction mới bị trùng thông tin; nhóm chấp nhận kết quả không như kỳ vọng và dừng mở rộng theo hướng đó.
+5. Sau khi HGB được chọn bằng bảng so sánh ba mô hình, nhóm không đổi thuật toán khó giải thích mà tối ưu ngưỡng bằng Validation. F1 Test tăng từ khoảng `0,29` lên `0,3292`, kèm phân tích minh bạch đánh đổi Precision–Recall.
+6. Kết luận bảo vệ: F1 chưa cao chủ yếu do lớp nợ xấu hiếm, hai lớp chồng lấn và tín hiệu đơn lẻ yếu; nhóm đã cải thiện có căn cứ, tránh Data Leakage và không che giấu chi phí là Recall giảm.
 
 ## Làm tới đâu (cập nhật mới nhất ở trên)
 
@@ -188,6 +268,10 @@
 
 ## Handoff mới nhất cho phiên kế tiếp
 
+- **2026-08-14 — trạng thái dùng để tiếp tục:** NB02, NB03, NB05, NB06 và NB06.1 đã chạy xong theo pipeline mới. Mốc dữ liệu cuối là `application_flat` 307.511 × 180 → `application_flat_cleaned` 306.195 × 188 → `application_features` 306.195 × 234. HistGradientBoosting được chọn trong NB06 với ROC-AUC 0,7780, PR-AUC 0,2717, F1 0,2903; NB06.1 chọn ngưỡng 0,67 trên Validation và đạt Test F1 0,3292. Ba vòng đào feature và phần giải thích F1 đã được lưu chi tiết ở mục **Hồ sơ nghiên cứu Feature Engineering và tối ưu F1-score** phía trên. Bước tiếp theo: kiểm tra Git, commit/push/PR; sau đó ưu tiên whitepaper khoảng 40 trang, NB07, slide và app. Artifact NB06.1 ở `models/` chỉ tồn tại cục bộ vì bị gitignore.
+
+> Các handoff có ngày cũ hơn dưới đây được giữ để truy vết lịch sử, không thay thế trạng thái 2026-08-14.
+
 - **2026-07-25 (NB00 — nhánh `fix/hung-update-NB01`):** Tạo `notebooks/00_business_understanding.ipynb` từ nội dung `docs/Business_Understanding.docx`. NB00 chỉ dùng Markdown, gồm 8 phần: giới thiệu dự án; nghiệp vụ cho vay; bài toán Home Credit và `TARGET`; mục tiêu nghiên cứu; lý do chọn dataset và SWOT; dataset/công nghệ; tình huống thực tế, vai trò AI và giá trị; tổng kết bàn giao sang NB01. File Word vẫn là nội dung đầy đủ cho Chương 1 báo cáo.
 
 - **2026-07-25 (NB01 — nhánh `fix/hung-update-NB01`):** Tạo checkpoint cho phần mở đầu NB01: tiêu đề dự án màu xanh, tên Notebook 01 màu đỏ; mục III tách heading import thư viện và hướng dẫn ngắn về dữ liệu. Mục III.2 dùng code đơn giản liệt kê CSV, dung lượng và `Shape` mà không nạp toàn bộ file lớn vào RAM. Cần `Restart & Run All` trên môi trường dự án trước khi tạo PR vì Python bundled của Codex thiếu `matplotlib`.
@@ -211,6 +295,13 @@
     - Kiểu `TEXT` cho cột số là lỗi **không làm import thất bại** nhưng làm `MAX()` sai âm thầm — phải quét toàn bộ giá trị để phát hiện.
 
 ## Còn dở / việc tiếp theo của tôi
+
+- [ ] Kiểm tra phạm vi thay đổi, commit và push nhánh `fix/hung-fix-NB06-13082026`, sau đó tạo Pull Request.
+- [ ] Viết/hoàn thiện khoảng 40 trang trong `reports/tai-lieu-du-an-nhom-01.docx`; ưu tiên phần Feature Engineering, so sánh mô hình, lý do F1 chưa cao và tối ưu ngưỡng vì đã có bằng chứng đầy đủ.
+- [ ] Xây dựng NB07 Prediction Demo từ đúng pipeline HGB tối ưu và ngưỡng 0,67.
+- [ ] Hoàn thiện slide bảo vệ và Streamlit/dashboard tương tác sau khi NB07 ổn định.
+
+> Checklist phía dưới là lịch sử các task trước; các mục chưa đánh dấu có thể đã được thay thế bởi trạng thái mới phía trên.
 
 - [ ] **NB04:** chạy lại cell biểu đồ mật độ dân số/xếp hạng khu vực và tiếp tục tới cuối notebook; xác nhận Run All không còn lỗi, lưu notebook rồi mới commit/PR.
 - [x] Push nhánh `feature/t19-readme-va-requirements`, tạo PR và merge (T19 — README + requirements → PR #36).
