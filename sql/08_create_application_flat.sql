@@ -14,6 +14,7 @@ SELECT
     b.bureau_avg_days_credit,
     b.bureau_latest_days_credit,
     b.bureau_recent_loan_12m_count,
+    b.bureau_recent_12m_overdue_count,
     b.bureau_active_count,
     b.bureau_closed_count,
     b.bureau_sum_overdue,
@@ -34,6 +35,8 @@ SELECT
     p.previous_approved_count,
     p.previous_refused_count,
     p.previous_recent_12m_count,
+    p.previous_recent_12m_approved_count,
+    p.previous_recent_12m_refused_count,
 
     i.installments_count,
     i.installments_sum_due,
@@ -41,18 +44,31 @@ SELECT
     i.installments_avg_late,
     i.installments_max_late,
     i.installments_late_count,
+    i.installments_underpaid_count,
+    i.installments_underpaid_amount,
+    i.installments_recent_12m_late_count,
+    i.installments_recent_12m_count,
+    i.installments_recent_12m_underpaid_count,
+    i.installments_recent_12m_underpaid_amount,
 
     pc.pos_cash_count,
     pc.pos_cash_avg_dpd,
     pc.pos_cash_max_dpd,
     pc.pos_cash_oldest_month,
     pc.pos_cash_latest_month,
+    pc.pos_cash_contract_count,
+    pc.pos_cash_recent_12m_dpd_count,
+    pc.pos_cash_recent_12m_max_dpd,
 
     cc.credit_card_count,
     cc.credit_card_avg_balance,
     cc.credit_card_max_balance,
     cc.credit_card_avg_limit,
-    cc.credit_card_max_dpd
+    cc.credit_card_max_dpd,
+    cc.credit_card_contract_count,
+    cc.credit_card_avg_utilization,
+    cc.credit_card_max_utilization,
+    cc.credit_card_recent_12m_max_utilization
 FROM applications a
 LEFT JOIN bureau_summary         b   ON b.sk_id_curr = a.sk_id_curr
 LEFT JOIN previous_application_summary   p   ON p.sk_id_curr = a.sk_id_curr

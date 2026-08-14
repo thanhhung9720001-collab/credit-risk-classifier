@@ -80,7 +80,29 @@
 4. **Models** (`models/`): còn `model.pkl`, `scaler.pkl`, `model_metadata.json` từ pipeline cũ. Trước khi dùng cho app/NB07 cần kiểm tra tương thích với pipeline làm lại.
 5. **Báo cáo** (`reports/`): Word + PowerPoint theo mẫu trường; theo dõi tiến độ nhóm bằng **Google Sheet** (nhóm trưởng quản lý, link ở nhóm chat — không nằm trong repo).  Đề bài nhắc tới **Jira/Trello + ảnh bảng Kanban** (Chương 5 + slide 12) — cần hỏi giảng viên xem Google Sheet có được chấp nhận thay thế không.
 
-## 3. Trạng thái hiện tại (cập nhật 2026-08-13)
+## 3. Trạng thái hiện tại (cập nhật 2026-08-14)
+
+### Cập nhật mới nhất — nguồn dùng cho báo cáo và phân công tiếp theo
+
+> Các nội dung có ngày cũ hơn ở phía dưới được giữ làm lịch sử dự án. Khi con số khác nhau, ưu tiên trạng thái 2026-08-14 trong khối này.
+
+- **Pipeline dữ liệu đã chạy hoàn chỉnh:** NB02 tạo `application_flat` **307.511 × 180**; NB03 làm sạch còn **306.195 × 188**; NB05 tạo `application_features` **306.195 × 234**. Các mốc 164/172/212 cột phía dưới là trạng thái trước các vòng bổ sung feature.
+- **NB03 đã hoàn tất:** missing giảm từ 12.456.340 xuống 3.280.224 ô và từ 125 xuống 58 cột; 56.674 lỗi logic được đưa về 0; capping P99 áp dụng cho 8 cột/22.446 giá trị; bảng `application_flat_cleaned` khớp DataFrame. Đã bổ sung Kết luận cuối notebook.
+- **NB05 đã hoàn tất Feature Engineering:** tạo 46 feature theo 7 nhóm nguồn/nghiệp vụ; 44 feature được bàn giao trực tiếp, còn `age_income_interaction` và `late_debt_interaction` được tính lại từ Train trong NB06 để tránh Data Leakage. Các kiểm tra chất lượng, quan hệ với target và PostgreSQL đã chạy thành công.
+- **NB06 đã hoàn tất so sánh ba mô hình** trên 244.956 dòng Train và 61.239 dòng Test, preprocessing thành 397 feature:
+
+  | Mô hình | Thời gian (giây) | ROC-AUC | PR-AUC | Precision | Recall | F1-score |
+  |---|---:|---:|---:|---:|---:|---:|
+  | Logistic Regression | 30,6 | 0,7714 | 0,2544 | 0,1741 | 0,6994 | 0,2788 |
+  | Random Forest | 79,5 | 0,7600 | 0,2424 | 0,1890 | 0,6163 | 0,2893 |
+  | HistGradientBoosting | 24,1 | **0,7780** | **0,2717** | 0,1840 | 0,6871 | **0,2903** |
+
+  HistGradientBoosting được chọn vì dẫn đầu đồng thời ROC-AUC, PR-AUC và F1-score; không chọn chỉ dựa trên một metric.
+- **Ba vòng đào feature đã được giữ làm hồ sơ nghiên cứu:** vòng 1 khai thác lịch sử hợp đồng/thanh toán (`HGB F1 0,2885`); vòng 2 ưu tiên hành vi 12 tháng và tỷ lệ (`F1 0,2901`, `credit_card_recent_12m_max_utilization` vào top 5); vòng 3 mở rộng từ `ext_ltv_interaction` top 1 (`F1 0,2903`, bốn interaction mới không vào top 20). Kết quả chứng minh feature có ý nghĩa nghiệp vụ vẫn phải được kiểm chứng bằng metric và Permutation Importance; thông tin trùng lặp chỉ tạo cải thiện biên nhỏ.
+- **NB06.1 đã hoàn tất tối ưu ngưỡng đúng quy trình:** chia Train/Validation/Test khoảng 64/16/20, chọn ngưỡng trên Validation trong 91 giá trị rồi chỉ đánh giá Test một lần. Ngưỡng 0,67 đạt F1 Validation 0,3281; trên Test tăng Precision từ 0,1839 lên 0,2630 và F1 từ 0,2896 lên **0,3292**, đổi lại Recall giảm từ 0,6813 xuống 0,4396. Ma trận nhầm lẫn: TN 50.183, FP 6.102, FN 2.776, TP 2.178.
+- **Căn cứ giải thích F1 chưa cao:** lớp nợ xấu chỉ chiếm 8,09% Test; tín hiệu giữa hai lớp còn chồng lấn (HGB ROC-AUC 0,7780, PR-AUC 0,2717); tương quan đơn biến mạnh nhất ở NB01 chỉ khoảng -0,18; các vòng feature sau có lợi ích giảm dần. Tối ưu F1 là đánh đổi Precision–Recall, không phải làm mọi chỉ số cùng tăng.
+- **Artifact cục bộ của NB06.1:** `models/hist_gradient_boosting_threshold_optimized.pkl` và `models/hist_gradient_boosting_threshold_optimized_metrics.json` đã được tạo, nhưng `models/` đang gitignore nên không đi theo commit/push. NB07/app phải dùng đúng model, danh sách feature và ngưỡng 0,67 tương ứng hoặc chạy lại NB06.1.
+- **Rà soát trình bày:** NB03/NB05/NB06 đã được bổ sung nhận xét bám output; NB06 có Tổng kết cuối; NB06.1 có nhận xét các phần cần giải thích và Tổng kết riêng. `notebooks/01_data_understanding.ipynb` có một dòng kết luận được Hưng chủ động xóa; đây là thay đổi có chủ đích, không phải thất thoát nội dung.
 
 -  Đã dựng xong cấu trúc thư mục hoàn chỉnh
 -  Đã tải đầy đủ dữ liệu Home Credit vào `data/raw/`
@@ -153,13 +175,24 @@
        - **Cách bắt:** quét **toàn bộ** giá trị thật của mọi cột khai `TEXT` xem cột nào chứa thuần số. Hai lượt kiểm tra trước đó không phát hiện được vì chỉ kiểm "dữ liệu có import lọt hay không".
        - **Cách phòng:** `sql/04_check_column_types.sql` đối chiếu số cột và số cột kiểu chữ của từng bảng với thiết kế, chạy sau mỗi lần import. Cũng cần vì `COPY` ghép dữ liệu **theo vị trí cột chứ không theo tên cột** — thứ tự lệch thì dữ liệu vào nhầm cột mà vẫn báo import thành công.
 
-## 4. Việc tiếp theo (cập nhật 2026-08-13)
+## 4. Việc tiếp theo (cập nhật 2026-08-14)
+
+### Ưu tiên hiện tại
+
+1. **Commit, push và tạo Pull Request cho nhánh hiện tại** sau khi kiểm tra lần cuối notebook/SQL/context; không đưa các artifact trong `models/` vào Git vì thư mục đang gitignore.
+2. **Ưu tiên hoàn thành whitepaper khoảng 40 trang trong `reports/tai-lieu-du-an-nhom-01.docx`:** dùng lịch sử ba vòng Feature Engineering và NB06.1 làm nội dung trọng tâm cho Chương Feature Engineering/Modeling; trình bày cả giả thuyết, metric, Feature Importance, kết quả chưa đạt kỳ vọng và đánh đổi Precision–Recall.
+3. **Xây dựng NB07 Prediction Demo** bằng HistGradientBoosting đã chọn và ngưỡng 0,67; bảo đảm preprocessing/danh sách feature khớp artifact NB06.1, không dùng `.predict()` với ngưỡng mặc định nếu mục tiêu là tái hiện kết quả tối ưu F1.
+4. **Hoàn thiện slide và phần bảo vệ:** nhấn mạnh mạch nghiệp vụ → giả thuyết feature → kiểm chứng → chọn HGB → tối ưu threshold; không tuyên bố F1 tăng mà bỏ qua việc Recall giảm và FN còn lớn hơn TP.
+5. **Hoàn thiện Streamlit/dashboard tương tác** sau khi NB07 ổn định; app phải hiển thị xác suất rủi ro, nhãn theo ngưỡng và giải thích rõ ngưỡng đang dùng.
+6. **Kiểm tra yêu cầu Jira/Trello và hình Kanban** với giảng viên trước khi chốt Chương 5/slide quản lý dự án.
 
 **Với mọi thành viên trước khi bắt đầu:** đọc `docs/QUY-TRINH-LAM-VIEC.md` và làm theo checklist đầu phiên (pull code mới → **khai báo tên** `echo <tên> > .claude/whoami` + tạo `context/<tên>.md` → tạo/chuyển nhánh, KHÔNG code trên main). Ai đã kéo quy trình mới về nhớ **khởi động lại Claude Code** để nạp hook.
 
 **Khi cần hiểu hướng dẫn của giảng viên:** đọc `docs/huong-dan-giang-vien/README.md` trước, sau đó xem `tai-lieu-tham-chieu.md` và `video-bai-giang.md`. Nếu thầy upload thêm video/file mới, bổ sung tiếp vào cùng thư mục này để AI Agent và thành viên mới không mất ngữ cảnh.
 
-### Đọc trước khi phân công: trạng thái sau reset
+### Lưu trữ — kế hoạch sau reset trước bản cập nhật 2026-08-14
+
+> Phần dưới đây được giữ để truy vết lịch sử. Không dùng các trạng thái “NB06 chưa hoàn thành” hoặc kích thước 172/212 cột làm hiện trạng mới.
 
 Sau đợt reset, nền tảng Business Understanding và Data Understanding đã rõ hơn; NB02 và toàn bộ `sql/` đã dựng lại xong. Phần pipeline còn lại vẫn cần làm lại có chủ đích — không mặc định dùng trạng thái pipeline cũ nếu file notebook/SQL không còn trong repo.
 

@@ -18,8 +18,8 @@ FROM application_flat
 UNION ALL
 SELECT
     'so_cot',
-    164::BIGINT,
+    180::BIGINT,
     COUNT(*)::BIGINT,
-    CASE WHEN COUNT(*) = 164 THEN 'OK' ELSE 'CAN_KIEM_TRA' END
+    CASE WHEN COUNT(*) = 180 THEN 'OK' ELSE 'CAN_KIEM_TRA' END
 FROM information_schema.columns
 WHERE table_schema = 'public' AND table_name = 'application_flat';
