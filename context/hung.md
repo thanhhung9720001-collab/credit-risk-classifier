@@ -4,6 +4,8 @@
 
 ## Đang làm
 
+- **Cập nhật báo cáo Word theo pipeline mới (2026-08-14 — nhánh `fix/hung-capnhat-laiieu-rp-14082026`):** File đang được sử dụng hiện tại là `docs/Nhom-HomeCredit-tailieubaocao.docx`; bản mang hậu tố `-capnhat` không còn hiện diện trong workspace. Tài liệu giữ nguyên 6 chương, hệ thống heading, lề và ảnh nhúng; hiện có 7 bảng. Chương 2, 3, 4 và 6 đã được đồng bộ với NB02–NB06.1: `application_flat` 307.511 × 180; dữ liệu sạch 306.195 × 188; `application_features` 306.195 × 234 với 46 feature; ba vòng kiểm chứng feature; bảng metric ba mô hình mới; quy trình Validation và ngưỡng 0,67; kết quả Test cùng ma trận nhầm lẫn; thứ tự chạy có NB06.1 và artifact threshold-optimized. Đã sửa dấu `'` thừa ở bìa và đoạn trùng tại mục 5.2.3. Tài liệu được chia thành 3 section: bìa không hiển thị số trang; phần đầu dùng số La Mã từ `i`; Chương 1 dùng số Ả Rập bắt đầu lại từ `1`. Chương 1 đã bổ sung Heading `1.1.2 Tầm quan trọng của việc giải quyết bài toán trong ngành AI`, đổi `1.3 Câu hỏi nghiên cứu` thành `1.3 Mục tiêu nghiên cứu`, chuyển lý do chọn dữ liệu và phần công nghệ thành bullet, đồng thời trình bày sáu câu hỏi nghiên cứu bằng danh sách đánh số. Chương 2 giữ nguyên thứ tự Heading do nhóm trưởng lựa chọn; nội dung của `2.1`, `2.2`, `2.3` được chuyển thành bullet ngắn, bảo toàn các số liệu kiểm thử/làm sạch và bổ sung ý tối ưu hiệu năng, bộ nhớ bằng PostgreSQL, chỉ mục và bảng summary. Chương 3 chỉ giữ quá trình EDA, insight và hình thành 46 feature; các insight và nhóm feature phù hợp được trình bày bằng bullet. Ba vòng kiểm chứng feature được chuyển sang Heading mới `4.3 Quá trình kiểm chứng và cải tiến feature sau đánh giá mô hình`, trình bày bằng bảng bốn cột; mục phân tích kết quả và hành động được đổi thành `4.4`. Chương 4 cũng chuyển danh sách mô hình và metric thành bullet, đồng thời loại nội dung lặp về Permutation Importance. Mục lục đã cập nhật đầy đủ; tài liệu hiện có 28 trang vật lý, không có trang trắng, Chương 1 vẫn bắt đầu tại trang hiển thị `1` và trang cuối hiển thị `22`. Word đã mở, phân trang và kiểm tra lại thành công; bước xuất PDF/ảnh để QA trực quan toàn bộ vẫn chưa hoàn tất do máy thiếu LibreOffice/headless renderer, vì vậy nên mở Word rà nhanh lần cuối trước khi nộp.
+
 - **Cập nhật context cuối phiên (2026-08-14 — nhánh `fix/hung-fix-NB06-13082026`):** Đã chốt pipeline NB02 → NB03 → NB05 → NB06 → NB06.1 và lưu riêng hồ sơ nghiên cứu Feature Engineering/tối ưu F1-score ở phần bên dưới. Khi viết báo cáo hoặc chuẩn bị bảo vệ, dùng các số liệu cuối: `application_flat` 307.511 × 180, dữ liệu sau làm sạch 306.195 × 188, `application_features` 306.195 × 234; NB06 xử lý thành 397 feature cho ba mô hình, còn NB06.1 dùng 360 feature sau khi chia Train/Validation/Test và chọn ngưỡng. Các mốc 164/172/212 cột ở những dòng lịch sử cũ chỉ phản ánh trạng thái trước khi bổ sung feature, không dùng làm số liệu cuối.
 
 - **NB03 — Bổ sung Kết luận cuối notebook (2026-08-14 — nhánh `fix/hung-fix-NB06-13082026`):** Đã thêm một cell Markdown ngay sau heading `## VII. Kết luận`. Nội dung chốt output hiện có: dữ liệu sau làm sạch 306.195 dòng × 188 cột; missing giảm từ 12.456.340 xuống 3.280.224 ô và từ 125 xuống 58 cột; lỗi logic giảm từ 56.674 về 0; capping P99 áp dụng cho 8 cột với 22.446 giá trị; bảng `application_flat_cleaned` khớp DataFrame và được bàn giao cho NB05. Không sửa code hoặc output; NB03 không có error output.
@@ -388,3 +390,20 @@
 - Đã tăng kiểm tra PostgreSQL: dùng schema `public` nhất quán, thông báo khi không ghi đè bảng có sẵn và đối chiếu giá trị feature của 1.000 khách cố định ngoài số dòng/cột.
 - Đã xác minh tĩnh JSON, cú pháp tất cả code cell và logic ba cờ lịch sử bằng dữ liệu mẫu. Cần Restart Kernel → Run All NB05 trên kernel có PostgreSQL để xác minh runtime thực tế trước PR.
 - Cần làm tiếp: chạy lại NB05 từ đầu với PostgreSQL; bảng `application_features` hiện đã tồn tại nên code sẽ không ghi đè. Nếu bảng không khớp DataFrame sau khi chạy, cần quyết định cập nhật/tạo lại bảng trước khi Restart & Run All và tạo PR.
+
+## Cập nhật tài liệu báo cáo — 2026-08-14
+
+- Đã sửa `reports/images/home_credit_erd.png`: đổi bảng trung tâm từ `application_train / test` thành `applications` và bỏ dòng mô tả riêng về train/test; giữ nguyên bố cục, liên kết và các nội dung còn lại của sơ đồ.
+
+## Cập nhật Task Tracker — 2026-08-14
+
+- Đã cập nhật `Task_Tracker.xlsx` theo trạng thái pipeline mới: bổ sung T35–T43 cho NB04, NB05, NB06, NB06.1, whitepaper, NB07, slide, Streamlit/dashboard và việc xác nhận Jira/Kanban.
+- Đã đồng bộ lại T31, T32 và T34 với số liệu cuối: `application_flat` 307.511 × 180; dữ liệu sạch 306.195 × 188; `application_features` 306.195 × 234 với 46 feature.
+- Đã cập nhật `Project Overview`, thêm Weekly Log ngày 14/08/2026 và BUG-12 về biến tham chiếu sai trong NB04. Workbook đã được kiểm tra dữ liệu, validation, lỗi công thức và render trực quan đủ 5 sheet trước khi ghi đè.
+
+## Cập nhật README — 2026-08-14
+
+- Đã cập nhật `README.md` theo pipeline PostgreSQL hiện tại và thay toàn bộ tên notebook, danh sách 11 file SQL cùng các bảng đầu ra bằng trạng thái thực tế.
+- Đã bổ sung kết quả so sánh ba mô hình, lý do chọn HistGradientBoosting và kết quả tối ưu ngưỡng 0,67 trên tập Test.
+- Đã cập nhật tiến độ whitepaper, NB07, slide và Streamlit/dashboard; đồng thời thay các lưu ý của pipeline CSV cũ bằng lưu ý về `COPY`, aggregation, data leakage và artifact mô hình.
+- Đã đồng bộ `PROJECT_CONTEXT.md` với lần cập nhật README, bản whitepaper đang làm, ảnh ERD và Task Tracker; ưu tiên whitepaper hiện trỏ tới file đang tồn tại `docs/Nhom-HomeCredit-tailieubaocao.docx`.

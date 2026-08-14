@@ -103,6 +103,9 @@
 - **Căn cứ giải thích F1 chưa cao:** lớp nợ xấu chỉ chiếm 8,09% Test; tín hiệu giữa hai lớp còn chồng lấn (HGB ROC-AUC 0,7780, PR-AUC 0,2717); tương quan đơn biến mạnh nhất ở NB01 chỉ khoảng -0,18; các vòng feature sau có lợi ích giảm dần. Tối ưu F1 là đánh đổi Precision–Recall, không phải làm mọi chỉ số cùng tăng.
 - **Artifact cục bộ của NB06.1:** `models/hist_gradient_boosting_threshold_optimized.pkl` và `models/hist_gradient_boosting_threshold_optimized_metrics.json` đã được tạo, nhưng `models/` đang gitignore nên không đi theo commit/push. NB07/app phải dùng đúng model, danh sách feature và ngưỡng 0,67 tương ứng hoặc chạy lại NB06.1.
 - **Rà soát trình bày:** NB03/NB05/NB06 đã được bổ sung nhận xét bám output; NB06 có Tổng kết cuối; NB06.1 có nhận xét các phần cần giải thích và Tổng kết riêng. `notebooks/01_data_understanding.ipynb` có một dòng kết luận được Hưng chủ động xóa; đây là thay đổi có chủ đích, không phải thất thoát nội dung.
+- **README đã được đồng bộ với trạng thái mới:** `README.md` hiện mô tả đúng pipeline PostgreSQL tuần tự NB00–NB06.1, danh sách 11 file SQL, shape của ba bảng đầu ra, kết quả so sánh mô hình và ngưỡng tối ưu 0,67. Các tên notebook, pipeline CSV hai nhánh và số liệu cũ đã được loại bỏ khỏi README.
+- **Whitepaper đang được cập nhật:** file hiện tại là `docs/Nhom-HomeCredit-tailieubaocao.docx`; bản mang hậu tố `-capnhat` không còn hiện diện trong workspace. Chương 1–4 và Chương 6 đã được đồng bộ theo pipeline/notebook hiện tại; tài liệu vẫn cần hoàn thiện các phần còn thiếu, rà soát hình ảnh, bảng biểu, số trang và định dạng trước khi chuyển sang file nộp chính thức.
+- **Tài liệu hỗ trợ đã được cập nhật:** ERD tại `reports/images/home_credit_erd.png` đã đổi bảng trung tâm thành `applications`; `Task_Tracker.xlsx` cục bộ đã được đồng bộ các task NB04–NB06.1, whitepaper, NB07, slide và Streamlit/dashboard. File tracker hiện bị gitignore nên không đi theo commit/PR.
 
 -  Đã dựng xong cấu trúc thư mục hoàn chỉnh
 -  Đã tải đầy đủ dữ liệu Home Credit vào `data/raw/`
@@ -180,7 +183,7 @@
 ### Ưu tiên hiện tại
 
 1. **Commit, push và tạo Pull Request cho nhánh hiện tại** sau khi kiểm tra lần cuối notebook/SQL/context; không đưa các artifact trong `models/` vào Git vì thư mục đang gitignore.
-2. **Ưu tiên hoàn thành whitepaper khoảng 40 trang trong `reports/tai-lieu-du-an-nhom-01.docx`:** dùng lịch sử ba vòng Feature Engineering và NB06.1 làm nội dung trọng tâm cho Chương Feature Engineering/Modeling; trình bày cả giả thuyết, metric, Feature Importance, kết quả chưa đạt kỳ vọng và đánh đổi Precision–Recall.
+2. **Ưu tiên hoàn thành whitepaper `docs/Nhom-HomeCredit-tailieubaocao.docx`:** tiếp tục hoàn thiện các phần còn thiếu, bổ sung hình/bảng phù hợp và rà soát số trang, heading, footer cùng bố cục tổng thể trước khi chuyển sang file nộp chính thức.
 3. **Xây dựng NB07 Prediction Demo** bằng HistGradientBoosting đã chọn và ngưỡng 0,67; bảo đảm preprocessing/danh sách feature khớp artifact NB06.1, không dùng `.predict()` với ngưỡng mặc định nếu mục tiêu là tái hiện kết quả tối ưu F1.
 4. **Hoàn thiện slide và phần bảo vệ:** nhấn mạnh mạch nghiệp vụ → giả thuyết feature → kiểm chứng → chọn HGB → tối ưu threshold; không tuyên bố F1 tăng mà bỏ qua việc Recall giảm và FN còn lớn hơn TP.
 5. **Hoàn thiện Streamlit/dashboard tương tác** sau khi NB07 ổn định; app phải hiển thị xác suất rủi ro, nhãn theo ngưỡng và giải thích rõ ngưỡng đang dùng.
