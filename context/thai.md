@@ -5,12 +5,27 @@
 
 ## Đang làm
 
-- **Cập nhật lần cuối:** 2026-08-07
-- **Task:** Rà soát và sửa lại Chương 2 "Xây dựng pipeline và tiền xử lý dữ liệu" trong `docs/2. Mau tai lieu.docx` cho khớp với NB02 và NB03 thật
-- **Nhánh:** `fix/thai-chuong2-so-lieu-nb02-nb03-07082026`
-- **Trạng thái:** Đã sửa xong, đã commit + push. Chương 3 (nhánh `docs/thai-chuong3-eda-featureengineering-07082026`, ghi ở dòng bên dưới) đã merge qua PR #107, không còn dở.
+- **Cập nhật lần cuối:** 2026-08-16
+- **Task:** Sửa mục lục và đánh số trang cho `reports/Nhom-HomeCredit-tailieubaocao.docx`
+- **Nhánh:** `update/Thai-update-tailieubaocao-16082026`
+- **Trạng thái:** Đã sửa xong, đã commit + push. Chờ tạo PR trên GitHub.
 
 ## Làm tới đâu (cập nhật mới nhất ở trên)
+
+- **2026-08-16:** Sửa mục lục và hệ thống đánh số trang của `reports/Nhom-HomeCredit-tailieubaocao.docx`. Bắt đầu từ việc đối chiếu mục lục với heading thật trong bản nháp `Nhom-HomeCredit-tailieubaocao-BANNHAP.docx`, sau đó lấy bản nháp đã sửa thay cho file chính (file chính đang là bản cũ hơn nhiều: 45k ký tự / 10 ảnh, so với bản nháp 88k ký tự / 71 ảnh).
+  - **Mục lục lỗi thời so với nội dung:** thiếu hẳn 3 mục mới (`1.3. Phát biểu bài toán và hai loại sai lầm`, `1.4. Mất cân bằng lớp và lựa chọn chỉ số đánh giá`, `3.2. Kết quả phân tích chi tiết theo chín nhóm biến`) nên toàn bộ số thứ tự từ 1.3 và 3.2 trở đi bị lệch. Đã cập nhật lại bằng Word (COM automation qua PowerShell, không gõ tay).
+  - **Phát hiện 10 heading Chương 1 bị nhân đôi số:** chúng còn dính đánh số tự động (`numId=4` trong `numPr`) chồng lên số đã gõ tay trong text, nên hiển thị thành `1.1.1.1. Bối cảnh dự án`, `1.2.1.2. Phân tích SWOT`... Toàn bộ phần còn lại của tài liệu đánh số thủ công, nên đã gỡ `numPr` khỏi 10 heading này cho nhất quán.
+  - **Lỗi số trang nghiêm trọng nhất (có sẵn trong file gốc, bấm Update Table không chữa được):** phần đầu tài liệu dùng footer mặc định `footer2.xml` **không hề có field PAGE**, tức là các trang đầu in ra hoàn toàn không có số trang, trong khi mục lục lại ghi số La Mã ii/iv trỏ tới chúng. Thêm nữa `evenAndOddHeaders` đang TẮT nên footer chẵn (`footer1.xml`, có PAGE) không bao giờ được dùng, và thân bài đặt `pgNumType start="0"` tức đếm từ 0.
+  - Theo yêu cầu người dùng, chuyển sang **đánh số liền mạch toàn tài liệu từ bìa = trang 1**, Chương 1 phải rơi đúng trang 8. Cách làm: bỏ `fmt="lowerRoman"` ở section 1, bỏ hẳn `pgNumType` ở section 2 để số chạy tiếp, thêm field PAGE vào `footer2.xml`, bật `titlePg` để trang bìa vẫn tính là trang 1 nhưng không in số.
+  - **Sắp xếp lại phần đầu** (thứ tự cũ bị đảo, Lời mở đầu đứng trước 2 trang nhận xét): nay là Bìa (tr.1) → Nhận xét GV (tr.2) → Nhận xét Hội đồng (tr.3) → Mục lục (tr.4-6) → Danh mục hình + Danh mục bảng + Lời mở đầu (tr.7) → Chương 1 (tr.8). Tổng 86 trang. Đã xác minh số trang trong mục lục khớp 100% vị trí thật của cả 6 chương (8/17/26/64/77/83).
+  - **Bài học kỹ thuật khi sửa .docx bằng script:**
+    1. **Không dùng `ElementTree` để ghi lại `document.xml`** — nó chỉ giữ namespace nào được `register_namespace`, làm hỏng các prefix khác (`mc:Ignorable`, `w14:paraId`) và Word báo "file appears to be corrupted". Lần đầu đã dính lỗi này, phải khôi phục backup. Cách an toàn: đọc XML ra chuỗi, sửa bằng regex trên đúng đoạn cần sửa, giữ nguyên phần còn lại.
+    2. **Khi rezip phải ghi lại theo `zipfile.ZipInfo` gốc** (`for i in infos: zo.writestr(i, data[i.filename])`), không tạo entry mới.
+    3. **Word âm thầm xoá phần tử đặt sai thứ tự schema** — chèn `<w:outlineLvl w:val="9"/>` vào `pPr` để giấu tiêu đề MỤC LỤC khỏi chính mục lục thì bị Word bỏ mất khi lưu. Cách chạy được: đổi luôn `pStyle` sang style dựng sẵn `TOCHeading` (kế thừa Heading1 nên nhìn y hệt, mà sẵn `outlineLvl=9`).
+    4. **Ưu tiên `<w:pageBreakBefore/>` hơn đoạn trống chứa `<w:br w:type="page"/>`** — `pageBreakBefore` không bao giờ sinh trang trắng thừa khi đoạn đó đã nằm đầu trang, còn ngắt trang thủ công thì có.
+    5. Heredoc `<<'EOF'` của Bash trên Windows nuốt mất dấu `\` trong chuỗi Python (` PAGE \* MERGEFORMAT `) — phải ghi script ra file rồi chạy, hoặc dùng `chr(92)`.
+  - **Chưa làm (đã báo người dùng):** mục lục vẫn chỉ 2 cấp (`TOC \o "1-2"`), thiếu 25 mục cấp 3 (1.1.1, 3.2.1–3.2.8, 5.1.1–5.1.4...) — thêm cấp 3 thì mục lục dài thêm 1 trang, Chương 1 sẽ thành trang 9, phá ràng buộc "Chương 1 = trang 8". Hai mục `DANH MỤC HÌNH ẢNH` / `DANH MỤC BẢNG BIỂU` vẫn còn nguyên dòng placeholder, chưa sinh nội dung thật.
+  - **Không đưa vào commit:** 71 ảnh PNG trong `reports/images/` (3,69 MB) và file `reports/Nhom-HomeCredit-tailieubaocao-BANNHAP.docx` (4,8 MB, nội dung giờ trùng hệt file chính) — đã xác nhận với người dùng.
 
 - **2026-08-07 (buổi 2 — sửa Chương 2 sau khi bị hỏi lại):** Người dùng yêu cầu đọc lại Chương 2 xem có đúng với NB03 không. Phát hiện 1 lỗi sai (đã ghi "điền Unknown cho cột chữ", thực tế notebook dùng nhãn "Missing") và thiếu hẳn 1 bước xử lý của NB03 (Mục III.5 loại 28 cột `_mode`/`_medi` trùng lặp thông tin) — đã sửa.
   - Khi viết lại chi tiết hơn, phát hiện vấn đề nghiêm trọng hơn: **chính NB03 có mâu thuẫn nội bộ** giữa markdown mô tả và code đã chạy thật. Markdown ghi "159 cột" rồi "giảm còn 131 cột", nhưng code output thật in rõ "Số cột: 155 -> 127" và khi lưu vào PostgreSQL xác nhận "Đã lưu 305.181 dòng, 127 cột". Đã sửa lại toàn bộ theo đúng số đã chạy thật (127, không phải 131), không tin theo markdown khi có code output đối chứng.
@@ -68,6 +83,12 @@
 - [x] Sửa lỗi sai và bổ sung nội dung thiếu ở mục 2.3 (NB03), đối chiếu bằng code output thật
 - [x] Rà soát và bổ sung mục 2.1/2.2 (NB02), đối chiếu bằng ảnh chụp kết quả SQL đính kèm trong notebook
 - [x] Commit + push bản sửa Chương 2 lên nhánh `fix/thai-chuong2-so-lieu-nb02-nb03-07082026`
+- [x] Sửa mục lục + đánh số trang liền mạch cho `reports/Nhom-HomeCredit-tailieubaocao.docx` (Chương 1 = trang 8, tổng 86 trang)
+- [x] Commit + push lên nhánh `update/Thai-update-tailieubaocao-16082026`
+- [ ] Tạo Pull Request cho bản sửa tài liệu báo cáo trên GitHub
+- [ ] Sinh nội dung thật cho `DANH MỤC HÌNH ẢNH` và `DANH MỤC BẢNG BIỂU` (đang là placeholder) — cần kiểm tra caption đã gán đúng style `Chu thich hinh` / `Chu thich bang` chưa
+- [ ] Hỏi nhóm trưởng: mục lục có cần đủ 3 cấp không (hiện 2 cấp, thiếu 25 mục cấp 3); nếu cần thì ràng buộc "Chương 1 = trang 8" phải đổi
+- [ ] Quyết định có đẩy 71 ảnh `reports/images/` và file BANNHAP lên repo không
 - [ ] Tạo Pull Request cho bản sửa Chương 2 trên GitHub (người dùng tự tạo, giống các lần trước)
 - [ ] Hỏi nhóm trưởng: có cần đánh lại số mục ở NB03 (đang thiếu "IV", nhảy từ III sang V) không — vẫn còn treo từ lần trước, chưa ai xác nhận
 - [ ] Cân nhắc báo lại cho người phụ trách NB03: markdown trong notebook đang ghi sai số cột ("159"/"131" cột) so với code output thật ("155"/"127" cột) — nên sửa lại markdown trong chính notebook để tránh người khác đọc nhầm như tôi đã gặp phải
