@@ -5,6 +5,7 @@
 import os
 import joblib
 import pandas as pd
+import numpy as np
 
 from pathlib import Path
 from dotenv import load_dotenv
@@ -81,10 +82,29 @@ model_package = joblib.load(model_path)
 model = model_package["model"]
 decision_threshold = model_package["decision_threshold"]
 feature_names = model_package["feature_names"]
+
+constant_columns = model_package["constant_columns"]
+history_zero_fill_columns = model_package["history_zero_fill_columns"]
+
 numeric_columns = model_package["numeric_columns"]
 categorical_columns = model_package["categorical_columns"]
-train_median = model_package["train_median"]
-dropped_interactions = model_package["dropped_interactions"]
+
+numeric_imputer = model_package["numeric_imputer"]
+categorical_imputer = model_package["categorical_imputer"]
+encoder = model_package["encoder"]
+
+interaction_features = model_package["interaction_features"]
+
+income_bins = model_package["income_bins"]
+debt_bins = model_package["debt_bins"]
+
+age_bins = model_package["age_bins"]
+age_labels = model_package["age_labels"]
+income_labels = model_package["income_labels"]
+debt_labels = model_package["debt_labels"]
+
+late_payment_columns = model_package["late_payment_columns"]
+missing_label = model_package["missing_label"]
 
 # Kiểm tra nhanh model sau khi load.
 print("Load model thành công.")
@@ -157,64 +177,223 @@ def get_customer_data(sk_id_curr: int) -> pd.DataFrame:
 
 def preprocess_features(customer_df: pd.DataFrame) -> pd.DataFrame:
     """
-    Tiền xử lý dữ liệu theo đúng quy trình đã sử dụng khi huấn luyện model.
+    Tiền xử lý dữ liệu theo đúng pipeline đã sử dụng khi huấn luyện model.
     """
 
     data = customer_df.copy()
 
-    # Không đưa ID và target vào model.
+    # --------------------------------------------------------
+    # 1. Loại ID và target
+    # --------------------------------------------------------
     data = data.drop(
         columns=["sk_id_curr", "target"],
         errors="ignore",
     )
 
-    # Loại các interaction đã được loại trước khi train model.
+    # --------------------------------------------------------
+    # 2. Loại các interaction cũ nếu có
+    # --------------------------------------------------------
     data = data.drop(
-        columns=dropped_interactions,
+        columns=interaction_features,
         errors="ignore",
     )
 
-    # Đảm bảo các cột cần thiết tồn tại.
+    # --------------------------------------------------------
+    # 3. Loại các cột hằng số giống lúc train
+    # --------------------------------------------------------
+    data = data.drop(
+        columns=constant_columns,
+        errors="ignore",
+    )
+
+    # --------------------------------------------------------
+    # 4. Tạo lại interaction features
+    # --------------------------------------------------------
+
+    # Age × Income
+    nhom_tuoi = pd.cut(
+        data["age_years"],
+        bins=age_bins,
+        labels=age_labels,
+    )
+
+    nhan_thu_nhap = income_labels[
+        : len(income_bins) - 1
+    ]
+
+    nhom_thu_nhap = pd.cut(
+        data["amt_income_total"],
+        bins=income_bins,
+        labels=nhan_thu_nhap,
+    )
+
+    age_income = (
+        nhom_tuoi.astype("string")
+        + " | "
+        + nhom_thu_nhap.astype("string")
+    )
+
+    data["age_income_interaction"] = (
+        age_income.fillna(missing_label)
+    )
+
+    # Late Payment × Debt
+    tung_tre = (
+        data[late_payment_columns]
+        .fillna(0)
+        .gt(0)
+        .any(axis=1)
+    )
+
+    nhom_tre = pd.Series(
+        [
+            "Từng trễ"
+            if value
+            else "Không ghi nhận trễ"
+            for value in tung_tre
+        ],
+        index=data.index,
+        dtype="string",
+    )
+
+    du_no = data["bureau_sum_debt"]
+
+    nhom_du_no = pd.Series(
+        missing_label,
+        index=data.index,
+        dtype="string",
+    )
+
+    nhom_du_no.loc[
+        du_no == 0
+    ] = "Không còn dư nợ"
+
+    co_du_no = du_no > 0
+
+    nhan_du_no = debt_labels[
+        : len(debt_bins) - 1
+    ]
+
+    nhom_du_no.loc[co_du_no] = pd.cut(
+        du_no.loc[co_du_no],
+        bins=debt_bins,
+        labels=nhan_du_no,
+    ).astype("string")
+
+    data["late_debt_interaction"] = (
+        nhom_tre
+        + " | "
+        + nhom_du_no
+    )
+
+    if "has_bureau" in data.columns:
+        data.loc[
+            data["has_bureau"].fillna(0) == 0,
+            "late_debt_interaction",
+        ] = missing_label
+
+    # --------------------------------------------------------
+    # 5. Điền 0 theo lịch sử
+    # --------------------------------------------------------
+    for flag, columns in history_zero_fill_columns.items():
+        if flag not in data.columns:
+            continue
+
+        khong_co_lich_su = data[flag] == 0
+
+        existing_columns = [
+            column
+            for column in columns
+            if column in data.columns
+        ]
+
+        data.loc[
+            khong_co_lich_su,
+            existing_columns,
+        ] = (
+            data.loc[
+                khong_co_lich_su,
+                existing_columns,
+            ]
+            .fillna(0)
+        )
+
+    # --------------------------------------------------------
+    # 6. Bổ sung cột thiếu nếu cần
+    # --------------------------------------------------------
     for column in numeric_columns:
         if column not in data.columns:
             data[column] = pd.NA
 
     for column in categorical_columns:
         if column not in data.columns:
-            data[column] = "Unknown"
+            data[column] = pd.NA
 
-    # Xử lý missing cho biến số bằng median của Train.
-    for column in numeric_columns:
-        data[column] = pd.to_numeric(
-            data[column],
-            errors="coerce",
-        )
-        data[column] = data[column].fillna(
-            train_median[column]
-        )
-
-    # Xử lý missing cho biến phân loại.
-    for column in categorical_columns:
-        data[column] = (
-            data[column]
-            .astype("string")
-            .fillna("Unknown")
-        )
-
-    # One-hot encoding giống Notebook 06.1.
-    data = pd.get_dummies(
-        data,
-        columns=categorical_columns,
-        dtype=int,
+    # --------------------------------------------------------
+    # 7. Impute numerical
+    # --------------------------------------------------------
+    data_num = pd.DataFrame(
+        numeric_imputer.transform(
+            data[numeric_columns]
+        ),
+        columns=numeric_columns,
+        index=data.index,
     )
 
-    # Căn lại chính xác 360 feature và đúng thứ tự khi train.
-    data = data.reindex(
+    # --------------------------------------------------------
+    # 8. Impute categorical
+    # --------------------------------------------------------
+    data_cat_input = (
+        data[categorical_columns]
+        .astype(object)
+    )
+
+    data_cat_input = data_cat_input.where(
+        data_cat_input.notna(),
+        pd.NA,
+    )
+
+    data_cat = pd.DataFrame(
+        categorical_imputer.transform(
+            data_cat_input
+        ),
+        columns=categorical_columns,
+        index=data.index,
+    )
+
+    # --------------------------------------------------------
+    # 9. One-hot encoding bằng encoder đã fit lúc train
+    # --------------------------------------------------------
+    encoded_columns = encoder.get_feature_names_out(
+        categorical_columns
+    )
+
+    encoded = pd.DataFrame(
+        encoder.transform(data_cat),
+        columns=encoded_columns,
+        index=data.index,
+    )
+
+    # --------------------------------------------------------
+    # 10. Ghép numerical + encoded
+    # --------------------------------------------------------
+    processed_data = pd.concat(
+        [
+            data_num,
+            encoded,
+        ],
+        axis=1,
+    )
+
+    # --------------------------------------------------------
+    # 11. Căn đúng feature và đúng thứ tự như lúc train
+    # --------------------------------------------------------
+    processed_data = processed_data.reindex(
         columns=feature_names,
         fill_value=0,
     )
 
-    return data
+    return processed_data
 
 
 def predict_customer(sk_id_curr: int) -> dict:
